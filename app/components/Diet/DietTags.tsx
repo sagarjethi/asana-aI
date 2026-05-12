@@ -33,15 +33,13 @@ export default function DietTags(props: { mealTag: string }) {
     }
 
     return (
-        <>
-            <div className="tooltip" data-tip="Click To Remove">
-                <button
-                    onClick={() => handleTagRemove(tag)}
-                    className="text-lg bg-blue-900 text-slate-100 px-4 py-1 capitalize rounded-full relative group"
-                >
-                    {tag}
-                </button>
-            </div>
-        </>
+        <div className="tooltip" data-tip="Click to remove">
+            <button
+                onClick={() => handleTagRemove(tag)}
+                className="text-sm bg-sun-cta text-white px-4 py-1 capitalize rounded-full shadow-warm hover:opacity-90 duration-300"
+            >
+                {tag}
+            </button>
+        </div>
     )
 }

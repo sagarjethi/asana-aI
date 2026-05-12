@@ -64,9 +64,12 @@ export default function LineChart() {
         datasets: [
             {
                 label: 'Accuracy ' + span,
-                borderColor: '#4158a8',
+                borderColor: '#F77F00',
+                backgroundColor: 'rgba(247, 127, 0, 0.18)',
+                fill: true,
                 data: analysis && analysis?.accuracy,
-                tension: 0.2,
+                tension: 0.3,
+                borderWidth: 2.5,
             },
         ],
     }

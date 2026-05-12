@@ -30,7 +30,7 @@ export default function LeaderboardStats({
     return (
         <div className="flex flex-col gap-[2px] items-center justify-start">
             <div className="w-full flex items-center gap-2">
-                <span className="text-sm text-slate-50">Accuracy </span>
+                <span className="text-xs text-ink-700/70 w-16 shrink-0">Accuracy</span>
                 <input
                     type="range"
                     className="gradient-slider"
@@ -43,7 +43,7 @@ export default function LeaderboardStats({
                 />
             </div>
             <div className="w-full flex items-center gap-2">
-                <span className="text-sm text-slate-50">Duration </span>
+                <span className="text-xs text-ink-700/70 w-16 shrink-0">Duration</span>
                 <input
                     type="range"
                     className="gradient-slider"
@@ -56,8 +56,8 @@ export default function LeaderboardStats({
                 />
             </div>
             <div className="w-full flex items-center gap-2">
-                <span className="text-sm text-slate-50">Yoga Sessions </span>
-                <span className="text-sm text-slate-50">{session}</span>
+                <span className="text-xs text-ink-700/70 w-16 shrink-0">Sessions</span>
+                <span className="text-xs text-ink-900 font-display">{session}</span>
             </div>
         </div>
     )

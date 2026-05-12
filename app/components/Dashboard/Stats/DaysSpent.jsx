@@ -11,7 +11,9 @@ export default function DaySpent({ activeInMonth }) {
             {
                 label: 'Number of active days:',
                 data: [activeInMonth.active, activeInMonth.inactive],
-                backgroundColor: ['#4158a8', '#a0b2f8'],
+                backgroundColor: ['#F77F00', '#EFDDBE'],
+                borderColor: ['#E25822', '#F5E9D4'],
+                borderWidth: 2,
                 hoverOffset: 4,
             },
         ],

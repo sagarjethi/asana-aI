@@ -33,65 +33,73 @@ export default function DietCard(props: { meals: MealData }) {
     }
 
     return (
-        <>
-            <div className="flex flex-col sm:w-1/3 xl:w-1/4 m-5 rounded-2xl shadow-lg bg-white">
-                <div className="w-full h-64 overflow-hidden rounded-t-2xl">
-                    <Image
-                        src={`/meals/${meal.image}`}
-                        width={0}
-                        height={0}
-                        sizes="100vw"
-                        className="-z-50 w-full h-full object-center object-cover hover:scale-105 transition-transform duration-700"
-                        alt={meal.name}
-                    />
-                    {/* <div className="z-50 bg-slate-300 h-full w-full animate-pulse"></div> */}
-                </div>
-
-                <div className="flex flex-col px-6 py-2 justify-evenly h-[60%]">
-                    <span className="text-2xl font-semibold text-gray-800 leading-tight">
-                        {meal.name}
-                        {meal.name.split(' ').length <= 3 && <br />}
-                    </span>
-
-                    <span className="text-lg font-medium text-gray-600 mt-2">
-                        {meal.meal_type}
-                        {meal.vegetarian ? (
-                            <LuVegan className="text-xl inline-flex mx-2 text-green-500 mb-1" />
-                        ) : (
-                            <TbMeat className="text-xl inline-flex mx-2 text-red-500 mb-1" />
-                        )}
-                    </span>
-
-                    <div className="flex flex-wrap gap-2 my-2">
-                        {meal.tags.map((tag, idx1) => (
-                            <button
-                                onClick={() => handleTagRoute(tag)}
-                                className="text-base bg-blue-700 text-white rounded-2xl px-3 py-1 capitalize cursor-pointer hover:bg-blue-900 transition-colors duration-300"
-                                key={idx1}
-                            >
-                                {tag}
-                            </button>
-                        ))}
-                    </div>
-
-                    <div className="flex flex-col gap-3 xl:gap-4 w-full xl:mt-5">
-                        <DietDialog meal={meal} />
-                        <Link
-                            href={`/diet/${meal.name.toLocaleLowerCase().replaceAll(' ', '-')}-${meal.id}`}
-                        >
-                            <button className="w-3/4 xl:w-full text-xl bg-blue-900 text-slate-50 rounded-2xl px-5 py-1 capitalize cursor-pointer hover:bg-blue-950 duration-500">
-                                Read More
-                                <MdArrowOutward className="text-xl inline-flex  mb-0.5" />
-                            </button>
-                        </Link>
-                    </div>
-                    <DietUserLike
-                        mealId={meal.id}
-                        mealLike={meal.likes}
-                        mealViews={meal.views}
-                    />
-                </div>
+        <div className="flex flex-col w-full sm:w-72 xl:w-80 rounded-3xl bg-white border border-ink-900/8 shadow-soft hover:shadow-warm hover:-translate-y-1 duration-300 overflow-hidden group">
+            <div className="w-full h-52 overflow-hidden bg-cream-100">
+                <Image
+                    src={`/meals/${meal.image}`}
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    alt={meal.name}
+                />
             </div>
-        </>
+
+            <div className="flex flex-col px-5 py-4 gap-3">
+                <div className="flex items-start justify-between gap-3">
+                    <h3 className="font-display text-xl text-ink-900 leading-tight">
+                        {meal.name}
+                    </h3>
+                    {meal.vegetarian ? (
+                        <span
+                            className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-sage-300/40 text-sage-700 shrink-0"
+                            title="Vegetarian"
+                        >
+                            <LuVegan />
+                        </span>
+                    ) : (
+                        <span
+                            className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-ember-500/10 text-ember-600 shrink-0"
+                            title="Non-vegetarian"
+                        >
+                            <TbMeat />
+                        </span>
+                    )}
+                </div>
+
+                <span className="text-xs text-ink-700/70 uppercase tracking-wider">
+                    {meal.meal_type}
+                </span>
+
+                <div className="flex flex-wrap gap-1.5">
+                    {meal.tags.slice(0, 4).map((tag, idx1) => (
+                        <button
+                            onClick={() => handleTagRoute(tag)}
+                            className="text-xs bg-cream-100 text-ink-700 hover:bg-sun-cta hover:text-white border border-ink-900/8 hover:border-transparent rounded-full px-3 py-0.5 capitalize duration-300"
+                            key={idx1}
+                        >
+                            {tag}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="flex flex-col gap-2 mt-2">
+                    <DietDialog meal={meal} />
+                    <Link
+                        href={`/diet/${meal.name.toLocaleLowerCase().replaceAll(' ', '-')}-${meal.id}`}
+                    >
+                        <button className="w-full inline-flex items-center justify-center gap-1 bg-sun-cta text-white rounded-full px-4 py-2 text-sm font-medium shadow-warm hover:opacity-95 duration-300">
+                            Read more
+                            <MdArrowOutward className="text-base" />
+                        </button>
+                    </Link>
+                </div>
+                <DietUserLike
+                    mealId={meal.id}
+                    mealLike={meal.likes}
+                    mealViews={meal.views}
+                />
+            </div>
+        </div>
     )
 }

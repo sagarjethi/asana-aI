@@ -1,16 +1,15 @@
 'use client'
-import { IoCalendarClearOutline } from 'react-icons/io5'
 import Heading from '@/app/components/Dashboard/Page/Heading'
 import WeekActivity from './WeekActivity'
 import DaySpent from './DaysSpent'
 import Accuracy from './Accuracy'
 import AreaOfInterest from './AreaOfInterest'
 import PerformanceAOI from './PerformanceAOI'
-import { DashboardStats } from '@/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/lib/store'
 import { useEffect } from 'react'
 import { fetchStats } from '@/lib/store/dashboard/dashboardSlice'
+import PageHeader from '@/app/components/Shell/PageHeader'
 
 export default function StatsDashboard() {
     const userStats = useSelector((state: RootState) => state.dashboard.STATS)
@@ -20,134 +19,82 @@ export default function StatsDashboard() {
         dispatch(fetchStats())
     }, [])
 
-    const dateToday = () => {
-        const monthNames = [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec',
-        ]
-        const dayNames = [
-            'Sunday',
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saturday',
-        ]
-
-        const timestamp = Date.now()
-        const epochDate = new Date(timestamp)
-        const month = epochDate.getMonth()
-        const date = epochDate.getDate()
-        const year = epochDate.getFullYear()
-
-        const dayIndex = epochDate.getDay()
-
-        return `${dayNames[dayIndex]}, ${date} ${monthNames[month]} ${year}`
-    }
-
     return (
-        <>
-            {userStats && (
-                <div className="grid grid-cols-12 gap-8 m-5 overflow-x-hidden">
-                    {/* level 0 */}
-                    <div className="col-span-12 min-h-[5vh] flex flex-col sm:flex-row justify-between items-center rounded-2xl">
-                        <span className="text-3xl mx-5 font-medium text-slate-800">
-                            Stats
-                        </span>
-                        <div className="flex text-gray-700 font-light">
-                            <IoCalendarClearOutline className="mx-3 text-xl" />
-                            <span className="text-nowrap">{dateToday()}</span>
-                        </div>
-                    </div>
+        <div className="max-w-[1500px] mx-auto">
+            <PageHeader
+                eyebrow="Your progress"
+                title="Stats"
+                description="A view of the patterns in your practice."
+                showDate
+            />
 
-                    <div className="col-span-full xl:col-span-6 min-h-[50vh] flex flex-col justify-between rounded-2xl">
+            {userStats ? (
+                <div className="grid grid-cols-12 gap-5">
+                    <div className="col-span-full xl:col-span-6 sun-card p-5 min-h-[45vh] flex flex-col">
                         <Heading
-                            title="Weekly Activity"
-                            description="Overview of your activity throughout the week"
+                            title="Weekly activity"
+                            description="How your practice spreads across the week."
                         />
-                        <div className="animate-fade-up  flex w-full ">
+                        <div className="animate-fade-up flex-1 w-full">
                             <WeekActivity
                                 weeklyActivity={userStats.weeklyActivity}
                             />
                         </div>
                     </div>
-                    <div className="col-span-full xl:col-span-6 min-h-[50vh] flex flex-col justify-between rounded-2xl">
+
+                    <div className="col-span-full xl:col-span-6 sun-card p-5 min-h-[45vh] flex flex-col">
                         <Heading
-                            title="Last 30 Days Activity"
-                            description="Summary of your recent activity."
+                            title="Last 30 days"
+                            description="Active vs inactive days."
                         />
-                        <div className="flex h-full w-full justify-center items-center ">
+                        <div className="flex-1 flex justify-center items-center">
                             <DaySpent activeInMonth={userStats.activeInMonth} />
                         </div>
                     </div>
 
-                    <div className="col-span-full xl:col-span-full min-h-[50vh] max-h-[100vh] flex flex-col justify-between rounded-2xl">
+                    <div className="col-span-full sun-card p-5 min-h-[50vh] max-h-[100vh] flex flex-col">
                         <Heading
                             title="Performance"
-                            description="Summary of your recent performance."
+                            description="Accuracy across your recent sessions."
                         />
-
-                        <div className="animate-fade-up h-full flex w-full">
+                        <div className="animate-fade-up flex-1 w-full">
                             <Accuracy performanceData={userStats.performance} />
                         </div>
                     </div>
 
-                    <div className="col-span-full xl:col-span-6 min-h-[50vh] flex flex-col justify-between rounded-2xl">
+                    <div className="col-span-full xl:col-span-6 sun-card p-5 min-h-[50vh] flex flex-col">
                         <Heading
-                            title="Area of interest"
-                            description="Here are the most performed yoga pose"
+                            title="Areas of interest"
+                            description="The poses you return to most."
                         />
-
-                        <div className="flex h-full w-full justify-center items-center">
+                        <div className="flex-1 flex justify-center items-center">
                             <AreaOfInterest
                                 areaOfInterest={userStats.areaOfInterest}
                             />
                         </div>
                     </div>
 
-                    <div className="col-span-full xl:col-span-6 min-h-[50vh] flex flex-col justify-between rounded-2xl">
+                    <div className="col-span-full xl:col-span-6 sun-card p-5 min-h-[50vh] flex flex-col">
                         <Heading
-                            title="Performance in Yoga Pose"
-                            description="Here are the most commonly practiced yoga poses."
+                            title="Performance per pose"
+                            description="Where you're most aligned."
                         />
-
-                        <div className="flex h-full w-full justify-center items-center">
+                        <div className="flex-1 flex justify-center items-center">
                             <PerformanceAOI
                                 areaOfInterest={userStats.areaOfInterest}
                             />
                         </div>
                     </div>
                 </div>
-            )}
-            {!userStats && (
-                <div className="grid grid-cols-12 gap-8 m-5 overflow-x-hidden">
-                    <div className="col-span-12 min-h-[5vh] flex flex-col sm:flex-row justify-between items-center rounded-2xl">
-                        <span className="text-3xl mx-5 font-medium text-slate-800">
-                            Stats
-                        </span>
-                        <div className="flex text-gray-700 font-light">
-                            <IoCalendarClearOutline className="mx-3 text-xl" />
-                            <span className="text-nowrap">{dateToday()}</span>
-                        </div>
-                    </div>
-                    <div className="col-span-full xl:col-span-6 min-h-[50vh] bg-slate-300 animate-pulse rounded-2xl"></div>
-                    <div className="col-span-full xl:col-span-6 min-h-[50vh] bg-slate-300 animate-pulse rounded-2xl"></div>
-                    <div className="col-span-full xl:col-span-full min-h-[50vh] bg-slate-300 animate-pulse max-h-[100vh] rounded-2xl"></div>
-                    <div className="col-span-full xl:col-span-6 min-h-[50vh] bg-slate-300 animate-pulse rounded-2xl"></div>
-                    <div className="col-span-full xl:col-span-6 min-h-[50vh] bg-slate-300 animate-pulse rounded-2xl"></div>
+            ) : (
+                <div className="grid grid-cols-12 gap-5">
+                    <div className="col-span-full xl:col-span-6 min-h-[45vh] bg-cream-200 animate-pulse rounded-3xl" />
+                    <div className="col-span-full xl:col-span-6 min-h-[45vh] bg-cream-200 animate-pulse rounded-3xl" />
+                    <div className="col-span-full min-h-[50vh] bg-cream-200 animate-pulse rounded-3xl" />
+                    <div className="col-span-full xl:col-span-6 min-h-[50vh] bg-cream-200 animate-pulse rounded-3xl" />
+                    <div className="col-span-full xl:col-span-6 min-h-[50vh] bg-cream-200 animate-pulse rounded-3xl" />
                 </div>
             )}
-        </>
+        </div>
     )
 }

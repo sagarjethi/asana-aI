@@ -13,6 +13,7 @@ import 'react-tooltip/dist/react-tooltip.css'
 import './tooltip.css'
 import { CiLock, CiUnlock } from 'react-icons/ci'
 import Image from 'next/image'
+import PageHeader from '@/app/components/Shell/PageHeader'
 
 export default function Achievements() {
     const completed = useSelector(
@@ -26,113 +27,97 @@ export default function Achievements() {
     useEffect(() => {
         dispatch(fetchAchievement())
     }, [])
-    return (
-        <>
-            <div className="h-[75vh] flex flex-col justify-between m-5">
-                <div className="flex flex-col gap-2 justify-start items-start m-5 py-5">
-                    <span className="text-4xl font-semibold text-slate-900 uppercase">
-                        Achievements
-                    </span>
-                    <span className="text-2xl font-normal text-slate-600">
-                        Explore your achievements and milestones.
-                    </span>
-                </div>
 
-                <div className="flex flex-wrap justify-center w-11/12 mx-auto">
-                    {achievements.map((item: achievementsData, key) => (
-                        <div
-                            data-tooltip-id={`tooltip-${key}`}
-                            key={key}
-                            className="has-tooltip 2xl:w-40 sm:w-48 w-28 h-fit overflow-hidden m-2 span-5 rounded-full cursor-pointer"
-                        >
-                            <Image
-                                src={`/achievements/${item.icon}-${gender}.webp`}
-                                width={256}
-                                height={256}
-                                alt="BG-IMAGE"
-                                className={`rounded-full object-cover shadow-lg hover:scale-105 hover:brightness-105 hover:shadow-2xl duration-500 
-                                            ${completed?.includes(item.id) ? 'brightness-100' : 'brightness-[.30]'}
-                                        `}
-                            />
-                            <Tooltip
-                                id={`tooltip-${key}`}
-                                className="place-tooltip animate-fade-up"
+    const unlockedCount = achievements.filter((a) =>
+        completed?.includes(a.id)
+    ).length
+
+    return (
+        <div className="max-w-[1500px] mx-auto">
+            <PageHeader
+                eyebrow="Milestones"
+                title="Achievements"
+                description="Each one a marker of practice over time."
+                right={
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sun-cta text-white text-sm font-medium shadow-warm">
+                        <CiUnlock className="text-lg" />
+                        {unlockedCount} / {achievements.length}
+                    </div>
+                }
+            />
+
+            <div className="sun-card p-6 sm:p-10">
+                <div className="flex flex-wrap justify-center gap-4">
+                    {achievements.map((item: achievementsData, key) => {
+                        const unlocked = completed?.includes(item.id)
+                        return (
+                            <div
+                                data-tooltip-id={`tooltip-${key}`}
+                                key={key}
+                                className={`relative has-tooltip rounded-full cursor-pointer transition duration-500 ${
+                                    unlocked
+                                        ? 'ring-2 ring-sun-600/40 hover:ring-sun-600 hover:shadow-warm hover:-translate-y-0.5'
+                                        : 'opacity-60 hover:opacity-100'
+                                }`}
                             >
-                                <div className="flex flex-col m-2 span-2">
-                                    <span className="font-bold text-slate-900 text-xl">
-                                        {item.name}
+                                <Image
+                                    src={`/achievements/${item.icon}-${gender}.webp`}
+                                    width={144}
+                                    height={144}
+                                    alt={item.name}
+                                    className={`2xl:w-36 sm:w-32 w-24 h-auto rounded-full object-cover shadow-soft duration-500 ${
+                                        unlocked
+                                            ? 'brightness-100'
+                                            : 'brightness-[.40] grayscale'
+                                    }`}
+                                />
+                                {unlocked && (
+                                    <span className="absolute -bottom-1 -right-1 h-7 w-7 flex items-center justify-center rounded-full bg-sage-600 text-white shadow-soft">
+                                        <CiUnlock className="text-base" />
                                     </span>
-                                    <span className="text-slate-800 text-lg">
-                                        {item.description}
-                                    </span>
-                                    <div className="flex flex-col justify-between text-slate-700 mt-2 capitalize">
-                                        <div className="flex gap-2 items-center">
-                                            <span className="font-bold text-lg">
-                                                Level -
-                                            </span>
-                                            <span className="font-semibold text-base">
+                                )}
+                                <Tooltip
+                                    id={`tooltip-${key}`}
+                                    className="place-tooltip animate-fade-up"
+                                >
+                                    <div className="flex flex-col m-2 max-w-[260px]">
+                                        <span className="font-display text-ink-900 text-lg">
+                                            {item.name}
+                                        </span>
+                                        <span className="text-ink-800 text-sm mt-1">
+                                            {item.description}
+                                        </span>
+                                        <div className="flex flex-col gap-1 text-ink-700 mt-3 capitalize text-xs">
+                                            <span>
+                                                <strong>Level</strong> —{' '}
                                                 {item.level}
                                             </span>
-                                        </div>
-                                        <div className="flex gap-2 items-center">
-                                            <span className="font-bold text-lg">
-                                                Rarity -
-                                            </span>
-                                            <span className="font-semibold text-base">
+                                            <span>
+                                                <strong>Rarity</strong> —{' '}
                                                 {item.rarity}
                                             </span>
-                                        </div>
-                                        <div className="flex gap-2 items-center">
-                                            <span className="font-bold text-lg">
-                                                Achievement -
-                                            </span>
-                                            <span className="font-semibold text-base">
-                                                {completed?.includes(
-                                                    item.id
-                                                ) ? (
-                                                    <span>
+                                            <span className="inline-flex items-center gap-1">
+                                                <strong>Status</strong> —{' '}
+                                                {unlocked ? (
+                                                    <>
                                                         Unlocked
-                                                        <CiUnlock className="inline-flex justify-center align-middle items-center mb-0.5 mx-1 font-bold" />
-                                                    </span>
+                                                        <CiUnlock />
+                                                    </>
                                                 ) : (
-                                                    <span>
+                                                    <>
                                                         Locked
-                                                        <CiLock className="inline-flex justify-center align-middle items-center mb-0.5 mx-1 font-bold" />
-                                                    </span>
+                                                        <CiLock />
+                                                    </>
                                                 )}
                                             </span>
                                         </div>
                                     </div>
-                                </div>
-                            </Tooltip>
-                        </div>
-                    ))}
+                                </Tooltip>
+                            </div>
+                        )
+                    })}
                 </div>
             </div>
-
-            {/* {completed && (
-                <div className="h-[75vh] flex flex-col justify-between m-5">
-                    <div className="flex flex-col gap-2 justify-start items-start m-5 py-5">
-                        <span className="text-5xl font-semibold text-slate-900 uppercase">
-                            Achievements
-                        </span>
-                        <span className="text-2xl font-normal text-slate-600">
-                            Explore your achievements and milestones.
-                        </span>
-                    </div>
-
-                    <div className="flex flex-wrap gap-5 justify-center items-center w-11/12 mx-auto">
-                        {Array.from({ length: 10 }).map((_, idx) => (
-                            <div
-                                key={idx}
-                                className="flex justify-center h-60 w-60 rounded-full bg-slate-300 p-1 animate-pulse"
-                            >
-                           
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )} */}
-        </>
+        </div>
     )
 }

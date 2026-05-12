@@ -48,7 +48,9 @@ export default function AnalysisDoughnutChart() {
             {
                 label: 'You have performed',
                 data: [counts.ones, counts.zeros],
-                backgroundColor: ['#4158a8', '#a0b2f8'],
+                backgroundColor: ['#5C8A60', '#EFDDBE'],
+                borderColor: ['#3F6A45', '#F5E9D4'],
+                borderWidth: 2,
                 hoverOffset: 4,
             },
         ],
@@ -94,8 +96,8 @@ export default function AnalysisDoughnutChart() {
     return (
         <>
             <div className="relative flex flex-col xl:flex-row w-full space-y-4 sm:space-y-0 sm:space-x-4">
-                <div className="absolute xl:top-1 xl:left-0 top-3 left-3 text-2xl font-bold">
-                    Session Analysis
+                <div className="absolute xl:top-1 xl:left-0 top-3 left-3 font-display text-xl text-ink-900">
+                    Session analysis
                 </div>
 
                 <div className="flex w-full xl:w-1/2 h-[40vh] justify-center items-center">
@@ -105,51 +107,64 @@ export default function AnalysisDoughnutChart() {
                 </div>
 
                 <div className="flex xl:flex-col xl:w-1/2 w-full p-4 justify-center">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <div className="flex items-center bg-blue-100 p-4 w-full max-w-md gap-3 rounded-xl shadow-md  hover:scale-[1.01]  duration-700">
-                            <LuClock8 className="text-blue-800 text-2xl font-semibold" />
-                            <span className="text-xl font-medium">
-                                Duration:{' '}
-                                {epochToSecond(
-                                    analysis?.startTime,
-                                    analysis?.endTime
-                                )}{' '}
-                                s
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="flex items-center bg-cream-100 border border-ink-900/8 p-4 max-w-md gap-3 rounded-2xl hover:-translate-y-0.5 duration-300">
+                            <LuClock8 className="text-sun-700 text-xl" />
+                            <span className="text-sm text-ink-800">
+                                <strong className="font-display text-ink-900">
+                                    {epochToSecond(
+                                        analysis?.startTime,
+                                        analysis?.endTime
+                                    )}
+                                    s
+                                </strong>{' '}
+                                duration
                             </span>
                         </div>
 
-                        <div className="flex items-center bg-blue-100 p-4 w-full max-w-md gap-3 rounded-xl shadow-md hover:scale-[1.01]  duration-700">
-                            <LuTarget className="text-blue-800 text-2xl font-semibold" />
-                            <span className="text-xl font-medium">
-                                Accuracy: {accuracy >= 0 ? accuracy : 0} %
+                        <div className="flex items-center bg-cream-100 border border-ink-900/8 p-4 max-w-md gap-3 rounded-2xl hover:-translate-y-0.5 duration-300">
+                            <LuTarget className="text-sun-700 text-xl" />
+                            <span className="text-sm text-ink-800">
+                                <strong className="font-display text-ink-900">
+                                    {accuracy >= 0 ? accuracy : 0}%
+                                </strong>{' '}
+                                accuracy
                             </span>
                         </div>
 
-                        <div className="flex items-center bg-emerald-100 p-4 w-full max-w-md gap-3 rounded-xl shadow-md hover:scale-[1.01]  duration-700">
-                            <IoIosCheckmarkCircleOutline className="text-emerald-800 text-2xl font-semibold" />
-                            <span className="text-xl font-medium">
-                                Correct: {counts.ones}
+                        <div className="flex items-center bg-sage-300/30 border border-sage-600/20 p-4 max-w-md gap-3 rounded-2xl hover:-translate-y-0.5 duration-300">
+                            <IoIosCheckmarkCircleOutline className="text-sage-700 text-xl" />
+                            <span className="text-sm text-ink-800">
+                                <strong className="font-display text-ink-900">
+                                    {counts.ones}
+                                </strong>{' '}
+                                correct
                             </span>
                         </div>
 
-                        <div className="flex items-center bg-blue-100 p-4 w-full max-w-md gap-3 rounded-xl shadow-md hover:scale-[1.01]  duration-700">
-                            <SiRemark className="text-blue-800 text-2xl font-semibold" />
-                            <span className="text-xl font-medium">
-                                Remark: {getGrade(accuracy)}
+                        <div className="flex items-center bg-cream-100 border border-ink-900/8 p-4 max-w-md gap-3 rounded-2xl hover:-translate-y-0.5 duration-300">
+                            <SiRemark className="text-sun-700 text-xl" />
+                            <span className="text-sm text-ink-800">
+                                <strong className="font-display text-ink-900">
+                                    {getGrade(accuracy)}
+                                </strong>
                             </span>
                         </div>
 
-                        <div className="flex items-center bg-rose-100 p-4 w-full max-w-md gap-3 rounded-xl shadow-md ">
-                            <IoMdCloseCircleOutline className="text-rose-800 text-2xl font-semibold" />
-                            <span className="text-xl font-medium">
-                                Incorrect: {counts.zeros}
+                        <div className="flex items-center bg-ember-500/10 border border-ember-500/20 p-4 max-w-md gap-3 rounded-2xl">
+                            <IoMdCloseCircleOutline className="text-ember-600 text-xl" />
+                            <span className="text-sm text-ink-800">
+                                <strong className="font-display text-ink-900">
+                                    {counts.zeros}
+                                </strong>{' '}
+                                incorrect
                             </span>
                         </div>
 
-                        <div className="flex items-center bg-blue-100 p-4 w-full max-w-md gap-3 rounded-xl shadow-md hover:scale-[1.01]  duration-700">
-                            <IoMdShareAlt className="text-blue-800 text-2xl font-semibold" />
-                            <span className="text-xl font-medium">
-                                Share on Socials
+                        <div className="flex items-center bg-cream-100 border border-ink-900/8 p-4 max-w-md gap-3 rounded-2xl hover:-translate-y-0.5 duration-300 cursor-pointer">
+                            <IoMdShareAlt className="text-sun-700 text-xl" />
+                            <span className="text-sm text-ink-800">
+                                Share session
                             </span>
                         </div>
                     </div>

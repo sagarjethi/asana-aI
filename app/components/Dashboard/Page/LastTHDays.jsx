@@ -28,10 +28,13 @@ export default function LastTHDays({ chartData }) {
         datasets: [
             {
                 label: '',
-                borderColor: '#4158a8',
+                borderColor: '#F77F00',
+                backgroundColor: 'rgba(247, 127, 0, 0.15)',
+                fill: true,
                 pointStyle: false,
                 data: chartData,
                 tension: 0.4,
+                borderWidth: 2.5,
             },
         ],
     }

@@ -61,52 +61,55 @@ export default function UserSection() {
     }, [id])
 
     return (
-        <>
+        <div className="max-w-[1500px] mx-auto">
             {data && (
-                <div className="flex flex-col justify-center items-center mb-10 sm:mb-2">
-                    <div className="flex sm:flex-row flex-col justify-center items-center sm:gap-3 text-slate-800 px-5 py-1 rounded-2xl">
-                        <span className="text-3xl capitalize font-bold text-center">
-                            {data.name}
+                <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+                    <div className="flex flex-col">
+                        <span className="text-xs uppercase tracking-[0.18em] text-sun-700 font-semibold">
+                            Practice
                         </span>
-                        <span className="text-3xl capitalize font-bold hidden sm:block">
-                            -
-                        </span>
-                        <span className="text-3xl capitalize font-bold text-center">
-                            <hr className="block sm:hidden my-1 py-0.5" />
-                            {data.originalName}
-                        </span>
+                        <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-3 mt-1">
+                            <h1 className="font-display text-3xl sm:text-4xl text-ink-900 capitalize">
+                                {data.name}
+                            </h1>
+                            <span className="font-display text-xl text-ink-700/70 capitalize">
+                                {data.originalName}
+                            </span>
+                        </div>
                     </div>
 
                     <button
-                        className="z-50 tooltip tooltip-bottom before:max-w-[60vw] bg-slate-200 px-4 rounded-xl hover:bg-slate-300 duration-500 cursor-pointer"
+                        className="tooltip tooltip-bottom before:max-w-[60vw] inline-flex items-center gap-2 bg-cream-100 hover:bg-cream-200 border border-ink-900/8 px-4 py-2 rounded-full duration-300 cursor-pointer"
                         data-tip={data.description}
                     >
-                        <IoIosMore className="text-slate-700" />
+                        <IoIosMore className="text-ink-700" />
+                        <span className="text-sm text-ink-700">About</span>
                     </button>
                 </div>
             )}
-            <div className="grid sm:grid-cols-12 gap-10 sm:gap-5">
-                <div className="col-span-full sm:col-span-6 h-[50vh] bg-slate-100 rounded-2xl">
+
+            <div className="grid sm:grid-cols-12 gap-5">
+                <div className="col-span-full sm:col-span-7 h-[55vh] sun-card overflow-hidden relative bg-ink-900">
                     <InputSource source={source} />
                 </div>
-                <div className="col-span-full sm:col-span-6 relative h-[50vh] bg-slate-100 rounded-2xl overflow-hidden">
+                <div className="col-span-full sm:col-span-5 relative h-[55vh] sun-card overflow-hidden bg-cream-100">
                     <TutorialControl />
                 </div>
             </div>
 
-            <div className="sm:grid sm:grid-cols-12 sm:gap-5 mt-5">
-                <div className="sm:col-span-9 h-[40vh]">
+            <div className="grid sm:grid-cols-12 sm:gap-5 mt-5 gap-5">
+                <div className="sm:col-span-9 min-h-[40vh] sun-card p-1">
                     <UserSectionExtras />
                 </div>
-                <div className="sm:col-span-3 h-[40vh] rounded-2xl mt-[35rem] sm:mt-3">
+                <div className="sm:col-span-3 min-h-[40vh] sun-card p-4">
                     <TensorControl></TensorControl>
                 </div>
             </div>
 
-            <div className="absolute top-5 right-5">
+            <div className="fixed top-5 right-5 z-30">
                 <Menu />
             </div>
             <NewAchievements></NewAchievements>
-        </>
+        </div>
     )
 }

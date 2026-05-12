@@ -30,7 +30,8 @@ export default function WeeklyActivity({ chartData }) {
         datasets: [
             {
                 label: '',
-                borderColor: chartDataSum === 0 ? '#f43f5e' : '#c18f20', //#10b981
+                borderColor: chartDataSum === 0 ? '#B73E1E' : '#5C8A60',
+                borderWidth: 2,
                 pointStyle: false,
                 data: chartData,
                 tension: 0.3,

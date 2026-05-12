@@ -5,15 +5,11 @@ interface Props {
 
 export default function Heading({ title, description }: Props) {
     return (
-        <>
-            <div className="flex flex-col">
-                <span className="text-2xl p-5 text-slate-900 capitalize font-semibold">
-                    {title}
-                </span>
-                <span className="text-xl px-5 text-slate-700 capitalize font-normal">
-                    {description}
-                </span>
-            </div>
-        </>
+        <div className="flex flex-col mb-4 px-1">
+            <h2 className="font-display text-2xl text-ink-900 capitalize">
+                {title}
+            </h2>
+            <p className="text-sm text-ink-700/70 mt-1">{description}</p>
+        </div>
     )
 }

@@ -14,8 +14,23 @@ import toast, { Toaster } from 'react-hot-toast'
 
 import DietStats from './Stats/DietStats'
 import { IoTrashBinSharp } from 'react-icons/io5'
+import PageHeader from '@/app/components/Shell/PageHeader'
 
 type View = 'manageDiet' | 'dietAnalysis'
+
+const monthNames = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+]
+const dayNames = [
+    'Sunday', 'Monday', 'Tuesday', 'Wednesday',
+    'Thursday', 'Friday', 'Saturday',
+]
+
+function formatDate(timestamp: number) {
+    const d = new Date(timestamp)
+    return `${dayNames[d.getDay()]}, ${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`
+}
 
 export default function DietDashboard() {
     const userDiet = useSelector((state: RootState) => state.dietSlice.USERDIET)
@@ -40,41 +55,6 @@ export default function DietDashboard() {
         dispatch(fetchDiet())
     }, [])
 
-    const dateToday = (timestamp: number) => {
-        const monthNames = [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec',
-        ]
-        const dayNames = [
-            'Sunday',
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saturday',
-        ]
-        const epochDate = new Date(timestamp)
-        const month = epochDate.getMonth()
-        const date = epochDate.getDate()
-        const year = epochDate.getFullYear()
-
-        const dayIndex = epochDate.getDay()
-
-        return `${dayNames[dayIndex]}, ${date} ${monthNames[month]} ${year}`
-    }
-
-    // Bad Approach Should be removed on future
     const imagesName: string[] | undefined = reversedUserDiet?.map(
         (item) => item.name
     )
@@ -106,75 +86,94 @@ export default function DietDashboard() {
         setOptimisticDiet(userDiet)
     }, [userDiet])
 
-    const handleViewChange = (view: View) => {
-        setCurrentView(view)
-    }
-
     return (
-        <>
+        <div className="max-w-[1500px] mx-auto">
             <Toaster position="top-center" reverseOrder={false} />
 
-            <div className="flex gap-4 p-5 justify-center sm:justify-normal">
-                <button
-                    className="capitalize bg-blue-900 text-slate-50 px-3 py-2 rounded-2xl hover:bg-blue-700 hover:scale-[1.01] duration-700"
-                    onClick={() => handleViewChange('manageDiet')}
-                >
-                    Manage Diet
-                </button>
-                <button
-                    className="capitalize bg-blue-900 text-slate-50 px-3 py-2 rounded-2xl hover:bg-blue-700 hover:scale-[1.01] duration-700"
-                    onClick={() => handleViewChange('dietAnalysis')}
-                >
-                    Diet Analysis
-                </button>
+            <PageHeader
+                eyebrow="Nourishment"
+                title="Diet"
+                description="Log your meals and trace patterns over time."
+                right={
+                    currentView === 'manageDiet' ? <DietAddForm /> : undefined
+                }
+            />
+
+            <div className="inline-flex bg-cream-100 rounded-full p-1 mb-6 border border-ink-900/8">
+                {(
+                    [
+                        ['manageDiet', 'Manage diet'],
+                        ['dietAnalysis', 'Diet analysis'],
+                    ] as const
+                ).map(([key, label]) => (
+                    <button
+                        key={key}
+                        onClick={() => setCurrentView(key)}
+                        className={`px-5 py-1.5 rounded-full text-sm font-medium duration-300 ${
+                            currentView === key
+                                ? 'bg-sun-cta text-white shadow-warm'
+                                : 'text-ink-700 hover:text-ink-900'
+                        }`}
+                    >
+                        {label}
+                    </button>
+                ))}
             </div>
 
             {currentView === 'manageDiet' && (
-                <div className="">
-                    <div className="flex sm:flex-row flex-col items-center align-middle p-5 justify-between gap-5 sm:gap-0">
-                        <span className="text-3xl">Recent Diet Meal</span>
-                        <DietAddForm />
-                    </div>
-                    <div className="flex flex-wrap overflow-x-hidden">
+                <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                         {status === 'success' &&
                             reversedUserDiet?.map((data, idx) => (
                                 <div
                                     key={idx}
-                                    className="relative w-full xl:w-[30%] m-5 sm:p-2 flex items-center bg-slate-50 shadow-md rounded-2xl overflow-hidden hover:scale-[1.01] duration-700 cursor-pointer"
+                                    className="relative group sun-card overflow-hidden hover:-translate-y-0.5 hover:shadow-warm duration-300"
                                 >
-                                    <div className="h-full overflow-hidden p-2">
-                                        <img
-                                            src={`/meals/${images && images[idx]}`}
-                                            alt="Default"
-                                            className="sm:w-40 w-28 h-full object-cover rounded-2xl hover:scale-105 duration-700"
-                                        />
-                                    </div>
-                                    <div className="p-4 flex-1">
-                                        <h2 className="text-xl font-semibold mb-2">
-                                            {data.name}
-                                        </h2>
-                                        <p className="text-slate-600 mb-1">
-                                            <strong>Calories:</strong>{' '}
-                                            {data.calorie} kcal
-                                        </p>
-                                        <p className="text-slate-600 mb-1">
-                                            <strong>Protein:</strong>{' '}
-                                            {data.protein} g
-                                        </p>
-                                        <p className="text-slate-600 mb-1">
-                                            <strong>Fat:</strong> {data.fat} g
-                                        </p>
-                                        <p className="text-slate-600 mb-1">
-                                            <strong>Carbs:</strong> {data.carb}{' '}
-                                            g
-                                        </p>
-                                        <p className="text-slate-600 mb-1">
-                                            <strong>Date Added:</strong>{' '}
-                                            {dateToday(data.id)}
-                                        </p>
+                                    <div className="flex">
+                                        <div className="h-32 w-32 shrink-0 overflow-hidden">
+                                            <img
+                                                src={`/meals/${images && images[idx]}`}
+                                                alt={data.name}
+                                                className="w-full h-full object-cover group-hover:scale-105 duration-500"
+                                            />
+                                        </div>
+                                        <div className="p-4 flex-1 min-w-0">
+                                            <h3 className="font-display text-lg text-ink-900 truncate">
+                                                {data.name}
+                                            </h3>
+                                            <div className="text-xs text-ink-700/70 mt-1">
+                                                {formatDate(data.id)}
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-1 mt-3 text-xs text-ink-700">
+                                                <span>
+                                                    <strong className="text-ink-900">
+                                                        {data.calorie}
+                                                    </strong>{' '}
+                                                    kcal
+                                                </span>
+                                                <span>
+                                                    <strong className="text-ink-900">
+                                                        {data.protein}
+                                                    </strong>{' '}
+                                                    g protein
+                                                </span>
+                                                <span>
+                                                    <strong className="text-ink-900">
+                                                        {data.fat}
+                                                    </strong>{' '}
+                                                    g fat
+                                                </span>
+                                                <span>
+                                                    <strong className="text-ink-900">
+                                                        {data.carb}
+                                                    </strong>{' '}
+                                                    g carbs
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div
+                                    <button
                                         onClick={() =>
                                             dispatch(
                                                 saveRecentDiet({
@@ -183,56 +182,44 @@ export default function DietDashboard() {
                                                 })
                                             )
                                         }
-                                        className="absolute sm:bottom-5 sm:right-5 bottom-1 right-2 flex items-center justify-center p-2 rounded-xl bg-red-500 hover:bg-red-600 duration-500"
+                                        className="absolute bottom-3 right-3 inline-flex items-center justify-center h-8 w-8 rounded-full bg-ember-500/10 text-ember-600 hover:bg-ember-500 hover:text-white duration-300"
+                                        aria-label="Remove"
                                     >
-                                        <IoTrashBinSharp className="text-slate-50 text-lg" />
-                                    </div>
+                                        <IoTrashBinSharp className="text-sm" />
+                                    </button>
                                 </div>
                             ))}
 
                         {status === 'pending' &&
-                            Array.from({ length: 5 }).map((_, idx) => (
+                            Array.from({ length: 6 }).map((_, idx) => (
                                 <div
                                     key={idx}
-                                    className="xl:w-1/2 m-5 p-2 flex items-center bg-slate-50 shadow-md rounded-2xl overflow-hidden hover:scale-105 duration-700 cursor-pointer"
-                                >
-                                    <div className="h-full overflow-hidden p-2">
-                                        <div className="bg-slate-300 h-full w-40 rounded-2xl animate-pulse"></div>
-                                    </div>
-                                    <div className="p-4 flex-1 w-full">
-                                        <p className="text-slate-600 mb-1 bg-slate-300 h-8 w-3/4 rounded-xl animate-pulse"></p>
-                                        <p className="text-slate-600 mb-1 bg-slate-300 h-4 w-1/2 rounded-xl animate-pulse"></p>
-                                        <p className="text-slate-600 mb-1 bg-slate-300 h-4 w-1/2 rounded-xl animate-pulse"></p>
-                                        <p className="text-slate-600 mb-1 bg-slate-300 h-4 w-1/2 rounded-xl animate-pulse"></p>
-                                        <p className="text-slate-600 mb-1 bg-slate-300 h-4 w-1/2 rounded-xl animate-pulse"></p>
-                                        <p className="text-slate-600 mb-1 bg-slate-300 h-4 w-1/2 rounded-xl animate-pulse"></p>
-                                    </div>
-                                </div>
+                                    className="h-32 bg-cream-200 rounded-2xl animate-pulse"
+                                />
                             ))}
                     </div>
 
                     {(!optimisticDiet || optimisticDiet.length === 0) &&
                         status !== 'pending' && (
-                            <div className="flex items-center justify-center  mt-40">
-                                <div className="max-w-md mx-auto p-6 bg-slate-50 shadow-lg rounded-2xl text-center">
-                                    <div className="text-2xl font-semibold text-slate-800 mb-4">
-                                        Uh oh, no recent diet found
+                            <div className="flex items-center justify-center mt-16">
+                                <div className="max-w-md mx-auto p-8 sun-card text-center">
+                                    <div className="font-display text-2xl text-ink-900 mb-2">
+                                        No meals logged yet
                                     </div>
-                                    <div className="text-slate-600 mb-6">
-                                        It seems like you haven&apos;t added any
-                                        recent meal. Please add your recent diet
-                                        to continue.
-                                    </div>
-                                    <div className="flex w-full px-4 py-2 justify-center">
+                                    <p className="text-ink-700/80 mb-6">
+                                        Add a meal to start tracing the
+                                        patterns of your day.
+                                    </p>
+                                    <div className="flex justify-center">
                                         <DietAddForm />
                                     </div>
                                 </div>
                             </div>
                         )}
-                </div>
+                </>
             )}
 
             {currentView === 'dietAnalysis' && <DietStats />}
-        </>
+        </div>
     )
 }

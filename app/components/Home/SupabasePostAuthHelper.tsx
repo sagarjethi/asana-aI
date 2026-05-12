@@ -1,28 +1,14 @@
 'use client'
-import { createClientBrowser } from '@/utils/supabase/client'
-import { createUserForDatabase, postAuth } from '@/app/auth/callback/postAuth'
 import { useEffect } from 'react'
+
+/**
+ * Previously created a Supabase user-db row after first OAuth login. The
+ * self-hosted backend now creates the user row at /api/auth/signup time, so
+ * this is a no-op kept for import-stability with existing call sites.
+ */
 export default function SupabasePostAuthHelper() {
-    const supabase = createClientBrowser()
-    const postAuthFunction = async () => {
-        const {
-            data: { user },
-            error,
-        } = await supabase.auth.getUser()
-
-        if (user) {
-            // adding new configuration to user-db
-            // using false wale because it check if the user created time is
-            // greater than Threshold time (in seconds)
-            // false if the user is created in the last 2 minutes
-            if (!(await postAuth(user?.created_at, 120))) {
-                createUserForDatabase(user)
-            }
-        }
-    }
     useEffect(() => {
-        postAuthFunction()
+        // no-op
     }, [])
-
     return <></>
 }

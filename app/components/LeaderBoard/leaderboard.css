@@ -1,12 +1,7 @@
 .gradient-slider {
     -webkit-appearance: none;
     height: 6px;
-    background: linear-gradient(
-        to right,
-        rgb(236, 72, 153),
-        rgb(239, 68, 68),
-        rgb(234, 179, 8)
-    );
+    background: linear-gradient(to right, #fcbf49, #f77f00, #e25822);
     border-radius: 50px;
     outline: none;
     opacity: 0.9;

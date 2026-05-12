@@ -43,9 +43,10 @@ export default function TabSwitcher() {
     const dispatch = useDispatch<AppDispatch>()
     return (
         <>
-            <div className="flex overflow-x-auto flex-row w-full bg-slate-100 rounded-t-2xl px-3 py-2 gap-5 border-b-[3px] border-slate-500">
+            <div className="flex overflow-x-auto flex-row w-full bg-cream-100 rounded-t-2xl px-3 py-2 gap-2 border-b border-ink-900/8">
                 {options.map((opt, idx) => (
-                    <div
+                    <button
+                        type="button"
                         key={idx}
                         onClick={() =>
                             dispatch(
@@ -59,16 +60,18 @@ export default function TabSwitcher() {
                                 )
                             )
                         }
-                        className={`flex px-3 py-0.5 items-center justify-start gap-2 rounded-xl 
-                             duration-700 hover:rounded-3xl cursor-pointer
-                            ${currentTab === opt.class.toLowerCase() ? 'bg-blue-950 text-slate-50' : 'bg-slate-300 hover:bg-opacity-50'}`}
+                        className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full duration-300 cursor-pointer
+                            ${
+                                currentTab === opt.class.toLowerCase()
+                                    ? 'bg-sun-cta text-white shadow-warm'
+                                    : 'text-ink-700 hover:text-ink-900 hover:bg-cream-200'
+                            }`}
                     >
-                        <span className="capitalize text-xl whitespace-nowrap font-extrabold">
+                        <span>{opt.icon}</span>
+                        <span className="capitalize text-sm whitespace-nowrap font-medium">
                             {opt.name}
                         </span>
-
-                        <span>{opt.icon}</span>
-                    </div>
+                    </button>
                 ))}
             </div>
         </>

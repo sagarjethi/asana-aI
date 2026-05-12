@@ -1,19 +1,20 @@
 'use client'
-import { FaApple, FaFacebook } from 'react-icons/fa'
-import { FcGoogle } from 'react-icons/fc'
 import AuthImageSlideShow from '../components/Auth/ImageSlideShow'
 
-import { oAuthSignIn } from './actions'
-import ProviderUpdate from './ProvidesUpdate'
-import toast, { Toaster } from 'react-hot-toast'
-import { useEffect } from 'react'
+import { signIn, signUp } from './actions'
+import { Toaster } from 'react-hot-toast'
+import { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 
 export default function Page() {
+    const [mode, setMode] = useState<'login' | 'signup'>('login')
+
     // remove toast notification
     useEffect(() => {
         Cookies.remove('init')
     }, [])
+
+    const action = mode === 'login' ? signIn : signUp
 
     return (
         <>
@@ -24,51 +25,59 @@ export default function Page() {
                         <div className="flex flex-col gap-5 mx-10 sm:mx-0 sm:m-10 items-center">
                             <img src="/home/logo.svg" alt="" className="w-14" />
                             <span className="text-3xl text-slate-900 font-extrabold">
-                                AsanaAI Login
+                                AsanaAI {mode === 'login' ? 'Login' : 'Signup'}
                             </span>
                         </div>
 
-                        <div className="flex flex-col p-2 gap-5 m-5">
+                        <form
+                            action={action}
+                            className="flex flex-col p-2 gap-4 m-5"
+                        >
+                            {mode === 'signup' && (
+                                <input
+                                    name="name"
+                                    type="text"
+                                    placeholder="Name"
+                                    className="border-[3px] rounded-2xl p-3 hover:border-slate-400 duration-300"
+                                />
+                            )}
+                            <input
+                                name="email"
+                                type="email"
+                                required
+                                placeholder="Email"
+                                className="border-[3px] rounded-2xl p-3 hover:border-slate-400 duration-300"
+                            />
+                            <input
+                                name="password"
+                                type="password"
+                                required
+                                minLength={6}
+                                placeholder="Password (min 6 chars)"
+                                className="border-[3px] rounded-2xl p-3 hover:border-slate-400 duration-300"
+                            />
                             <button
-                                onClick={async () => {
-                                    await oAuthSignIn('google')
-                                }}
-                                className="flex justify-center items-center gap-5 border-[3px] rounded-2xl p-2 hover:border-slate-400 duration-300 cursor-pointer"
+                                type="submit"
+                                className="flex justify-center items-center gap-5 border-[3px] rounded-2xl p-2 hover:border-slate-400 duration-300 cursor-pointer bg-blue-900 text-white"
                             >
-                                <FcGoogle className="inline-flex text-2xl" />
                                 <span className="text-xl font-semibold">
-                                    Login with Google
+                                    {mode === 'login'
+                                        ? 'Log In'
+                                        : 'Create Account'}
                                 </span>
                             </button>
-
                             <button
-                                className="flex justify-center items-center gap-5 border-[3px] rounded-2xl p-2 hover:border-slate-400 duration-300 cursor-pointer"
+                                type="button"
                                 onClick={() =>
-                                    toast.custom((t) =>
-                                        ProviderUpdate(t, 'facebook')
-                                    )
+                                    setMode(mode === 'login' ? 'signup' : 'login')
                                 }
+                                className="text-sm text-slate-700 underline"
                             >
-                                <FaFacebook className="inline-flex text-2xl text-blue-500" />
-                                <span className="text-xl font-semibold">
-                                    Login with Facebook
-                                </span>
+                                {mode === 'login'
+                                    ? "Don't have an account? Sign up"
+                                    : 'Already have an account? Log in'}
                             </button>
-
-                            <button
-                                className="flex justify-center items-center gap-5 border-[3px] rounded-2xl p-2 hover:border-slate-400 duration-300 cursor-pointer"
-                                onClick={() =>
-                                    toast.custom((t) =>
-                                        ProviderUpdate(t, 'apple')
-                                    )
-                                }
-                            >
-                                <FaApple className="inline-flex text-2xl text-slate-600" />
-                                <span className="text-xl font-semibold">
-                                    Login with Apple ID
-                                </span>
-                            </button>
-                        </div>
+                        </form>
 
                         <div className="flex flex-col p-2 gap-5 mx-10">
                             AsanaAI Yoga Trainer

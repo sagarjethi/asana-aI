@@ -38,14 +38,14 @@ export default function Accuracy({ performanceData }) {
             {
                 label: 'Accurate',
                 data: accuracy,
-                borderColor: '#3a61fd',
+                borderColor: '#F77F00',
                 fill: false,
                 tension: 0.3,
             },
             {
                 label: 'Inaccurate',
                 data: inaccurate,
-                borderColor: '#7ba3fb',
+                borderColor: '#5C8A60',
                 fill: false,
                 tension: 0.3,
             },
@@ -58,7 +58,7 @@ export default function Accuracy({ performanceData }) {
             {
                 label: 'Accurate',
                 data: accuracy,
-                borderColor: '#3a61fd',
+                borderColor: '#F77F00',
                 fill: false,
                 tension: 0.3,
             },
@@ -71,7 +71,7 @@ export default function Accuracy({ performanceData }) {
             {
                 label: 'Inaccurate',
                 data: inaccurate,
-                borderColor: '#7ba3fb',
+                borderColor: '#5C8A60',
                 fill: false,
                 tension: 0.3,
             },
@@ -163,28 +163,23 @@ export default function Accuracy({ performanceData }) {
         <>
             <div className="flex flex-col w-full h-full m-1 sm:mx-5 p-2">
                 <div className="flex flex-col xl:flex-row h-fit sm:mx-3">
-                    <div className="flex h-10 gap-5 text-slate-100">
-                        <button
-                            onClick={() => setUserSelection('mixed')}
-                            className={`cursor-pointer text-base font-medium bg-blue-800 bg-opacity-40 px-3 rounded-2xl ${userSelection === 'mixed' ? 'bg-blue-800 border-b-[3px] border-b-secondary' : 'hover-item'}`}
-                        >
-                            Mixed
-                        </button>
-                        <button
-                            onClick={() => setUserSelection('accurate')}
-                            className={`cursor-pointer text-base font-medium bg-blue-800 bg-opacity-40 px-3 rounded-2xl ${userSelection === 'accurate' ? 'bg-blue-800 border-b-[3px] border-b-secondary' : 'hover-item'}`}
-                        >
-                            Accurate
-                        </button>
-                        <button
-                            onClick={() => setUserSelection('inaccurate')}
-                            className={`cursor-pointer text-base font-medium bg-blue-800 bg-opacity-40 px-3 rounded-2xl ${userSelection === 'inaccurate' ? 'bg-blue-800 border-b-[3px] border-b-secondary' : 'hover-item'}`}
-                        >
-                            Inaccurate
-                        </button>
+                    <div className="flex h-10 gap-2">
+                        {['mixed', 'accurate', 'inaccurate'].map((opt) => (
+                            <button
+                                key={opt}
+                                onClick={() => setUserSelection(opt)}
+                                className={`capitalize cursor-pointer text-sm font-medium px-4 py-1.5 rounded-full duration-300 ${
+                                    userSelection === opt
+                                        ? 'bg-sun-cta text-white shadow-warm'
+                                        : 'bg-cream-100 text-ink-700 hover:bg-cream-200'
+                                }`}
+                            >
+                                {opt}
+                            </button>
+                        ))}
                     </div>
 
-                    <div className="inline-flex ml-4 xl:my-0 sm:my-2 py-2 text-lg text-slate-800 ">
+                    <div className="inline-flex ml-4 xl:my-0 sm:my-2 py-2 text-sm text-ink-700/80 ">
                         {userSelection === 'accurate' && (
                             <span>
                                 You have reached{' '}

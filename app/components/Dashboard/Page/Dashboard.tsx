@@ -2,7 +2,6 @@
 
 import './dashboard.css'
 import { BsLightningCharge } from 'react-icons/bs'
-import { IoCalendarClearOutline } from 'react-icons/io5'
 import Calendar from './Calendar'
 import RecentActivity from './RecentActivity'
 import Heading from './Heading'
@@ -17,6 +16,45 @@ import {
 import { AppDispatch, RootState } from '@/lib/store'
 import { RxActivityLog } from 'react-icons/rx'
 import Link from 'next/link'
+import PageHeader from '@/app/components/Shell/PageHeader'
+
+const wishes = (time: string, name: string) => {
+    switch (time) {
+        case 'Morning':
+            return `Good morning, ${name}. Greet the sun.`
+        case 'Midday':
+            return `Hey ${name} — a midday breath to reset.`
+        case 'Evening':
+            return `Good evening, ${name}. Unwind with intention.`
+        case 'Afternoon':
+            return `Hello, ${name}. A short flow can change the day.`
+        case 'Night':
+            return `Hey ${name} — wind down before rest.`
+        default:
+            return `Hello, ${name}. Step onto the mat.`
+    }
+}
+
+const getHour = () => {
+    const hours = new Date().getHours()
+    if (hours >= 5 && hours < 12) return 'Morning'
+    if (hours >= 12 && hours < 17) return 'Midday'
+    if (hours >= 17 && hours < 20) return 'Evening'
+    if (hours >= 20 && hours < 22) return 'Night'
+    return 'Afternoon'
+}
+
+function DashboardSkeleton() {
+    return (
+        <div className="grid grid-cols-12 gap-5">
+            <div className="col-span-full xl:col-span-4 min-h-[40vh] bg-cream-200 animate-pulse rounded-3xl" />
+            <div className="col-span-full xl:col-span-5 min-h-[40vh] bg-cream-200 animate-pulse rounded-3xl" />
+            <div className="col-span-full xl:col-span-3 min-h-[40vh] bg-cream-200 animate-pulse rounded-3xl" />
+            <div className="col-span-full xl:col-span-9 min-h-[40vh] bg-cream-200 animate-pulse rounded-3xl" />
+            <div className="col-span-full xl:col-span-3 min-h-[40vh] bg-cream-200 animate-pulse rounded-3xl" />
+        </div>
+    )
+}
 
 export default function Dashboard(name: any) {
     const dashboardData = useSelector(
@@ -43,205 +81,116 @@ export default function Dashboard(name: any) {
         }
     }, [dashboardData])
 
-    const dateToday = () => {
-        const monthNames = [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec',
-        ]
-        const dayNames = [
-            'Sunday',
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saturday',
-        ]
-
-        const timestamp = Date.now()
-        const epochDate = new Date(timestamp)
-        const month = epochDate.getMonth()
-        const date = epochDate.getDate()
-        const year = epochDate.getFullYear()
-
-        const dayIndex = epochDate.getDay()
-
-        return `${dayNames[dayIndex]}, ${date} ${monthNames[month]} ${year}`
-    }
-
-    const wishes = (time: string, name: string) => {
-        switch (time) {
-            case 'Morning':
-                return `Good morning, ${name}! Rise and shine for your yoga session.`
-            case 'Midday':
-                return `Hey ${name}, it's time for your midday yoga break. Take a moment to recharge.`
-            case 'Evening':
-                return `Good evening, ${name}! Unwind and release tension with some calming yoga.`
-            case 'Afternoon':
-                return `Hello, ${name}! Take a break from your day and enjoy a refreshing yoga session.`
-            case 'Night':
-                return `Hey ${name}, wind down your day with some relaxing yoga before bed.`
-            default:
-                return `Hello, ${name}! Enjoy your yoga session.`
-        }
-    }
-
-    const getHour = () => {
-        const hours = new Date().getHours()
-        if (hours >= 5 && hours < 12) {
-            return 'Morning'
-        } else if (hours >= 12 && hours < 17) {
-            return 'Midday'
-        } else if (hours >= 17 && hours < 20) {
-            return 'Evening'
-        } else if (hours >= 20 && hours < 22) {
-            return 'Night'
-        } else {
-            return 'Afternoon'
-        }
-    }
+    const firstName = (name?.name ?? '').split(' ')[0] || 'friend'
 
     return (
-        <>
-            {dashboardData && poseInfo && recentActivities && (
-                <div className="grid grid-cols-12 sm:gap-8 gap-3 mt-8 sm:mt-0 sm:m-2 overflow-y-hidden ml-3 mr-3">
-                    {/* level 0 */}
-                    <div className="col-span-12 min-h-[5vh] flex flex-col sm:flex-row justify-between items-center rounded-2xl">
-                        <span className="text-3xl mx-5 font-medium text-slate-800">
-                            Dashboard
-                        </span>
-                        <div className="flex text-gray-700 font-light">
-                            <IoCalendarClearOutline className="mx-3 text-xl" />
-                            <span className="text-nowrap">{dateToday()}</span>
+        <div className="max-w-[1500px] mx-auto">
+            <PageHeader
+                eyebrow="Your space"
+                title="Dashboard"
+                description="A quiet overview of your practice today."
+                showDate
+            />
+
+            {!dashboardData || !poseInfo || !recentActivities ? (
+                <DashboardSkeleton />
+            ) : (
+                <div className="grid grid-cols-12 gap-5">
+                    {/* welcome */}
+                    <div className="col-span-full xl:col-span-4 rounded-3xl overflow-hidden anim-blob border border-ink-900/8 min-h-[40vh] flex flex-col items-center justify-center p-6 relative">
+                        <div className="absolute -top-10 -right-10 w-56 h-56 bg-sun-orb opacity-90 animate-sun-pulse pointer-events-none" />
+                        <div className="w-40 relative z-10">
+                            <img
+                                src="/dashboard/meditation.gif"
+                                alt="yoga"
+                                className="mix-blend-multiply"
+                            />
                         </div>
+                        <p className="relative z-10 text-center font-display text-xl text-ink-900 mt-4 max-w-xs leading-snug">
+                            {wishes(getHour(), firstName)}
+                        </p>
                     </div>
 
-                    {/* level 1 */}
-
-                    {/* level 1.1 - user welcome */}
-                    <div className="col-span-full xl:col-span-4 h-[30vh] xl:h-[50vh] overflow-hidden rounded-2xl">
-                        <div className="h-full anim-blob flex flex-col justify-center">
-                            <div className="w-44 mx-auto">
-                                <img
-                                    src="/dashboard/meditation.gif"
-                                    alt="yoga"
-                                />
-                            </div>
-                            <div className="flex justify-center items-center text-center mx-5">
-                                <span className="text-xl px-5 text-white capitalize font-bold">
-                                    {wishes(
-                                        getHour(),
-                                        name.name.split(' ')[0] ?? 'User'
-                                    )}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* level 1.2 - today list */}
-                    <div className="col-span-full xl:col-span-5 sm:h-[50vh] flex flex-col  rounded-2xl">
+                    {/* today list */}
+                    <div className="col-span-full xl:col-span-5 sun-card p-5 min-h-[40vh] flex flex-col">
                         <Heading
-                            title=" Today's List"
-                            description="Complete the following yoga exercises"
+                            title="Today's flow"
+                            description="A handful of poses to move through."
                         />
-
-                        <div className="my-3 flex flex-col justify-around h-full">
-                            {poseInfo &&
-                                poseInfo.map((item: any, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="flex flex-col sm:flex-row gap-5 sm:gap-0 justify-between capitalize mt-2 px-3 py-5 sm:py-2 items-center align-middle rounded-2xl shadow-lg hover:shadow-xl border-2 border-slate-200 duration-500"
-                                    >
-                                        <div className="flex flex-col sm:flex-row items-center sm:w-3/5 gap-5 sm:gap-0">
-                                            <div className="sm:w-16 w-36">
-                                                <img
-                                                    className="object-scale-down mix-blend-multiply rounded-xl"
-                                                    src={`/pose/image/webp/${item?.image}`}
-                                                    alt={item.name}
-                                                />
-                                            </div>
-
-                                            <span className="text-xl overflow-hidden mx-4 p-1 truncate sm:block hidden">
-                                                {item.name} -{' '}
-                                                {item.originalName}
+                        <div className="flex flex-col gap-3 flex-1">
+                            {poseInfo?.map((item: any, idx) => (
+                                <div
+                                    key={idx}
+                                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl bg-cream-50 border border-ink-900/6 hover:border-sun-600/40 hover:shadow-soft duration-300 p-3"
+                                >
+                                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                                        <div className="h-14 w-14 shrink-0 rounded-xl overflow-hidden bg-cream-100 flex items-center justify-center">
+                                            <img
+                                                className="object-contain mix-blend-multiply w-full h-full"
+                                                src={`/pose/image/webp/${item?.image}`}
+                                                alt={item.name}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col min-w-0">
+                                            <span className="font-display text-base text-ink-900 capitalize truncate">
+                                                {item.name}
                                             </span>
-
-                                            <span className="text-xl overflow-hidden mx-4 p-1 truncate sm:hidden block">
-                                                {item.name} -{' '}
-                                            </span>
-                                            <span className="text-xl overflow-hidden mx-4 p-1 truncate sm:hidden block">
+                                            <span className="text-xs text-ink-700/70 capitalize truncate">
                                                 {item.originalName}
                                             </span>
                                         </div>
-
-                                        <Link href={`/practice?id=${item.id}`}>
-                                            <button className="capitalize bg-blue-800 text-xl text-slate-100 rounded-xl px-3 py-3 font-medium h-fit mx-2 shadow-md hover:shadow-indigo-900 duration-300">
-                                                exercise
-                                                <BsLightningCharge className="inline-flex mx-1" />
-                                            </button>
-                                        </Link>
                                     </div>
-                                ))}
+                                    <Link href={`/practice?id=${item.id}`}>
+                                        <button className="inline-flex items-center gap-2 rounded-full bg-sun-cta text-white px-4 py-2 text-sm font-medium shadow-warm hover:opacity-95 duration-300">
+                                            Practice
+                                            <BsLightningCharge />
+                                        </button>
+                                    </Link>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
-                    {/* level 1.3 - calendar */}
-                    <div className="col-span-full xl:col-span-3 sm:h-[50vh] rounded-2xl overflow-hidden">
+                    {/* calendar */}
+                    <div className="col-span-full xl:col-span-3 sun-card p-5 min-h-[40vh] flex flex-col">
                         <Heading
-                            title="Current Activity"
-                            description="All active dates are marked below"
+                            title="Active days"
+                            description="Highlighted dates show your practice."
                         />
-
-                        <div className="flex xl:sm:-mt-14 mt-3 justify-center">
+                        <div className="flex justify-center -mt-2">
                             <Calendar
                                 epochTimes={dashboardData.userActiveDays}
                             />
                         </div>
                     </div>
 
-                    {/* level 2 */}
-
-                    {/* level 2.1 recent activity */}
-                    <div className="col-span-full xl:col-span-9 2xl:h-[50vh] rounded-2xl overflow-hidden">
+                    {/* recent activity */}
+                    <div className="col-span-full xl:col-span-9 sun-card p-5 min-h-[40vh]">
                         <Heading
-                            title="Recent Activities"
-                            description="All your recent activities are displayed below"
+                            title="Recent activity"
+                            description="What you've been moving through lately."
                         />
-                        {recentActivities.length !== 0 && (
-                            <div className="sm:p-3 px-9 flex flex-col justify-between h-fit">
-                                <RecentActivity
-                                    recentActivities={recentActivities}
-                                />
-                            </div>
-                        )}
-
-                        {recentActivities.length === 0 && (
-                            <div className="h-full flex flex-col gap-5 justify-center items-center align-middle">
-                                <RxActivityLog className="text-4xl text-slate-900" />
-                                <span className="text-2xl text-slate-900 font-semibold">
-                                    No recent activities
+                        {recentActivities.length !== 0 ? (
+                            <RecentActivity
+                                recentActivities={recentActivities}
+                            />
+                        ) : (
+                            <div className="flex flex-col items-center justify-center gap-3 py-12 text-ink-700/60">
+                                <RxActivityLog className="text-4xl" />
+                                <span className="font-display text-lg">
+                                    No recent activity yet
                                 </span>
                             </div>
                         )}
                     </div>
 
-                    {/* level 2.2 last 30 days */}
-                    <div className="col-span-full xl:col-span-3 h-[50vh]  rounded-2xl overflow-hidden flex flex-col justify-between">
+                    {/* last 30 days */}
+                    <div className="col-span-full xl:col-span-3 sun-card p-5 min-h-[40vh] flex flex-col">
                         <Heading
-                            title="Last 30 Days"
-                            description="Overview of activity trends over the last 30 days."
+                            title="Last 30 days"
+                            description="Your activity trend."
                         />
-                        <div className="h-[25vh] flex justify-center items-center my-5 mx-8">
+                        <div className="flex-1 flex justify-center items-center">
                             <LastTHDays
                                 chartData={dashboardData.userLastNDaysActivity}
                             />
@@ -249,27 +198,6 @@ export default function Dashboard(name: any) {
                     </div>
                 </div>
             )}
-
-            {(!dashboardData || !poseInfo || !recentActivities) && (
-                <div className=" z-50 grid grid-cols-12 sm:gap-8 gap-5 sm:m-2 m-5 overflow-y-hidden">
-                    {/* level 0 */}
-                    <div className="col-span-12 min-h-[5vh] flex flex-col sm:flex-row justify-between items-center rounded-2xl">
-                        <span className="text-3xl mx-5 font-medium text-slate-800">
-                            Dashboard
-                        </span>
-                        <div className="flex text-gray-700 font-light">
-                            <IoCalendarClearOutline className="mx-3 text-xl" />
-                            <span className="text-nowrap">{dateToday()}</span>
-                        </div>
-                    </div>
-
-                    <div className="col-span-full xl:col-span-4 min-h-[40vh] bg-slate-300 animate-pulse overflow-hidden rounded-2xl"></div>
-                    <div className="col-span-full xl:col-span-5 min-h-[40vh] bg-slate-300 animate-pulse rounded-2xl"></div>
-                    <div className="col-span-full xl:col-span-3 min-h-[40vh] max-h-[40vh] rounded-2xl bg-slate-300 animate-pulse"></div>
-                    <div className="col-span-full xl:col-span-9 min-h-[40vh] rounded-2xl bg-slate-300 animate-pulse"></div>
-                    <div className="col-span-full xl:col-span-3 min-h-[40vh] max-h-[40vh] rounded-2xl bg-slate-300 animate-pulse"></div>
-                </div>
-            )}
-        </>
+        </div>
     )
 }

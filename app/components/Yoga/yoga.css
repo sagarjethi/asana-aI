@@ -2,10 +2,10 @@
     /* slider */
     --slider-width: 20vw;
     --slider-height: 12px;
-    --slider-bg: rgb(170, 170, 170);
+    --slider-bg: #efddbe;
     --slider-border-radius: 999px;
     /* level */
-    --level-color: #1e3a8a;
+    --level-color: #f77f00;
     --level-transition-duration: 0.1s;
     /* icon */
     --icon-margin: 15px;
@@ -124,7 +124,7 @@
     height: 3.25em;
     border-radius: 50%;
     border: 2px solid transparent;
-    border-top-color: #172554;
+    border-top-color: #f77f00;
     animation: rotate4-pr 2s linear infinite;
     position: relative;
 }
@@ -137,7 +137,7 @@
     top: 0;
     left: 0;
     border: 2px solid transparent;
-    border-top-color: #172554;
+    border-top-color: #e25822;
     border-radius: 50%;
     animation: dash4-pr 1.5s ease-in-out infinite;
 }
@@ -158,6 +158,6 @@
     }
     100% {
         transform: rotate(360deg);
-        border-top-color: #172554;
+        border-top-color: #f77f00;
     }
 }

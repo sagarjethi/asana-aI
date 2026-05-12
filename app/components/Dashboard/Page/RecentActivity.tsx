@@ -15,7 +15,7 @@ export default function RecentActivity(recentActivities: any) {
             opts={{
                 align: 'start',
             }}
-            className="w-11/12 mx-auto"
+            className="w-[92%] mx-auto"
         >
             <CarouselContent>
                 {recentActivities &&
@@ -23,27 +23,21 @@ export default function RecentActivity(recentActivities: any) {
                         (item: any, idx: number) => (
                             <CarouselItem key={idx} className="sm:basis-1/3">
                                 <Link href={`/practice?id=${item.id}`}>
-                                    <div
-                                        key={idx}
-                                        className="flex justify-center items-center p-4"
-                                    >
-                                        <div className="w-full max-w-xs flex flex-col items-center bg-slate-200 shadow-md rounded-2xl overflow-hidden transform transition duration-500 hover:scale-105 hover:shadow-xl cursor-pointer">
-                                            <div className="w-full flex justify-center bg-gray-200 p-4">
-                                                <img
-                                                    src={`/pose/image/webp/${item?.image}`}
-                                                    alt={item.name}
-                                                    className="h-32 object-contain mix-blend-multiply rounded-lg"
-                                                />
-                                            </div>
-
-                                            <div className="flex flex-col text-center">
-                                                <span className="capitalize mt-4 text-lg font-semibold text-slate-800 line-clamp-1">
-                                                    {item.name}
-                                                </span>
-                                                <span className="capitalize mt-2 mb-4 text-lg font-semibold text-slate-800 line-clamp-1">
-                                                    {item.originalName}
-                                                </span>
-                                            </div>
+                                    <div className="m-2 group rounded-2xl border border-ink-900/8 bg-cream-50 overflow-hidden hover:shadow-warm hover:-translate-y-0.5 duration-300 cursor-pointer">
+                                        <div className="w-full flex justify-center bg-cream-100 p-5">
+                                            <img
+                                                src={`/pose/image/webp/${item?.image}`}
+                                                alt={item.name}
+                                                className="h-28 object-contain mix-blend-multiply group-hover:scale-105 duration-500"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-1 text-center px-4 py-3 border-t border-ink-900/6">
+                                            <span className="capitalize font-display text-base text-ink-900 line-clamp-1">
+                                                {item.name}
+                                            </span>
+                                            <span className="capitalize text-xs text-ink-700/60 line-clamp-1">
+                                                {item.originalName}
+                                            </span>
                                         </div>
                                     </div>
                                 </Link>
@@ -51,8 +45,8 @@ export default function RecentActivity(recentActivities: any) {
                         )
                     )}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="border-ink-900/10 text-ink-800 hover:bg-cream-100" />
+            <CarouselNext className="border-ink-900/10 text-ink-800 hover:bg-cream-100" />
         </Carousel>
     )
 }

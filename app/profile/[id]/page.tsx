@@ -54,84 +54,105 @@ export default async function Profile({ params }: any) {
     return (
         <>
             {data?.profile_type === 'public' && (
-                <div className="h-screen flex justify-center items-center bg-gray-50">
-                    <div className="grid bg-white w-11/12 sm:w-3/4 xl:w-1/2 grid-cols-1 md:grid-cols-6 p-6 rounded-2xl shadow-xl">
-                        <div className="md:col-span-2 flex flex-col justify-center items-center md:items-start w-full overflow-hidden">
-                            <div className="m-4 w-full sm:w-full h-72 overflow-hidden rounded-xl shadow-2xl mx-auto">
-                                <img
-                                    src={`/avatar/${data.profile_pic.split('-')[0]}/${data.profile_pic}.webp`}
-                                    alt="avatar"
-                                    className="w-full h-full object-cover rounded-xl shadow-2xl transition-transform hover:scale-110 duration-700"
-                                />
+                <div className="min-h-screen flex justify-center items-center bg-cream-fade relative overflow-hidden p-4">
+                    <div className="absolute -top-32 -right-32 w-[40rem] h-[40rem] bg-sun-orb opacity-50 animate-sun-pulse pointer-events-none" />
+                    <div className="relative grid bg-white w-11/12 sm:w-3/4 xl:w-2/3 grid-cols-1 md:grid-cols-6 p-8 rounded-3xl border border-ink-900/8 shadow-warm gap-6">
+                        <div className="md:col-span-2 flex flex-col justify-center items-center">
+                            <div className="relative">
+                                <div className="absolute -inset-3 bg-sun-orb pointer-events-none animate-sun-pulse" />
+                                <div className="relative w-48 h-48 sm:w-56 sm:h-56 overflow-hidden rounded-3xl ring-2 ring-sun-600/30 shadow-warm">
+                                    <img
+                                        src={`/avatar/${data.profile_pic.split('-')[0]}/${data.profile_pic}.webp`}
+                                        alt="avatar"
+                                        className="w-full h-full object-cover transition-transform hover:scale-105 duration-700"
+                                    />
+                                </div>
                             </div>
                         </div>
 
-                        <div className="md:col-span-4 flex flex-col justify-center sm:items-start items-center m-5 gap-3">
-                            <div className="flex flex-col">
-                                <span className="text-4xl font-semibold text-gray-800">
-                                    {data.name}
+                        <div className="md:col-span-4 flex flex-col justify-center md:items-start items-center gap-4">
+                            <div>
+                                <span className="uppercase tracking-[0.18em] text-xs text-sun-700 font-semibold">
+                                    Member
                                 </span>
-                                <span className="text-sm font-semibold text-gray-600">
+                                <h1 className="font-display text-4xl text-ink-900 mt-1">
+                                    {data.name}
+                                </h1>
+                                <span className="text-sm text-ink-700/70 font-mono">
                                     #{data.user_public_id}
                                 </span>
                             </div>
 
-                            <div className="flex items-center gap-2">
-                                <Image
-                                    height={24}
-                                    width={24}
-                                    className="mr-2 rounded-md shadow-xl brightness-95"
-                                    src={`https://flagicons.lipis.dev/flags/4x3/${data.country}.svg`}
-                                    alt=""
-                                />
-                                <span className="text-xl text-gray-700 cursor-pointer hover:text-gray-900 duration-500">
-                                    {getName(data.country)}
-                                </span>
-                            </div>
+                            {data.country && (
+                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cream-100 border border-ink-900/8">
+                                    <Image
+                                        height={20}
+                                        width={20}
+                                        className="rounded-sm"
+                                        src={`https://flagicons.lipis.dev/flags/4x3/${data.country}.svg`}
+                                        alt=""
+                                    />
+                                    <span className="text-sm text-ink-800">
+                                        {getName(data.country)}
+                                    </span>
+                                </div>
+                            )}
 
-                            <span className="text-gray-800">
-                                Member since {joinedTime(data.created_at)}
+                            <span className="text-sm text-ink-700/80">
+                                Member since{' '}
+                                <strong className="text-ink-900">
+                                    {joinedTime(data.created_at)}
+                                </strong>
                             </span>
 
-                            <div className="flex flex-wrap w-full justify-center sm:justify-start">
-                                {achievement &&
-                                    achievement.map(
-                                        (item: any, key: number) => (
-                                            <div
-                                                key={key}
-                                                className="overflow-hidden m-2 rounded-full cursor-pointer flex items-center justify-center"
-                                            >
-                                                <Image
-                                                    src={`/achievements/${item.icon}-${gender}.webp`}
-                                                    width={92}
-                                                    height={92}
-                                                    alt="Achievement"
-                                                    className="rounded-full object-cover shadow-lg brightness-100 hover:scale-105 hover:brightness-105 hover:shadow-2xl duration-500"
-                                                />
-                                            </div>
-                                        )
-                                    )}
-                            </div>
+                            {achievement && achievement.length > 0 && (
+                                <div className="w-full">
+                                    <span className="text-xs uppercase tracking-[0.18em] text-sun-700 font-semibold mb-2 block">
+                                        Achievements
+                                    </span>
+                                    <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+                                        {achievement.map(
+                                            (item: any, key: number) => (
+                                                <div
+                                                    key={key}
+                                                    title={item.name}
+                                                    className="rounded-full ring-2 ring-sun-600/30 hover:ring-sun-600 hover:-translate-y-0.5 duration-300 overflow-hidden"
+                                                >
+                                                    <Image
+                                                        src={`/achievements/${item.icon}-${gender}.webp`}
+                                                        width={72}
+                                                        height={72}
+                                                        alt="Achievement"
+                                                        className="object-cover"
+                                                    />
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
             )}
 
             {(!data || data?.profile_type === 'private') && (
-                <div className="h-screen flex justify-center items-center bg-gray-50">
-                    <div className="flex flex-col gap-10 justify-center items-center bg-white w-11/12 sm:w-3/4 xl:w-1/3 p-6 rounded-2xl shadow-xl">
+                <div className="min-h-screen flex justify-center items-center bg-cream-fade p-4">
+                    <div className="flex flex-col gap-6 justify-center items-center bg-white w-11/12 sm:w-3/4 xl:w-1/3 p-10 rounded-3xl border border-ink-900/8 shadow-warm text-center">
                         <img
                             src="https://img.icons8.com/pulsar-gradient/96/user-not-found.png"
                             alt="no-user-found"
-                            className="w-24"
+                            className="w-20 opacity-90"
                         />
-                        <span className="text-2xl text-center font-semibold">
+                        <span className="font-display text-2xl text-ink-900">
                             No user found with the tag{' '}
-                            {`#${searchParam || null}`}
+                            <span className="text-sun-700">
+                                #{searchParam || null}
+                            </span>
                         </span>
                         <Link href={'/'}>
-                            <button className="text-xl bg-blue-900 text-slate-50 px-6 py-2 rounded-2xl font-bold  hover:bg-blue-800 duration-700 transition-all">
-                                Home
+                            <button className="bg-sun-cta text-white px-6 py-2 rounded-full font-medium shadow-warm hover:opacity-95 duration-300">
+                                Back home
                             </button>
                         </Link>
                     </div>

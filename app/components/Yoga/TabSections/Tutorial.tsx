@@ -19,46 +19,50 @@ export default function Tutorial() {
 
     return (
         <>
-            <div className="grid sm:grid-cols-2 gap-10 w-full place-items-center">
-                <div
-                    onClick={() => dispatch(setTutorial({ provider: 'video' }))}
-                    className={`w-3/4 relative flex flex-col items-center justify-center cursor-pointer 
-border-2 rounded-xl hover:scale-[1.01] duration-700 transition-transform
-${active === 'video' ? 'border-blue-950 ring-2 ring-blue-950' : 'border-gray-300'}`}
-                >
-                    <img
-                        src={`https://img.youtube.com/vi/${extractVideoID}/0.jpg`}
-                        alt="Video tutorial"
-                        className="w-full h-48 object-cover rounded-xl"
-                    />
-                    <span
-                        className={`absolute bottom-0 w-full rounded-b-xl text-center py-2 font-semibold text-white 
-${active === 'video' ? 'bg-blue-950' : 'bg-gray-600'}`}
-                    >
-                        Video Tutorial
-                    </span>
-                </div>
-
-                <div
-                    onClick={() =>
-                        dispatch(setTutorial({ provider: 'animated' }))
-                    }
-                    className={`w-3/4 relative flex flex-col items-center justify-center cursor-pointer 
-border-2 rounded-xl hover:scale-[1.01] duration-700 transition-transform
-${active === 'animated' ? 'border-blue-950 ring-2 ring-blue-950' : 'border-gray-300'}`}
-                >
-                    <img
-                        src={`/pose/tutorial/${poseData?.tutorial}`}
-                        alt="Animated tutorial"
-                        className="w-full h-48 object-cover rounded-xl"
-                    />
-                    <span
-                        className={`absolute bottom-0 w-full rounded-b-xl text-center py-2 font-semibold text-white 
-${active === 'animated' ? 'bg-blue-950' : 'bg-gray-600'}`}
-                    >
-                        Animated Tutorial
-                    </span>
-                </div>
+            <div className="grid sm:grid-cols-2 gap-6 w-full place-items-stretch py-2">
+                {[
+                    {
+                        key: 'video' as const,
+                        label: 'Video tutorial',
+                        img: `https://img.youtube.com/vi/${extractVideoID}/0.jpg`,
+                    },
+                    {
+                        key: 'animated' as const,
+                        label: 'Animated tutorial',
+                        img: `/pose/tutorial/${poseData?.tutorial}`,
+                    },
+                ].map((opt) => {
+                    const isActive = active === opt.key
+                    return (
+                        <button
+                            type="button"
+                            key={opt.key}
+                            onClick={() =>
+                                dispatch(setTutorial({ provider: opt.key }))
+                            }
+                            className={`w-full relative flex flex-col items-stretch cursor-pointer rounded-2xl overflow-hidden duration-300 hover:-translate-y-0.5 ${
+                                isActive
+                                    ? 'ring-2 ring-sun-600 shadow-warm'
+                                    : 'ring-1 ring-ink-900/8 hover:ring-sun-600/40'
+                            }`}
+                        >
+                            <img
+                                src={opt.img}
+                                alt={opt.label}
+                                className="w-full h-44 object-cover"
+                            />
+                            <span
+                                className={`px-3 py-2 text-sm font-medium text-left ${
+                                    isActive
+                                        ? 'bg-sun-cta text-white'
+                                        : 'bg-cream-100 text-ink-800'
+                                }`}
+                            >
+                                {opt.label}
+                            </span>
+                        </button>
+                    )
+                })}
             </div>
         </>
     )

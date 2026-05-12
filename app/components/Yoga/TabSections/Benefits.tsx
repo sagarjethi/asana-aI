@@ -20,44 +20,51 @@ export default function Benefits() {
 
     return (
         <>
-            <div className={`flex flex-col`}>
-                <div className="sm:text-2xl text-xl font-extrabold capitalize my-2">
-                    <span>benefits of {name}</span>
-
-                    <span
-                        // onClick={() => props?.playAudio(props?.audioBenefits, "benefits")}
-                        className="inline-flex align-middle mx-2 sm:w-10 w-10 rounded-2xl bg-blue-900 text-white hover:brightness-75 duration-300 cursor-pointer"
+            <div className="flex flex-col">
+                <div className="flex items-center gap-3 mb-3">
+                    <h3 className="font-display text-xl sm:text-2xl text-ink-900 capitalize">
+                        Benefits of {name}
+                    </h3>
+                    <button
+                        type="button"
+                        onClick={() =>
+                            dispatch(
+                                setAudioState(
+                                    audioState === 'benefits' ? null : 'benefits'
+                                )
+                            )
+                        }
+                        className="inline-flex items-center justify-center h-9 w-9 rounded-full bg-sun-cta text-white hover:opacity-90 duration-300 shadow-warm"
+                        aria-label="Toggle audio"
                     >
                         {audioState === 'benefits' ? (
-                            <IoVolumeMediumOutline
-                                onClick={() => dispatch(setAudioState(null))}
-                                className="text-[1.85rem] font-bold mx-auto py-1 px-0.5 text-button-text"
-                            />
+                            <IoVolumeMediumOutline className="text-xl" />
                         ) : (
-                            <IoVolumeMuteOutline
-                                onClick={() =>
-                                    dispatch(setAudioState('benefits'))
-                                }
-                                className="text-[1.85rem] mx-auto font-bold py-1 px-0.5 text-button-text"
-                            />
+                            <IoVolumeMuteOutline className="text-xl" />
                         )}
-                    </span>
+                    </button>
                 </div>
 
-                <ScrollArea data-lenis-prevent>
-                    {benefits?.map((text: string, idx: number) => (
-                        <div
-                            key={idx}
-                            className="sm:mb-1 mb-5 text-justify sm:text-left mx-auto"
-                        >
-                            <span className="sm:text-lg text-base font-bold">
-                                {text.split(':')[0]} -
-                            </span>
-                            <span className="sm:text-lg text-base leading-relaxed tracking-wide">
-                                {text.split(':')[1]}
-                            </span>
-                        </div>
-                    ))}
+                <ScrollArea data-lenis-prevent className="max-h-[28vh]">
+                    <ul className="space-y-3">
+                        {benefits?.map((text: string, idx: number) => (
+                            <li
+                                key={idx}
+                                className="flex gap-3 text-ink-800"
+                            >
+                                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-sun-600" />
+                                <span className="text-sm leading-relaxed">
+                                    <strong className="font-display text-ink-900">
+                                        {text.split(':')[0]}
+                                    </strong>
+                                    <span className="text-ink-700/80">
+                                        {' '}
+                                        — {text.split(':')[1]}
+                                    </span>
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
                 </ScrollArea>
             </div>
         </>

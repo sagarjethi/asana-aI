@@ -62,61 +62,69 @@ export default function Profile(props: any) {
     }
 
     return (
-        <>
+        <div className="max-w-[1100px] mx-auto">
             {userProfile && (
-                <div className="h-screen flex justify-center items-center bg-gray-50">
-                    <div className="grid bg-white w-11/12 xl:w-1/2 grid-cols-6 p-6 rounded-2xl shadow-xl">
-                        <div className="col-span-full sm:col-span-2 flex flex-col justify-center items-center">
-                            <div className="m-4 w-40 h-40 overflow-hidden rounded-xl shadow-2xl">
-                                <img
-                                    src={`/avatar/${userProfile.image.split('-')[0]}/${userProfile.image}.webp`}
-                                    alt="avatar"
-                                    className="w-full h-full object-cover rounded-xl shadow-2xl transition-transform hover:scale-110 duration-700"
-                                />
+                <div className="sun-card p-8 sm:p-10">
+                    <div className="grid grid-cols-1 sm:grid-cols-6 gap-8">
+                        <div className="col-span-full sm:col-span-2 flex flex-col items-center gap-4">
+                            <div className="relative">
+                                <div className="absolute inset-0 bg-sun-orb -m-3 rounded-full animate-sun-pulse pointer-events-none" />
+                                <div className="relative w-44 h-44 overflow-hidden rounded-3xl ring-2 ring-sun-600/30 shadow-warm">
+                                    <img
+                                        src={`/avatar/${userProfile.image.split('-')[0]}/${userProfile.image}.webp`}
+                                        alt="avatar"
+                                        className="w-full h-full object-cover transition-transform hover:scale-105 duration-700"
+                                    />
+                                </div>
                             </div>
-
-                            <AvatarSelection></AvatarSelection>
+                            <AvatarSelection />
                         </div>
 
-                        <div className="col-span-full sm:col-span-4 flex flex-col justify-center m-5 gap-4">
-                            <div className="flex flex-col">
-                                <span className="text-4xl font-semibold text-gray-800">
-                                    {userProfile.name}
+                        <div className="col-span-full sm:col-span-4 flex flex-col justify-center gap-5">
+                            <div>
+                                <span className="uppercase tracking-[0.18em] text-xs text-sun-700 font-semibold">
+                                    Your profile
                                 </span>
-                                <span className="text-sm font-semibold text-gray-600">
+                                <h1 className="font-display text-4xl text-ink-900 mt-1">
+                                    {userProfile.name}
+                                </h1>
+                                <span className="text-sm text-ink-700/70 font-mono">
                                     #{userProfile.userID}
                                 </span>
                             </div>
 
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-3 flex-wrap">
                                 {userProfile.country && (
-                                    <>
+                                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cream-100 border border-ink-900/8">
                                         <Image
-                                            height={24}
-                                            width={24}
-                                            className="mr-2 rounded-md shadow-xl brightness-95"
+                                            height={20}
+                                            width={20}
+                                            className="rounded-sm"
                                             src={`https://flagicons.lipis.dev/flags/4x3/${userProfile.country}.svg`}
                                             alt=""
                                         />
-                                        <span className="text-xl text-gray-700 cursor-pointer hover:text-gray-900 duration-500">
+                                        <span className="text-sm text-ink-800">
                                             {getName(userProfile.country)}
                                         </span>
-                                    </>
+                                    </div>
                                 )}
                                 <CountrySelector
                                     isCountryAvailable={Boolean(
                                         userProfile.country
                                     )}
-                                ></CountrySelector>
+                                />
                             </div>
 
-                            <span className="text-gray-800">
-                                Member since {joinedTime(userProfile.date)}
+                            <span className="text-sm text-ink-700/80">
+                                Member since{' '}
+                                <strong className="text-ink-900">
+                                    {joinedTime(userProfile.date)}
+                                </strong>
                             </span>
 
-                            <div className="flex items-center gap-2">
-                                <span className="text-gray-800">
-                                    {isPublic ? 'Public' : 'Private'} Account
+                            <div className="flex items-center gap-3 pt-2">
+                                <span className="text-sm font-medium text-ink-800">
+                                    {isPublic ? 'Public' : 'Private'} account
                                 </span>
                                 <label className="flex cursor-pointer select-none items-center">
                                     <div className="relative">
@@ -127,11 +135,11 @@ export default function Profile(props: any) {
                                             className="sr-only"
                                         />
                                         <div
-                                            className={`block h-6 w-10 rounded-full transition ${isPublic ? 'bg-emerald-500' : 'bg-blue-500'}`}
-                                        ></div>
+                                            className={`block h-6 w-11 rounded-full transition ${isPublic ? 'bg-sage-600' : 'bg-ink-700/30'}`}
+                                        />
                                         <div
-                                            className={`absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition transform ${isPublic ? 'translate-x-4' : ''}`}
-                                        ></div>
+                                            className={`absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow-soft transition transform ${isPublic ? 'translate-x-5' : ''}`}
+                                        />
                                     </div>
                                 </label>
                             </div>
@@ -139,6 +147,6 @@ export default function Profile(props: any) {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     )
 }

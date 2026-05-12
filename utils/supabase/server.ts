@@ -1,36 +1,22 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { createShimClient } from './shimCore'
 
+const COOKIE_NAME = 'aa_session'
+
+/**
+ * Server-side compatibility shim. Forwards the aa_session cookie via the
+ * Cookie header so the backend can authenticate the request.
+ */
 export function createClient() {
     const cookieStore = cookies()
-
-    return createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-            cookies: {
-                get(name: string) {
-                    return cookieStore.get(name)?.value
-                },
-                set(name: string, value: string, options: CookieOptions) {
-                    try {
-                        cookieStore.set({ name, value, ...options })
-                    } catch (error) {
-                        // The `set` method was called from a Server Component.
-                        // This can be ignored if you have middleware refreshing
-                        // user sessions.
-                    }
-                },
-                remove(name: string, options: CookieOptions) {
-                    try {
-                        cookieStore.set({ name, value: '', ...options })
-                    } catch (error) {
-                        // The `delete` method was called from a Server Component.
-                        // This can be ignored if you have middleware refreshing
-                        // user sessions.
-                    }
-                },
-            },
-        }
-    )
+    const token = cookieStore.get(COOKIE_NAME)?.value
+    const headers: Record<string, string> = {}
+    if (token) {
+        headers['Cookie'] = `${COOKIE_NAME}=${token}`
+        headers['Authorization'] = `Bearer ${token}`
+    }
+    return createShimClient({
+        fetcher: (...args) => fetch(...args),
+        init: { headers, cache: 'no-store' },
+    })
 }

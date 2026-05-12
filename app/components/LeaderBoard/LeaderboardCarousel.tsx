@@ -10,61 +10,61 @@ import LeaderboardStats from './LeaderboardStats'
 
 export default function LeaderboardCarousel({ userData }: { userData: any }) {
     return (
-        <>
-            <div className="h-full w-full  xl:ml-0 flex justify-center items-center bg-slate-50 bg-opacity-10 rounded-2xl border-2 border-slate-50 border-opacity-10 shadow-2xl p-2">
-                <Carousel className="w-3/4 h-full flex items-center px-1 py-1">
-                    <CarouselContent>
-                        {userData?.metrics
-                            ?.slice(0, 3)
-                            .map((data: any, idx: number) => (
+        <div className="w-full flex justify-center items-center bg-cream-100/70 rounded-3xl border border-ink-900/8 p-5">
+            <Carousel className="w-full max-w-xs flex items-center">
+                <CarouselContent>
+                    {userData?.metrics
+                        ?.slice(0, 3)
+                        .map((data: any, idx: number) => {
+                            const medal =
+                                idx === 0
+                                    ? 'gold'
+                                    : idx === 1
+                                      ? 'silver'
+                                      : 'bronze'
+                            return (
                                 <CarouselItem key={idx}>
-                                    <div className="p-1 flex flex-col gap-3 justify-center items-center">
-                                        <div className="w-36 h-36 overflow-hidden rounded-badge">
-                                            <Image
-                                                height={0}
-                                                width={0}
-                                                sizes="100wv"
-                                                src={`/avatar/${data.userInfo.profile_pic.split('-')[0]}/${data.userInfo.profile_pic}.webp`}
-                                                // src={`/avatar/men/men-5.webp`}
-                                                alt="avatar"
-                                                className="w-full h-full object-cover rounded-2xl shadow-2xl transition-transform hover:scale-110 duration-700"
-                                            />
+                                    <div className="p-3 flex flex-col gap-3 justify-center items-center">
+                                        <div className="relative">
+                                            <div className="absolute -inset-3 bg-sun-orb pointer-events-none animate-sun-pulse" />
+                                            <div className="relative w-32 h-32 overflow-hidden rounded-full ring-2 ring-sun-600/40 shadow-warm">
+                                                <Image
+                                                    height={0}
+                                                    width={0}
+                                                    sizes="100vw"
+                                                    src={`/avatar/${data.userInfo.profile_pic.split('-')[0]}/${data.userInfo.profile_pic}.webp`}
+                                                    alt="avatar"
+                                                    className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
+                                                />
+                                            </div>
                                         </div>
 
-                                        <div className="flex items-center gap-3">
+                                        <div className="relative flex items-center gap-2">
                                             <Image
-                                                src={`/leaderboard/${idx + 1 === 1 ? 'gold' : idx + 1 === 2 ? 'silver' : 'bronze'}.png`}
-                                                alt={
-                                                    idx + 1 === 1
-                                                        ? 'gold'
-                                                        : idx + 1 === 2
-                                                          ? 'silver'
-                                                          : 'bronze'
-                                                }
-                                                height={40}
-                                                width={40}
-                                                className="p-0 m-0 brightness-110 shadow-xl"
+                                                src={`/leaderboard/${medal}.png`}
+                                                alt={medal}
+                                                height={32}
+                                                width={32}
                                             />
                                             {data.userInfo.country && (
-                                                <div className="rounded-lg h-fit w-fit overflow-hidden">
+                                                <div className="rounded-md overflow-hidden">
                                                     <Image
-                                                        height={40}
-                                                        width={40}
+                                                        height={32}
+                                                        width={32}
                                                         alt={
                                                             data.userInfo
                                                                 .country
                                                         }
                                                         src={`https://flagicons.lipis.dev/flags/4x3/${data.userInfo.country}.svg`}
-                                                        className="shadow-2xl"
+                                                        className="shadow-soft"
                                                     />
                                                 </div>
                                             )}
                                         </div>
-                                        <div className="flex items-center gap-1">
-                                            <span className="text-nowrap text-xl text-slate-50 text-extrabold">
-                                                {data.userInfo.name}
-                                            </span>
-                                        </div>
+
+                                        <span className="font-display text-xl text-ink-900 text-center">
+                                            {data.userInfo.name}
+                                        </span>
 
                                         <div className="flex flex-col w-full">
                                             <LeaderboardStats
@@ -75,12 +75,12 @@ export default function LeaderboardCarousel({ userData }: { userData: any }) {
                                         </div>
                                     </div>
                                 </CarouselItem>
-                            ))}
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                </Carousel>
-            </div>
-        </>
+                            )
+                        })}
+                </CarouselContent>
+                <CarouselPrevious className="bg-ink-900 text-white border-0 hover:bg-ink-800 hover:text-white" />
+                <CarouselNext className="bg-ink-900 text-white border-0 hover:bg-ink-800 hover:text-white" />
+            </Carousel>
+        </div>
     )
 }

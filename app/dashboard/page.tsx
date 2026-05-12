@@ -66,27 +66,23 @@ export default function Page() {
     )
 
     return (
-        <>
-            <div className="flex bg-slate-100">
-                <Sidebar />
-                <div className="mt-16 sm:ml-24 sm:m-2 h-full w-full bg-slate-50 rounded-2xl">
-                    {activeWindow === 'dashboard' && (
-                        <Dashboard name={user?.user_metadata?.name}></Dashboard>
-                    )}
+        <div className="min-h-screen w-full bg-cream-fade text-ink-800">
+            <Sidebar />
+            <div className="pt-20 sm:pt-6 sm:pl-24 xl:pl-64 pb-12 px-3 sm:px-6">
+                {activeWindow === 'dashboard' && (
+                    <Dashboard name={user?.user_metadata?.name}></Dashboard>
+                )}
 
-                    {activeWindow === 'stats' && (
-                        <StatsDashboard></StatsDashboard>
-                    )}
+                {activeWindow === 'stats' && <StatsDashboard></StatsDashboard>}
 
-                    {activeWindow === 'badges' && <Achievements></Achievements>}
+                {activeWindow === 'badges' && <Achievements></Achievements>}
 
-                    {activeWindow === 'diet' && <DietDashboard />}
+                {activeWindow === 'diet' && <DietDashboard />}
 
-                    {user && activeWindow === 'profile' && (
-                        <Profile user={user}></Profile>
-                    )}
-                </div>
+                {user && activeWindow === 'profile' && (
+                    <Profile user={user}></Profile>
+                )}
             </div>
-        </>
+        </div>
     )
 }

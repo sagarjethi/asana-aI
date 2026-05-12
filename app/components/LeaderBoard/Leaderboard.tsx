@@ -11,24 +11,36 @@ export default async function Leaderboard() {
 
 
     return (
-        <>
-            <div className="z-50 w-11/12 justify-center glass-card">
-                <div className="sm:grid xl:grid-cols-6 xl:m-3 sm:p-3 gap-3 w-full">
-                    <div className="mt-3 xl:mt-0 md:col-span-4 xl:col-span-2 flex-col h-full flex justify-center items-center  px-3">
-                        {data && <LeaderboardCarousel userData={data} />}
-                        {!data && (
-                            <div className="h-full w-full bg-slate-50 bg-opacity-20 rounded-2xl animate-pulse"></div>
+        <div className="z-10 w-full max-w-6xl">
+            <div className="sun-card p-5 sm:p-8">
+                <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-6">
+                    <div>
+                        <span className="text-xs uppercase tracking-[0.18em] text-sun-700 font-semibold">
+                            Community
+                        </span>
+                        <h1 className="font-display text-3xl sm:text-4xl text-ink-900 mt-1">
+                            Leaderboard
+                        </h1>
+                    </div>
+                    <span className="text-sm text-ink-700/70">
+                        How the community is showing up this week.
+                    </span>
+                </div>
+
+                <div className="grid xl:grid-cols-6 gap-6 w-full">
+                    <div className="xl:col-span-2 flex items-center justify-center">
+                        {data ? (
+                            <LeaderboardCarousel userData={data} />
+                        ) : (
+                            <div className="h-72 w-full bg-cream-200 rounded-3xl animate-pulse" />
                         )}
                     </div>
 
-                    <div className="mt-20 xl:mt-0 col-span-4 w-full flex flex-col gap-5">
-                        <span className="mb-10 xl:mb-0 text-slate-50 text-3xl font-extrabold mx-auto">
-                            Leaderboard
-                        </span>
+                    <div className="xl:col-span-4 w-full flex flex-col gap-3">
                         <LeaderboardDisplay data={data?.metrics} />
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }

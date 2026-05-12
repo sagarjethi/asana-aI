@@ -82,13 +82,12 @@ export default function NewAchievements() {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="sm:min-w-[768px]">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold text-gray-800">
-                        Congratulations on Your New Achievement! 🎉
+                    <DialogTitle className="font-display text-2xl text-ink-900">
+                        A new milestone, gently reached.
                     </DialogTitle>
-                    <DialogDescription className="text-gray-600">
-                        You&apos;ve unlocked new achievements by reaching these
-                        milestones. Keep up the great work and continue to
-                        challenge yourself to earn more rewards!
+                    <DialogDescription className="text-ink-700/80">
+                        You&apos;ve unlocked new achievements. Keep returning
+                        to the mat — the next one finds you naturally.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -96,41 +95,47 @@ export default function NewAchievements() {
                     data-lenis-prevent
                     className="w-full h-[50vh] sm:h-full flex"
                 >
-                    <div className="flex flex-wrap gap-10 justify-center">
+                    <div className="flex flex-wrap gap-5 justify-center">
                         {filteredAchievements?.map((achievement) => (
                             <div
                                 key={achievement.id}
-                                className="bg-slate-50 rounded-xl p-4 shadow-md flex flex-col items-center text-center relative hover:bg-slate-100 duration-700 hover:scale-105"
+                                className="sun-card p-5 flex flex-col items-center text-center relative duration-300 hover:-translate-y-0.5 hover:shadow-warm w-56"
                             >
-                                <Image
-                                    height={128}
-                                    width={128}
-                                    src={`/achievements/${achievement.icon}-${gender}.webp`}
-                                    alt={achievement.name}
-                                    className="rounded-full mb-4"
-                                />
-                                <div className="flex flex-col items-center">
-                                    <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                                        {achievement.name}
-                                    </h3>
-                                    <p className="text-gray-500 mb-2">
-                                        {achievement.description}
-                                    </p>
-                                    <span
-                                        className={`inline-block px-2 py-1 rounded-full text-sm ${achievement.rarity === 'Legendary' ? 'bg-yellow-400 text-gray-800' : 'bg-gray-300 text-gray-600'}`}
-                                    >
-                                        {achievement.rarity}
-                                    </span>
-                                    <span className="block text-gray-500 mt-2 capitalize">
-                                        Level: {achievement.level}
-                                    </span>
+                                <div className="rounded-full ring-2 ring-sun-600/40 overflow-hidden mb-4">
+                                    <Image
+                                        height={128}
+                                        width={128}
+                                        src={`/achievements/${achievement.icon}-${gender}.webp`}
+                                        alt={achievement.name}
+                                    />
                                 </div>
+                                <h3 className="font-display text-lg text-ink-900 mb-1">
+                                    {achievement.name}
+                                </h3>
+                                <p className="text-xs text-ink-700/70 mb-3">
+                                    {achievement.description}
+                                </p>
+                                <span
+                                    className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
+                                        achievement.rarity === 'Legendary'
+                                            ? 'bg-sun-cta text-white'
+                                            : 'bg-cream-100 text-ink-700 border border-ink-900/8'
+                                    }`}
+                                >
+                                    {achievement.rarity}
+                                </span>
+                                <span className="block text-xs text-ink-700/60 mt-2 capitalize">
+                                    Level {achievement.level}
+                                </span>
                             </div>
                         ))}
                     </div>
                 </ScrollArea>
                 <DialogClose asChild>
-                    <Button type="button" className="bg-blue-950">
+                    <Button
+                        type="button"
+                        className="bg-sun-cta text-white hover:opacity-95 border-0 rounded-full"
+                    >
                         Close
                     </Button>
                 </DialogClose>

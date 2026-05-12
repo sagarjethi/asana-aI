@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: asanaai-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: asanaai
+      POSTGRES_PASSWORD: asanaai
+      POSTGRES_DB: asanaai
+    ports:
+      - '5432:5432'
+    volumes:
+      - asanaai_pgdata:/var/lib/postgresql/data
+
+volumes:
+  asanaai_pgdata:

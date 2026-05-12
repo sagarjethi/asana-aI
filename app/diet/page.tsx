@@ -65,29 +65,44 @@ export default async function Meals({
     const merge = combineData(filteredMeals, data)
 
     return (
-        <>
-            <div className="min-h-screen bg-gray-50 w-full p-8">
-                <h1 className="text-5xl mt-12 font-extrabold mb-8 text-center text-blue-950">
-                    Healthy Diet Essentials
-                </h1>
-                <div className="max-w-2xl mx-auto my-5">
+        <div className="min-h-screen bg-cream-fade w-full pt-24 pb-12 px-4 sm:px-8 relative overflow-hidden">
+            <NavbarDummy />
+            <div className="absolute -top-32 -right-24 w-[32rem] h-[32rem] bg-sun-orb opacity-50 pointer-events-none animate-sun-pulse" />
+
+            <div className="relative max-w-6xl mx-auto">
+                <div className="text-center mb-8">
+                    <span className="text-xs uppercase tracking-[0.18em] text-sun-700 font-semibold">
+                        Nourishment
+                    </span>
+                    <h1 className="font-display text-4xl sm:text-5xl text-ink-900 mt-2">
+                        Healthy diet essentials
+                    </h1>
+                    <p className="mt-2 text-ink-700/80 max-w-xl mx-auto">
+                        A small collection of meals to support your practice.
+                    </p>
+                </div>
+
+                <div className="max-w-2xl mx-auto mb-8">
                     <DietInput />
                 </div>
 
                 {search && (
-                    <div className="my-5">
-                        <span className="text-xl px-5 mx-5 capitalize font-semibold text-slate-700">
-                            Search Result For <b>&ldquo;{search}&ldquo;</b>
+                    <div className="mb-4 text-center">
+                        <span className="text-sm text-ink-700/80">
+                            Results for{' '}
+                            <strong className="text-ink-900">
+                                &ldquo;{search}&rdquo;
+                            </strong>
                         </span>
                     </div>
                 )}
 
                 {tag && (
-                    <div className="my-5">
-                        <span className="text-2xl px-5 mx-5 capitalize font-semibold text-slate-700">
-                            Tags
+                    <div className="mb-6 flex flex-col items-center">
+                        <span className="text-xs uppercase tracking-[0.18em] text-sun-700 font-semibold mb-2">
+                            Filters
                         </span>
-                        <div className="flex flex-wrap gap-2 px-5 mx-5 my-2">
+                        <div className="flex flex-wrap gap-2 justify-center">
                             {tag.map((tag, idx) => (
                                 <DietTags mealTag={tag} key={idx} />
                             ))}
@@ -95,13 +110,13 @@ export default async function Meals({
                     </div>
                 )}
 
-                <div className="flex flex-wrap gap-10 justify-center">
+                <div className="flex flex-wrap gap-6 justify-center">
                     {merge.length === 0 && <DietSearchNoResult />}
                     {merge.map((meal, idx: number) => (
                         <DietCard meals={meal} key={idx} />
                     ))}
                 </div>
             </div>
-        </>
+        </div>
     )
 }

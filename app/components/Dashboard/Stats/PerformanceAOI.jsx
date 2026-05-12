@@ -15,17 +15,17 @@ ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend, Filler)
 
 export default function PerformanceAOI({ areaOfInterest }) {
     const backgroundColor = [
-        'rgb(58, 97, 253, 0.2)',
-        'rgb(72, 64, 186, 0.3)',
-        'rgb(80, 121, 252, 0.1)',
-        'rgb(30, 48, 97, 0.6)',
+        'rgba(247, 127, 0, 0.3)',
+        'rgba(252, 191, 73, 0.3)',
+        'rgba(255, 107, 53, 0.3)',
+        'rgba(92, 138, 96, 0.3)',
     ]
 
     const borderColor = [
-        'rgb(58, 97, 253, 1)',
-        'rgb(72, 64, 186, 1)',
-        'rgb(80, 121, 252, 01)',
-        'rgb(30, 48, 97, 1)',
+        'rgba(247, 127, 0, 1)',
+        'rgba(252, 191, 73, 1)',
+        'rgba(255, 107, 53, 1)',
+        'rgba(92, 138, 96, 1)',
     ]
 
     const FAreaOfInterest = areaOfInterest.slice(0, 5)
@@ -51,8 +51,8 @@ export default function PerformanceAOI({ areaOfInterest }) {
             {
                 label: 'Inaccuracy',
                 data: inaccuracy,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(92, 138, 96, 0.25)',
+                borderColor: 'rgba(92, 138, 96, 1)',
                 borderWidth: 1,
                 fill: true,
             },

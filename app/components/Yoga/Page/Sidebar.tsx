@@ -4,12 +4,8 @@ import { poseInfo } from '@/app/api/pose/poseApiData'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import Link from 'next/link'
 import { useState } from 'react'
-import {
-    IoAccessibility,
-    IoAccessibilityOutline,
-    IoHomeOutline,
-} from 'react-icons/io5'
-import { LuLayoutDashboard } from 'react-icons/lu'
+import { IoAccessibility, IoClose } from 'react-icons/io5'
+import { useSearchParams } from 'next/navigation'
 
 import '@/app/components/Yoga/yoga.css'
 
@@ -19,8 +15,75 @@ interface sidebarShowCase {
     image: string
 }
 
+function PoseList({
+    pose,
+    activeId,
+    onSelect,
+}: {
+    pose: sidebarShowCase[]
+    activeId: number | null
+    onSelect?: () => void
+}) {
+    return (
+        <div className="flex flex-col gap-3">
+            <Link href="/" className="flex items-center gap-3 px-2 py-1 mb-1">
+                <span className="flex items-center justify-center h-9 w-9 rounded-2xl bg-sun-cta text-white font-display shadow-warm">
+                    A
+                </span>
+                <span className="font-display text-lg text-ink-900">
+                    AsanaAI
+                </span>
+            </Link>
+            <div className="px-2 py-1">
+                <span className="text-[10px] uppercase tracking-[0.18em] text-sun-700 font-semibold">
+                    Pose library
+                </span>
+            </div>
+            {pose.map((p) => {
+                const active = activeId === p.id
+                return (
+                    <Link
+                        key={p.id}
+                        href={`/practice?id=${p.id}`}
+                        onClick={onSelect}
+                    >
+                        <div
+                            className={`group rounded-2xl overflow-hidden border duration-300 cursor-pointer bg-cream-50 ${
+                                active
+                                    ? 'border-sun-600 ring-2 ring-sun-600/30 shadow-warm'
+                                    : 'border-ink-900/8 hover:border-sun-600/40'
+                            }`}
+                        >
+                            <div className="w-full bg-cream-100 p-2 flex items-center justify-center">
+                                <img
+                                    src={`/pose/image/webp/${p.image}`}
+                                    alt={p.title}
+                                    className="h-20 w-full object-contain mix-blend-multiply group-hover:scale-105 duration-500"
+                                />
+                            </div>
+                            <div className="px-3 py-2">
+                                <span
+                                    className={`font-display text-sm capitalize ${
+                                        active
+                                            ? 'text-sun-700'
+                                            : 'text-ink-900'
+                                    }`}
+                                >
+                                    {p.title}
+                                </span>
+                            </div>
+                        </div>
+                    </Link>
+                )
+            })}
+        </div>
+    )
+}
+
 export default function YogaSidebar() {
     const [open, setOpen] = useState<boolean>(false)
+    const searchParams = useSearchParams()
+    const activeId = Number(searchParams.get('id') ?? 101)
 
     const pose: sidebarShowCase[] = poseInfo.map((pose) => ({
         id: pose.id,
@@ -28,97 +91,69 @@ export default function YogaSidebar() {
         image: pose.image,
     }))
 
-    const options = [
-        { title: 'Pose', icon: <IoAccessibilityOutline /> },
-        { title: 'Home', icon: <IoHomeOutline /> },
-        { title: 'Dashboard', icon: <LuLayoutDashboard /> },
-    ]
-
     return (
         <>
-            <div className="hidden xl:block h-screen fixed w-52">
+            {/* Desktop sidebar */}
+            <aside className="hidden xl:flex fixed top-0 left-0 h-screen w-60 z-40 flex-col bg-cream-50/95 backdrop-blur border-r border-ink-900/8">
                 <ScrollArea
                     data-lenis-prevent
-                    className="h-[99vh] w-full rounded-md border p-2"
+                    className="h-screen w-full p-3"
                 >
-                    <div className="flex flex-col gap-5 p-2">
-                        {pose.map((pose, idx) => (
-                            <Link key={idx} href={`/practice?id=${pose.id}`}>
-                                <div className="bg-slate-50 flex flex-col gap-3 justify-center items-center rounded-2xl border-4 hover:border-slate-400 duration-700 cursor-pointer">
-                                    <div className="w-full overflow-hidden">
-                                        <img
-                                            src={`/pose/image/webp/${pose.image}`}
-                                            alt={pose.title}
-                                            className="w-full h-full object-contain hover:scale-110 duration-500 rounded-2xl"
-                                        />
-                                    </div>
-                                    <div className="bg-slate-200 p-2 w-full text-center rounded-2xl">
-                                        <span className="font-bold text-slate-800 text-[1.1rem] capitalize hover:text-blue-950 duration-500">
-                                            {pose.title}
-                                        </span>
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
+                    <PoseList pose={pose} activeId={activeId} />
                 </ScrollArea>
-            </div>
+            </aside>
 
-            {/* display button to open side menu */}
-            <div className="xl:hidden block">
-                <div
-                    onClick={() => setOpen(!open)}
-                    className="absolute top-5 left-3 p-1 bg-slate-200 rounded-xl cursor-pointer"
-                >
-                    <IoAccessibility className="text-2xl text-slate-800 hover:animate-spin animate-once animate-duration-[2000ms] animate-ease-in-out" />
-                </div>
-            </div>
-
-            {/* for mobile devices */}
-
-            {open && (
-                <div
-                    className={`h-full fixed w-64 bg-slate-300 z-[100] ${open ? 'sidebar-in-animation' : 'sidebar-out-animation'}`}
-                >
-                    <ScrollArea
-                        data-lenis-prevent
-                        className="h-full w-full border p-2"
+            {/* Mobile top bar */}
+            <div className="xl:hidden fixed top-0 left-0 right-0 z-50 px-3 py-3">
+                <div className="flex items-center justify-between bg-cream-50/95 backdrop-blur border border-ink-900/8 rounded-2xl shadow-soft px-3 py-2">
+                    <button
+                        onClick={() => setOpen(true)}
+                        className="p-2 rounded-xl text-ink-800 hover:bg-cream-100"
+                        aria-label="Open pose library"
                     >
-                        <div className="flex flex-col gap-5 p-2">
-                            {pose.map((pose, idx) => (
-                                <Link
-                                    key={idx}
-                                    href={`/practice?id=${pose.id}`}
-                                >
-                                    <div
-                                        onClick={() => setOpen(false)}
-                                        className="bg-slate-50 flex flex-col gap-3 justify-center items-center rounded-2xl border-4 hover:border-slate-400 duration-700 cursor-pointer"
-                                    >
-                                        <div className="w-full overflow-hidden">
-                                            <img
-                                                src={`/pose/image/webp/${pose.image}`}
-                                                alt={pose.title}
-                                                className="w-full h-full object-contain hover:scale-110 duration-500 rounded-2xl"
-                                            />
-                                        </div>
-                                        <div className="bg-slate-200 p-2 w-full text-center rounded-2xl">
-                                            <span className="font-bold text-slate-800 text-[1.1rem] capitalize hover:text-blue-950 duration-500">
-                                                {pose.title}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </ScrollArea>
+                        <IoAccessibility className="text-2xl text-sun-700" />
+                    </button>
+                    <span className="font-display text-lg text-ink-900">
+                        Practice
+                    </span>
+                    <Link
+                        href="/"
+                        className="flex items-center justify-center h-9 w-9 rounded-xl bg-sun-cta text-white font-display shadow-warm"
+                    >
+                        A
+                    </Link>
                 </div>
-            )}
+            </div>
 
+            {/* Mobile drawer */}
             {open && (
-                <div
-                    onClick={() => setOpen(false)}
-                    className="absolute h-screen w-screen bg-transparent z-[99]"
-                ></div>
+                <>
+                    <div
+                        className="xl:hidden fixed inset-0 bg-ink-900/30 z-[60]"
+                        onClick={() => setOpen(false)}
+                    />
+                    <aside className="xl:hidden fixed top-0 left-0 h-screen w-72 z-[70] bg-cream-50 border-r border-ink-900/8">
+                        <div className="flex items-center justify-end p-3">
+                            <button
+                                onClick={() => setOpen(false)}
+                                className="p-2 rounded-xl text-ink-800 hover:bg-cream-100"
+                                aria-label="Close pose library"
+                            >
+                                <IoClose className="text-2xl" />
+                            </button>
+                        </div>
+                        <ScrollArea
+                            data-lenis-prevent
+                            className="h-[calc(100vh-3.5rem)] w-full p-3"
+                        >
+                            <PoseList
+                                pose={pose}
+                                activeId={activeId}
+                                onSelect={() => setOpen(false)}
+                            />
+                        </ScrollArea>
+                    </aside>
+                </>
             )}
         </>
     )

@@ -5,93 +5,91 @@ import LeaderboardStats from './LeaderboardStats'
 
 export default async function LeaderboardDisplay({ data }: { data: any }) {
     return (
-        <>
-            <ScrollArea
-                data-lenis-prevent
-                className="sm:h-[26rem] w-full my-auto flex flex-col rounded-2xl "
-            >
+        <ScrollArea
+            data-lenis-prevent
+            className="sm:h-[26rem] w-full rounded-2xl"
+        >
+            <div className="flex flex-col gap-2">
                 {data &&
-                    data?.map((metric: any, idx: number) => (
-                        <div
-                            key={idx}
-                            className="flex gap-5 my-5 sm:my-3 flex-col sm:flex-row bg-slate-50 bg-opacity-10 rounded-lg sm:m-2 sm:p-2 p-4 items-center"
-                        >
-                            {idx < 3 ? (
-                                <Image
-                                    src={`/leaderboard/${idx + 1 === 1 ? 'gold' : idx + 1 === 2 ? 'silver' : 'bronze'}.png`}
-                                    alt={
-                                        idx + 1 === 1
-                                            ? 'gold'
-                                            : idx + 1 === 2
-                                              ? 'silver'
-                                              : 'bronze'
-                                    }
-                                    height={40}
-                                    width={40}
-                                    // className="w-10 h-10"
-                                />
-                            ) : (
-                                <span className="text-2xl text-slate-50">
-                                    {idx + 1}
-                                </span>
-                            )}
-                            <div className="flex flex-col sm:flex-row justify-center items-center gap-5 sm:gap-3 w-full">
-                                <div className="sm:w-16 sm:h-14 w-20 h-20 overflow-hidden my-auto">
-                                    <Image
-                                        height={0}
-                                        width={0}
-                                        sizes="100wv"
-                                        src={`/avatar/${metric.userInfo.profile_pic.split('-')[0]}/${metric.userInfo.profile_pic}.webp`}
-                                        alt="avatar"
-                                        className="w-full h-full object-cover rounded-full shadow-2xl transition-transform hover:scale-110 duration-700"
-                                    />
+                    data?.map((metric: any, idx: number) => {
+                        const isTop3 = idx < 3
+                        return (
+                            <div
+                                key={idx}
+                                className={`flex flex-col sm:flex-row gap-4 sm:items-center bg-cream-50 border rounded-2xl p-3 hover:-translate-y-0.5 hover:shadow-soft duration-300 ${
+                                    isTop3
+                                        ? 'border-sun-600/30'
+                                        : 'border-ink-900/8'
+                                }`}
+                            >
+                                <div className="flex items-center gap-3 sm:w-8 shrink-0">
+                                    {isTop3 ? (
+                                        <Image
+                                            src={`/leaderboard/${idx + 1 === 1 ? 'gold' : idx + 1 === 2 ? 'silver' : 'bronze'}.png`}
+                                            alt="medal"
+                                            height={28}
+                                            width={28}
+                                        />
+                                    ) : (
+                                        <span className="font-display text-lg text-ink-700/70 w-7 text-center">
+                                            {idx + 1}
+                                        </span>
+                                    )}
                                 </div>
 
-                                <div className="flex flex-col gap-2 w-full">
-                                    <div className="flex flex-row w-full items-center gap-3">
-                                        <span className="h-fit text-2xl text-slate-50 font-bold max-w-3/4 truncate tracking-wide">
-                                            {metric.userInfo.name}
-                                        </span>
-
-                                        {metric.userInfo.country && (
-                                            <div className="rounded-lg h-fit w-fit overflow-hidden">
-                                                <Image
-                                                    height={20}
-                                                    width={28}
-                                                    alt={
-                                                        metric.userInfo.country
-                                                    }
-                                                    src={`https://flagicons.lipis.dev/flags/4x3/${metric.userInfo.country}.svg`}
-                                                    className="shadow-2xl brightness-90 opacity-90"
-                                                />
-                                            </div>
-                                        )}
+                                <div className="flex items-center gap-3 flex-1 min-w-0">
+                                    <div className="w-12 h-12 shrink-0 overflow-hidden rounded-full ring-1 ring-sun-600/30">
+                                        <Image
+                                            height={0}
+                                            width={0}
+                                            sizes="100vw"
+                                            src={`/avatar/${metric.userInfo.profile_pic.split('-')[0]}/${metric.userInfo.profile_pic}.webp`}
+                                            alt="avatar"
+                                            className="w-full h-full object-cover"
+                                        />
                                     </div>
 
-                                    <LeaderboardStats
-                                        accuracy={metric.correctPoseMean}
-                                        timeSpent={metric.durationMean}
-                                        session={metric.totalSessions}
-                                    />
+                                    <div className="flex flex-col gap-1 min-w-0 flex-1">
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-display text-base text-ink-900 truncate">
+                                                {metric.userInfo.name}
+                                            </span>
+                                            {metric.userInfo.country && (
+                                                <Image
+                                                    height={16}
+                                                    width={22}
+                                                    alt={metric.userInfo.country}
+                                                    src={`https://flagicons.lipis.dev/flags/4x3/${metric.userInfo.country}.svg`}
+                                                    className="rounded-sm shrink-0"
+                                                />
+                                            )}
+                                        </div>
+
+                                        <LeaderboardStats
+                                            accuracy={metric.correctPoseMean}
+                                            timeSpent={metric.durationMean}
+                                            session={metric.totalSessions}
+                                        />
+                                    </div>
                                 </div>
 
-                                <div className="w-16 sm:h-16 h-8 flex justify-center items-center my-auto">
+                                <div className="w-16 h-12 flex justify-center items-center shrink-0">
                                     <WeeklyActivity
                                         chartData={metric.weekActivity}
                                     />
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        )
+                    })}
 
                 {!data &&
                     Array.from({ length: 10 }).map((_, idx) => (
                         <div
                             key={idx}
-                            className="w-[97%] mx-auto h-20 px-5 my-5 bg-slate-50 bg-opacity-10 rounded-2xl animate-pulse"
-                        ></div>
+                            className="h-20 bg-cream-200 rounded-2xl animate-pulse"
+                        />
                     ))}
-            </ScrollArea>
-        </>
+            </div>
+        </ScrollArea>
     )
 }

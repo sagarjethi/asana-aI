@@ -18,9 +18,9 @@ export default function DietDialog(props: { meal: MealData }) {
     return (
         <>
             <Dialog data-lenis-prevent>
-                <DialogTrigger className="w-3/4 xl:w-full text-xl bg-blue-900 text-slate-50 rounded-2xl px-3 py-1 capitalize cursor-pointer hover:bg-blue-950 duration-500 flex items-center justify-center">
-                    Explore
-                    <RiCompassLine className="text-xl inline-flex mx-2 mb-0.5" />
+                <DialogTrigger className="w-full inline-flex items-center justify-center gap-1 bg-cream-100 border border-ink-900/8 text-ink-800 hover:bg-cream-200 rounded-full px-4 py-2 text-sm font-medium duration-300">
+                    Quick view
+                    <RiCompassLine className="text-base" />
                 </DialogTrigger>
                 <DialogContent className="z-[120] max-w-[90vw] sm:max-w-[60vw] sm:min-h-[80vh] p-5 rounded-2xl shadow-xl overflow-hidden">
                     <DialogHeader>
