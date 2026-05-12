@@ -1,21 +1,61 @@
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { type NextRequest, NextResponse } from 'next/server'
-import { createShimClient } from './shimCore'
-
-const COOKIE_NAME = 'aa_session'
 
 export const createClient = (request: NextRequest) => {
-    const response = NextResponse.next({
-        request: { headers: request.headers },
+    // Create an unmodified response
+    let response = NextResponse.next({
+        request: {
+            headers: request.headers,
+        },
     })
-    const token = request.cookies.get(COOKIE_NAME)?.value
-    const headers: Record<string, string> = {}
-    if (token) {
-        headers['Cookie'] = `${COOKIE_NAME}=${token}`
-        headers['Authorization'] = `Bearer ${token}`
-    }
-    const supabase = createShimClient({
-        fetcher: (...args) => fetch(...args),
-        init: { headers, cache: 'no-store' },
-    })
+
+    const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+            cookies: {
+                get(name: string) {
+                    return request.cookies.get(name)?.value
+                },
+                set(name: string, value: string, options: CookieOptions) {
+                    // If the cookie is updated, update the cookies for the request and response
+                    request.cookies.set({
+                        name,
+                        value,
+                        ...options,
+                    })
+                    response = NextResponse.next({
+                        request: {
+                            headers: request.headers,
+                        },
+                    })
+                    response.cookies.set({
+                        name,
+                        value,
+                        ...options,
+                    })
+                },
+                remove(name: string, options: CookieOptions) {
+                    // If the cookie is removed, update the cookies for the request and response
+                    request.cookies.set({
+                        name,
+                        value: '',
+                        ...options,
+                    })
+                    response = NextResponse.next({
+                        request: {
+                            headers: request.headers,
+                        },
+                    })
+                    response.cookies.set({
+                        name,
+                        value: '',
+                        ...options,
+                    })
+                },
+            },
+        }
+    )
+
     return { supabase, response }
 }

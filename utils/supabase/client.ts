@@ -1,8 +1,7 @@
-'use client'
-import { createShimClient } from './shimCore'
+import { createBrowserClient } from '@supabase/ssr'
 
 export const createClientBrowser = () =>
-    createShimClient({
-        fetcher: (...args) => fetch(...args),
-        init: { credentials: 'include' },
-    })
+    createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
