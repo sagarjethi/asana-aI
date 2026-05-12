@@ -1,170 +1,138 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import {
-    IoAccessibilityOutline,
-    IoCloseOutline,
-    IoLogInOutline,
-    IoTrendingUpOutline,
-} from 'react-icons/io5'
-import { RxHamburgerMenu } from 'react-icons/rx'
-import toast, { Toaster } from 'react-hot-toast'
 import Link from 'next/link'
 import Cookies from 'js-cookie'
-import { PiBowlFoodLight } from 'react-icons/pi'
+import toast, { Toaster } from 'react-hot-toast'
+import { RxHamburgerMenu } from 'react-icons/rx'
+import { IoCloseOutline } from 'react-icons/io5'
 import { createClientBrowser } from '@/utils/supabase/client'
-import { MdOutlineSpaceDashboard } from 'react-icons/md'
+
+const NAV_LINKS = [
+    { name: 'Practice', href: '/practice' },
+    { name: 'Poses', href: '/practice' },
+    { name: 'Leaderboard', href: '/leaderboard' },
+    { name: 'Diet', href: '/diet' },
+]
 
 export default function Navbar() {
-    const [isOpen, setIsOpen] = useState<boolean>(false)
-    const [isAuth, setIsAuth] = useState<boolean>(false)
-
+    const [isOpen, setIsOpen] = useState(false)
+    const [isAuth, setIsAuth] = useState(false)
     const supabase = createClientBrowser()
 
-    const toastAndSetCookie = (userPromise: Promise<any>, username: string) => {
-        toast.promise(
-            userPromise,
-            {
-                loading: 'Loading...',
-                success: <b>Hello {username}, You are now logged in</b>,
-                error: <b>Couldn&apos;t Authenticate.</b>,
-            },
-            {
-                duration: 2000,
-                icon: '🧘',
-                style: {
-                    borderRadius: '10px',
-                    background: '#033298',
-                    color: '#fff',
-                },
-            }
-        )
-        Cookies.set('init', '0')
-    }
+    const validateUserCookie = async () => {
+        const { data: user } = await supabase.auth.getSession()
+        if (!user.session) return
 
-    const valiDateUserCookie = async () => {
-        const { data: user, error } = await supabase.auth.getSession()
-        const userPromise = new Promise((resolve, reject) => {
-            if (user.session) {
-                setIsAuth(true)
-                resolve(user)
-            }
+        setIsAuth(true)
+
+        const userPromise: Promise<typeof user> = new Promise((resolve) => {
+            resolve(user)
         })
 
-        const readCookie = Cookies.get('init')
-        readCookie === undefined
-            ? toastAndSetCookie(
-                  userPromise,
-                  user.session?.user?.user_metadata?.name
-              )
-            : null
+        if (Cookies.get('init') === undefined) {
+            toast.promise(
+                userPromise,
+                {
+                    loading: 'Loading…',
+                    success: (
+                        <b>
+                            Welcome back,{' '}
+                            {user.session?.user?.user_metadata?.name ?? 'yogi'}
+                        </b>
+                    ),
+                    error: <b>Couldn&apos;t authenticate.</b>,
+                },
+                {
+                    duration: 2200,
+                    icon: '🧘',
+                    style: {
+                        borderRadius: '12px',
+                        background: '#241914',
+                        color: '#FFFBF4',
+                    },
+                }
+            )
+            Cookies.set('init', '0')
+        }
     }
 
     useEffect(() => {
-        valiDateUserCookie()
+        validateUserCookie()
     }, [])
-
-    const options = [
-        {
-            name: 'diet',
-            icon: (
-                <PiBowlFoodLight className="inline-flex align-middle mr-2 cursor-pointer" />
-            ),
-        },
-        {
-            name: 'leaderBoard',
-            icon: (
-                <IoTrendingUpOutline className="inline-flex align-middle mr-2 " />
-            ),
-        },
-        {
-            name: 'practice',
-            icon: (
-                <IoAccessibilityOutline className="inline-flex align-middle mr-2 " />
-            ),
-        },
-    ]
 
     return (
         <>
             <Toaster position="top-right" reverseOrder={false} />
 
-            <nav className="z-50 flex mx-5 my-5 justify-between">
-                <div className="flex items-center m-1 glass-card p-2">
-                    <img src="/home/logo.svg" alt="" className="w-12" />
-                    <span className="text-3xl text-slate-100 px-1 m-1 font-extrabold">
-                        AsanaAI
-                    </span>
-                </div>
-
-                <div className="sm:flex hidden flex-row items-center gap-4 m-1 px-6 glass-card">
-                    {options.map((option, idx) => (
-                        <Link key={idx} href={`/${option.name.toLowerCase()}`}>
-                            <div className="text-xl text-slate-100 flex items-center hover:brightness-50 duration-500 cursor-pointer">
-                                {option.icon}
-                                <span className="capitalize inline-flex items-center cursor-pointer">
-                                    {option.name}
-                                </span>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-
-                <div className="flex flex-row items-center  m-1 p-2 glass-card">
-                    <Link href={isAuth ? '/dashboard' : '/login'}>
-                        <button className="sm:block hidden text-xl  text-slate-100 py-2 px-4 rounded-xl shadow-lg shadow-blue-700 hover:scale-105 duration-200 transform">
-                            {isAuth ? 'Dashboard' : 'Login'}
-                        </button>
+            <nav className="z-50 sticky top-4 mx-4 sm:mx-8">
+                <div className="flex items-center justify-between rounded-full border border-ink-900/10 bg-cream-50/80 backdrop-blur-md px-4 py-2 shadow-soft">
+                    <Link href="/" className="flex items-center gap-2 pl-2">
+                        <div className="w-9 h-9 rounded-full bg-sun-cta flex items-center justify-center text-ink-900 font-display font-bold">
+                            A
+                        </div>
+                        <span className="font-display text-xl font-semibold text-ink-900">
+                            AsanaAI
+                        </span>
                     </Link>
 
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="sm:hidden block text-xl text-slate-100 py-2 px-4 rounded-xl   hover:scale-105 duration-200 transform"
-                    >
-                        <RxHamburgerMenu className="text-2xl " />
-                    </button>
-                </div>
-            </nav>
-
-            {/* Hamburger */}
-            {isOpen && (
-                <div className="fixed top-20 right-0 animate-in mt-6 rounded-2xl w-11/12 inset-x-0 mx-auto shadow-lg z-50 p-4 glass-card">
-                    <div className="flex flex-col items-center gap-5">
-                        {options.map((option, idx) => (
+                    <div className="hidden md:flex items-center gap-6 text-sm text-ink-800/80">
+                        {NAV_LINKS.map((l) => (
                             <Link
-                                key={idx}
-                                href={`/${option.name.toLowerCase()}`}
-                                onClick={() => setIsOpen(false)}
+                                key={l.name}
+                                href={l.href}
+                                className="hover:text-ember-600 transition-colors"
                             >
-                                <div className="text-xl text-slate-50 flex  px-2 py-1 rounded-2xl items-center hover:brightness-75 duration-1000 cursor-pointer ">
-                                    {option.icon}
-                                    <span className="capitalize inline-flex items-center cursor-pointer">
-                                        {option.name}
-                                    </span>
-                                </div>
+                                {l.name}
                             </Link>
                         ))}
+                    </div>
+
+                    <div className="flex items-center gap-2">
                         <Link
                             href={isAuth ? '/dashboard' : '/login'}
-                            onClick={() => setIsOpen(false)}
+                            className="hidden sm:inline-flex rounded-full bg-ink-900 px-4 py-2 text-sm font-medium text-cream-50 hover:bg-ember-600 transition-colors"
                         >
-                            <button className="text-xl bg-slate-100 text-slate-900 py-2 px-4 rounded-xl hover:scale-105 duration-200 transform">
-                                {isAuth ? (
-                                    <span>
-                                        <MdOutlineSpaceDashboard className="inline-flex align-middle mr-2 mb-0.5" />
-                                        Dashboard
-                                    </span>
-                                ) : (
-                                    <span>
-                                        <IoLogInOutline className="inline-flex align-middle mr-2 mb-0.5" />
-                                        Login
-                                    </span>
-                                )}
-                            </button>
+                            {isAuth ? 'Dashboard' : 'Sign in'}
                         </Link>
+                        <button
+                            onClick={() => setIsOpen((s) => !s)}
+                            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-full bg-ink-900 text-cream-50"
+                            aria-label="Toggle navigation"
+                        >
+                            {isOpen ? (
+                                <IoCloseOutline className="text-xl" />
+                            ) : (
+                                <RxHamburgerMenu className="text-xl" />
+                            )}
+                        </button>
                     </div>
                 </div>
-            )}
+
+                {isOpen && (
+                    <div className="md:hidden mt-3 rounded-3xl border border-ink-900/10 bg-cream-50/95 backdrop-blur-md p-4 shadow-soft">
+                        <div className="flex flex-col gap-1">
+                            {NAV_LINKS.map((l) => (
+                                <Link
+                                    key={l.name}
+                                    href={l.href}
+                                    onClick={() => setIsOpen(false)}
+                                    className="px-4 py-3 rounded-2xl text-ink-800 hover:bg-cream-200 transition-colors"
+                                >
+                                    {l.name}
+                                </Link>
+                            ))}
+                            <Link
+                                href={isAuth ? '/dashboard' : '/login'}
+                                onClick={() => setIsOpen(false)}
+                                className="mt-2 px-4 py-3 rounded-full bg-ink-900 text-cream-50 text-center"
+                            >
+                                {isAuth ? 'Dashboard' : 'Sign in'}
+                            </Link>
+                        </div>
+                    </div>
+                )}
+            </nav>
         </>
     )
 }

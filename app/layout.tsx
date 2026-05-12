@@ -1,10 +1,22 @@
 import type { Metadata } from 'next'
 
-import { Comfortaa } from 'next/font/google'
+import { Fraunces, Inter } from 'next/font/google'
 import './globals.css'
 import { StoreProvider } from '@/lib/store/StoreProvider'
 import SmoothScrolling from './components/SmoothScroll'
-const comfortaa = Comfortaa({ subsets: ['latin'] })
+
+const fraunces = Fraunces({
+    subsets: ['latin'],
+    variable: '--font-display',
+    display: 'swap',
+    weight: ['400', '500', '600', '700'],
+})
+
+const inter = Inter({
+    subsets: ['latin'],
+    variable: '--font-sans',
+    display: 'swap',
+})
 
 export const metadata: Metadata = {
     title: 'AsanaAI',
@@ -82,8 +94,12 @@ export default function RootLayout({
 }>) {
     return (
         <StoreProvider>
-            <html lang="en" data-theme="light">
-                <body className={comfortaa.className}>
+            <html
+                lang="en"
+                data-theme="light"
+                className={`${fraunces.variable} ${inter.variable}`}
+            >
+                <body className="font-sans">
                     <SmoothScrolling>{children}</SmoothScrolling>
                 </body>
             </html>
