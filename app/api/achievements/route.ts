@@ -35,6 +35,10 @@ export async function GET(request: NextRequest) {
 
     const userIdMD5 = await getUserIDCookie(cookie?.value)
 
+    if (!USERDB) {
+        return NextResponse.json({ achievements: [] })
+    }
+
     const { data, error } = await supabase
         .from(USERDB)
         .select('achievements')

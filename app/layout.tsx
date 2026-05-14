@@ -99,6 +99,18 @@ export default function RootLayout({
                 data-theme="light"
                 className={`${fraunces.variable} ${inter.variable}`}
             >
+                <head>
+                    <link
+                        rel="preload"
+                        as="image"
+                        href="/pose/image/webp/tree.webp"
+                        type="image/webp"
+                    />
+                    <link
+                        rel="dns-prefetch"
+                        href="https://flagicons.lipis.dev"
+                    />
+                </head>
                 <body className="font-sans">
                     <SmoothScrolling>{children}</SmoothScrolling>
                 </body>

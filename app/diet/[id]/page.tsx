@@ -31,14 +31,14 @@ export async function generateMetadata({ params }: any) {
 
     if (!metaInfo) {
         return {
-            title: 'RAGE Diet not found',
-            description: 'RAGE Diet not found',
+            title: 'AsanaAI Diet not found',
+            description: 'AsanaAI Diet not found',
         }
     }
 
     // Return metadata with information from metaInfo
     return {
-        title: 'RAGE Diet ' + metaInfo.name,
+        title: 'AsanaAI Diet ' + metaInfo.name,
         description: metaInfo.preparation_steps[0] + '...',
         openGraph: {
             images: metaInfo.image[0],

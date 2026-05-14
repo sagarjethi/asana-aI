@@ -7,10 +7,17 @@ import { CalculateMetrics } from './calculateMetrics'
 import { nanoid } from '@reduxjs/toolkit'
 
 const leaderboardUpdateTime = 5 // minutes
-const redis = new Redis({
-    url: process.env.NEXT_PUBLIC_UPSTASH_REDIS_URL,
-    token: process.env.NEXT_PUBLIC_UPSTASH_REDIS_KEY,
-})
+
+// Only construct the Upstash client if both env vars are present.
+// Otherwise the SDK throws `Invalid URL '/pipeline'` on first call.
+const redis =
+    process.env.NEXT_PUBLIC_UPSTASH_REDIS_URL &&
+    process.env.NEXT_PUBLIC_UPSTASH_REDIS_KEY
+        ? new Redis({
+              url: process.env.NEXT_PUBLIC_UPSTASH_REDIS_URL,
+              token: process.env.NEXT_PUBLIC_UPSTASH_REDIS_KEY,
+          })
+        : null
 
 interface Data {
     userID: string
@@ -29,7 +36,9 @@ interface Data {
 }
 
 async function handleCache(finalResponse: any) {
-    await redis.set('leaderboard', JSON.stringify(finalResponse))
+    if (redis) {
+        await redis.set('leaderboard', JSON.stringify(finalResponse))
+    }
     return { source: 'supabase', ...finalResponse }
 }
 
@@ -59,8 +68,10 @@ async function handleCacheUpdate() {
 }
 
 export async function GET(req: NextRequest, res: NextResponse) {
-    // fetching data from redis
-    const leaderboardDataRedis = (await redis.get('leaderboard')) as any
+    // fetching data from redis (if configured)
+    const leaderboardDataRedis = redis
+        ? ((await redis.get('leaderboard')) as any)
+        : null
 
     // validating if data is present in redis
     if (leaderboardDataRedis) {

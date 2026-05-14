@@ -1,13 +1,15 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { IoArrowForwardOutline } from 'react-icons/io5'
 
+// pose-api ids — see app/api/pose/poseApiData.ts
 const poses = [
-    { id: 'mountain', name: 'Tadasana', en: 'Mountain', level: 'Beginner' },
-    { id: 'tree', name: 'Vrikshasana', en: 'Tree', level: 'Beginner' },
-    { id: 'warrior1', name: 'Virabhadrasana I', en: 'Warrior I', level: 'Intermediate' },
-    { id: 'warrior2', name: 'Virabhadrasana II', en: 'Warrior II', level: 'Intermediate' },
-    { id: 'goddess', name: 'Utkata Konasana', en: 'Goddess', level: 'Intermediate' },
-    { id: 'downdog', name: 'Adho Mukha', en: 'Downward Dog', level: 'Beginner' },
+    { id: 'mountain', poseId: 105, name: 'Tadasana', en: 'Mountain', level: 'Beginner' },
+    { id: 'tree', poseId: 101, name: 'Vrikshasana', en: 'Tree', level: 'Beginner' },
+    { id: 'warrior1', poseId: 102, name: 'Virabhadrasana I', en: 'Warrior I', level: 'Intermediate' },
+    { id: 'warrior2', poseId: 106, name: 'Virabhadrasana II', en: 'Warrior II', level: 'Intermediate' },
+    { id: 'goddess', poseId: 104, name: 'Utkata Konasana', en: 'Goddess', level: 'Intermediate' },
+    { id: 'downdog', poseId: 103, name: 'Adho Mukha', en: 'Downward Dog', level: 'Beginner' },
 ] as const
 
 export default function PoseGallery() {
@@ -36,14 +38,16 @@ export default function PoseGallery() {
                     {poses.map((p) => (
                         <Link
                             key={p.id}
-                            href="/practice"
+                            href={`/practice?id=${p.poseId}`}
                             className="group relative rounded-3xl overflow-hidden border border-ink-900/8 bg-cream-50 hover:shadow-warm transition-shadow"
                         >
-                            <div className="aspect-[4/5] overflow-hidden">
-                                <img
+                            <div className="aspect-[4/5] overflow-hidden relative">
+                                <Image
                                     src={`/pose/image/webp/${p.id}.webp`}
                                     alt={`${p.en} pose`}
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    fill
+                                    sizes="(min-width: 768px) 33vw, 50vw"
+                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                                 />
                             </div>
                             <div className="absolute top-3 left-3 inline-flex items-center rounded-full bg-cream-50/90 backdrop-blur px-2.5 py-1 text-[10px] uppercase tracking-widest text-ink-800/80 border border-ink-900/8">

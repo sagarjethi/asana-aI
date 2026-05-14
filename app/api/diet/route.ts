@@ -44,6 +44,13 @@ export async function GET(request: NextRequest) {
     // stage 1 - extract user ID information
     const userID = await getUserIDCookie(cookie?.value)
 
+    if (!USERDB) {
+        return NextResponse.json(
+            { error: 'USERDB table not configured' },
+            { status: 503 }
+        )
+    }
+
     const { data: userRecord, error: fetchError } = await supabase
         .from(USERDB)
         .select('diet')

@@ -42,11 +42,15 @@ export default async function Meals({
         meals: MealData[],
         data: any
     ): (MealData & { likes: number; views: number })[] => {
-        // Create a map to store likes and views for each id
+        // Guard against null/undefined (e.g. when Supabase env is missing or
+        // the request errored) so the page still renders meals with zero stats.
+        const rows: Array<{ id: number; likes: number; views: number }> =
+            Array.isArray(data) ? data : []
+
         const likesAndViewsMap: Record<
             number,
             { likes: number; views: number }
-        > = data.reduce(
+        > = rows.reduce(
             (acc: any, item: any) => {
                 acc[item.id] = { likes: item.likes, views: item.views }
                 return acc
