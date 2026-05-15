@@ -1,15 +1,15 @@
-import 'dotenv/config'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
 import { db, pool } from './client.js'
+import { logger } from '../common/utils/logger.js'
 
 async function main() {
-    console.log('Running drizzle migrations from ./drizzle ...')
+    logger.info('Running drizzle migrations from ./drizzle ...')
     await migrate(db, { migrationsFolder: './drizzle' })
     await pool.end()
-    console.log('Migrations complete.')
+    logger.info('Migrations complete.')
 }
 
 main().catch((err) => {
-    console.error('Migration failed:', err)
+    logger.fatal({ err }, 'Migration failed')
     process.exit(1)
 })

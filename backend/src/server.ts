@@ -1,46 +1,39 @@
-import 'dotenv/config'
-import express from 'express'
-import cors from 'cors'
-import helmet from 'helmet'
-import morgan from 'morgan'
-import cookieParser from 'cookie-parser'
-import { health } from './routes/health.js'
-import { pose } from './routes/pose.js'
-import { auth } from './routes/auth.js'
-import { users } from './routes/users.js'
-import { poses } from './routes/poses.js'
-import { leaderboard } from './routes/leaderboard.js'
-import { diet } from './routes/diet.js'
-import { achievements } from './routes/achievements.js'
-import { dbRoutes } from './routes/db.js'
+/**
+ * Process entrypoint. Reads env, builds the Express app, listens, and
+ * wires graceful shutdown.
+ */
+import { createApp } from './app.js'
+import { env } from './config/index.js'
+import { logger } from './common/utils/logger.js'
+import { pool } from './db/client.js'
 
-const app = express()
-const PORT = Number(process.env.PORT ?? 8080)
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN ?? 'http://localhost:3000'
+async function main() {
+    const app = createApp()
 
-app.use(helmet())
-app.use(
-    cors({
-        origin: FRONTEND_ORIGIN,
-        credentials: true,
+    const server = app.listen(env.PORT, () => {
+        logger.info(
+            { port: env.PORT, env: env.NODE_ENV },
+            'asanaai-backend listening'
+        )
     })
-)
-app.use(express.json({ limit: '1mb' }))
-app.use(cookieParser())
-app.use(morgan('tiny'))
 
-app.use('/health', health)
-app.use('/api/pose', pose)
-app.use('/api/poses', poses)
-app.use('/api/auth', auth)
-app.use('/api/users', users)
-app.use('/api/leaderboard', leaderboard)
-app.use('/api/diet', diet)
-app.use('/api/achievements', achievements)
-app.use('/api/db', dbRoutes)
+    const shutdown = async (signal: string) => {
+        logger.info({ signal }, 'shutting down')
+        server.close(() => logger.info('http server closed'))
+        try {
+            await pool.end()
+            logger.info('pg pool closed')
+        } catch (err) {
+            logger.error({ err }, 'pg pool close failed')
+        }
+        process.exit(0)
+    }
 
-app.use((_req, res) => res.status(404).json({ error: 'not_found' }))
+    process.on('SIGINT', () => void shutdown('SIGINT'))
+    process.on('SIGTERM', () => void shutdown('SIGTERM'))
+}
 
-app.listen(PORT, () => {
-    console.log(`asanaai-backend listening on :${PORT}`)
+main().catch((err) => {
+    logger.fatal({ err }, 'failed to start')
+    process.exit(1)
 })
