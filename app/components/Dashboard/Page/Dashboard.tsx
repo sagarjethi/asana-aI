@@ -5,7 +5,14 @@ import { BsLightningCharge } from 'react-icons/bs'
 import Calendar from './Calendar'
 import RecentActivity from './RecentActivity'
 import Heading from './Heading'
-import LastTHDays from './LastTHDays'
+import dynamic from 'next/dynamic'
+
+const LastTHDays = dynamic(() => import('./LastTHDays'), {
+    ssr: false,
+    loading: () => (
+        <div className="h-[20vh] w-full bg-cream-200 rounded-2xl animate-pulse" />
+    ),
+})
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {

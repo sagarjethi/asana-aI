@@ -37,11 +37,17 @@ export default async function Profile({ params }: any) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    const { data, error } = await supabase
-        .from(USERDB)
-        .select('*')
-        .eq('user_public_id', searchParam)
-        .single()
+    // Without a configured USERDB the query crashes the route. Fall through
+    // to the "no user found" empty state instead.
+    let data: any = null
+    if (USERDB) {
+        const result = await supabase
+            .from(USERDB)
+            .select('*')
+            .eq('user_public_id', searchParam)
+            .single()
+        data = result.data
+    }
 
     const achievement =
         data?.achievements &&

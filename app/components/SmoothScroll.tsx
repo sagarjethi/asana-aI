@@ -1,24 +1,27 @@
 'use client'
-import { ReactLenis } from '@studio-freight/react-lenis'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import dynamic from 'next/dynamic'
+
+const ReactLenis = dynamic(
+    () => import('@studio-freight/react-lenis').then((m) => m.ReactLenis),
+    { ssr: false }
+)
 
 function SmoothScrolling({ children }: { children: React.ReactNode }) {
-    const searchParam = usePathname()
+    const pathname = usePathname()
+
+    // Practice page disables smooth scrolling for camera/pose performance.
+    if (pathname?.includes('practice')) {
+        return <>{children}</>
+    }
 
     return (
-        // disable smooth scrolling for practice page
-        <>
-            {searchParam.includes('practice') ? (
-                children
-            ) : (
-                <ReactLenis
-                    root
-                    options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}
-                >
-                    {children}
-                </ReactLenis>
-            )}
-        </>
+        <ReactLenis
+            root
+            options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}
+        >
+            {children}
+        </ReactLenis>
     )
 }
 

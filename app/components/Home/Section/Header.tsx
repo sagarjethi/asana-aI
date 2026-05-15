@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { IoArrowForwardOutline } from 'react-icons/io5'
 
 export default function Header() {
@@ -74,9 +75,13 @@ export default function Header() {
 
                 <div className="lg:col-span-5 relative">
                     <div className="relative rounded-[36px] bg-cream-50 border border-ink-900/8 shadow-warm overflow-hidden animate-float-y">
-                        <img
+                        <Image
                             src="/pose/image/webp/tree.webp"
                             alt="Tree pose"
+                            width={720}
+                            height={900}
+                            priority
+                            sizes="(min-width: 1024px) 40vw, 100vw"
                             className="w-full h-[420px] sm:h-[480px] object-cover"
                         />
                         <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-cream-50/95 backdrop-blur px-4 py-3 flex items-center justify-between border border-ink-900/8">

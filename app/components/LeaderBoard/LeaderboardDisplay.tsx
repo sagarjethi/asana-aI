@@ -1,7 +1,11 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import Image from 'next/image'
-import WeeklyActivity from './WeeklyActivity'
+import dynamic from 'next/dynamic'
 import LeaderboardStats from './LeaderboardStats'
+
+const WeeklyActivity = dynamic(() => import('./WeeklyActivity'), {
+    loading: () => <div className="h-16 w-16" />,
+})
 
 export default async function LeaderboardDisplay({ data }: { data: any }) {
     return (
