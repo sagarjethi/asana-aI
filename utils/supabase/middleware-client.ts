@@ -16,6 +16,7 @@ export const createClient = (request: NextRequest) => {
     const supabase = createShimClient({
         fetcher: (...args) => fetch(...args),
         init: { headers, cache: 'no-store' },
+        baseUrl: process.env.BACKEND_INTERNAL_URL ?? 'http://127.0.0.1:8080',
     })
     return { supabase, response }
 }
