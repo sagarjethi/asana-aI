@@ -61,8 +61,14 @@ Maps directly to the brief's required "Next Steps" sections.
 | 03 | [`spec/03-architecture-data.md`](spec/03-architecture-data.md) | System architecture diagram + full Postgres/Drizzle data model |
 | 04 | [`spec/04-reuse-pilot.md`](spec/04-reuse-pilot.md) | Reuse map + the precise Solo pilot scope (in/out, success criteria) |
 | 05 | [`spec/05-roadmap-workstreams.md`](spec/05-roadmap-workstreams.md) | Phased roadmap + FE / BE / AI-ML task checklists |
-| 06 | [`spec/06-integrations.md`](spec/06-integrations.md) | Third-party tech (Vizrt/Unreal, Mo-Sys, cameras, GPU, LLM, TTS) + data boundaries |
-| 07 | [`spec/07-team-process-sdlc.md`](spec/07-team-process-sdlc.md) | Analyst ⇄ builder ⇄ client review loop, SDLC, change control, RACI |
+| 06 | [`spec/06-integrations.md`](spec/06-integrations.md) | Third-party tech (Vizrt/Unreal, Mo-Sys, cameras, GPU sizing, LLM, TTS) + data boundaries |
+| 07 | [`spec/07-team-process-sdlc.md`](spec/07-team-process-sdlc.md) | Analyst ⇄ builder ⇄ client review loop, SDLC, change control, live-event freeze, RACI |
+| 08 | [`spec/08-nfr-reliability-slo.md`](spec/08-nfr-reliability-slo.md) | Non-functional requirements, SLOs, redundancy/failover, capacity math, observability, DR |
+| 09 | [`spec/09-security-privacy.md`](spec/09-security-privacy.md) | RBAC, threat model, cryptographic integrity chain, GDPR biometric governance |
+| 10 | [`spec/10-commercial-model.md`](spec/10-commercial-model.md) | Revenue streams, pricing tiers, unit economics, the moat as a commercial asset, GTM |
+| 11 | [`spec/11-validation-and-testing.md`](spec/11-validation-and-testing.md) | How we prove scoring is correct: accuracy validation, judge-agreement, test strategy, go/no-go |
+| 12 | [`spec/12-api-event-contracts.md`](spec/12-api-event-contracts.md) | REST/RPC + real-time event schemas, versioning, idempotency, on-prem↔cloud boundary |
+| 13 | [`spec/13-risks-and-open-questions.md`](spec/13-risks-and-open-questions.md) | Risk register + open questions / decisions needed (the honest first-build gaps) |
 
 ---
 
@@ -71,8 +77,10 @@ Maps directly to the brief's required "Next Steps" sections.
 - **forza.ventures / client decision-maker** → `proposal/00` then `proposal/03` (the demos).
 - **UI/UX designer** → `spec/00` (understand the sport), then `spec/01` and `spec/02`.
 - **Front-end / back-end engineer** → `spec/03`, `spec/04`, `spec/05`.
-- **AI/ML engineer** → `spec/03` (two-tier inference), `spec/05` (ML workstream), `proposal/01`.
-- **Project analyst / delivery lead** → `spec/07` and `proposal/05`.
+- **AI/ML engineer** → `spec/03` (two-tier inference), `spec/11` (validation), `spec/05` (ML workstream), `proposal/01`.
+- **Platform / SRE / security** → `spec/08` (reliability/SLOs), `spec/09` (security/privacy), `spec/12` (contracts).
+- **Project analyst / delivery lead** → `spec/07`, `spec/13` (risks & open questions), `proposal/05`.
+- **Commercial / founder** → `spec/10` (revenue model) and `proposal/04` (budget).
 
 ## The delivery & review loop
 
@@ -93,6 +101,13 @@ Detail in [`spec/07-team-process-sdlc.md`](spec/07-team-process-sdlc.md).
 
 ## Status
 
-Draft v1 — analysis & proposal complete, ready for stakeholder review.
+**Draft v2 — senior-engineer hardening pass complete.** v1 analysis + proposal, then a principal-level
+review-and-harden pass that added production concerns a first draft always misses: reliability/SLOs (08),
+security & biometric privacy (09), the commercial/revenue model (10), accuracy validation & testing (11),
+API/event contracts (12), and an explicit risk + open-questions register (13). Specs 00–07 were upgraded
+in place (failure/recovery journeys, defensible accuracy claims, determinism/replay rigor, honest reuse
+effort, critical-path roadmap, live-event ops). ~39,000 words total.
+
+**Open decisions for the client live in [`spec/13`](spec/13-risks-and-open-questions.md)** — review these first.
 **Next step after review:** turn `spec/04` + `spec/05` into a concrete implementation plan for the
 Solo pilot. Contact for the brief: `forza@forza.ventures`.

@@ -84,6 +84,43 @@ The mission in one sentence: **make performance quality visible and make scoring
 
 ---
 
+## Goals & non-goals (read this before you design a single screen)
+
+Let's be blunt about what success means, so we don't drift into building a pretty toy.
+
+**Our goals — what this product must do:**
+1. **Make every score explainable.** A score is four numbers, each of which can show its work with a frame and a measurement. If a viewer or athlete can't see *why*, we've failed.
+2. **Cut judge cognitive load and dispute time.** The judge should score faster and defend any score in seconds, not arguments.
+3. **Settle disputes on evidence, not authority.** Replayable, signed record. A protest ends with "look at the frame," not "the judge said so."
+4. **Make the invisible visible for fans.** The 3-degree spine deviation, the micro-wobble — turn them into something Grandpa Joe can see and Priya can play along with.
+5. **Feed the flywheel.** Every competition produces clean data back into AsanaAI and athlete/coach profiles.
+
+**Non-goals — what we deliberately do NOT do (and why):**
+- **The AI does not decide scores.** Ever. It suggests; a human confirms. (Removing the human breaks trust, governance, and the whole "machine-assisted" promise.)
+- **We do not measure what the camera can't honestly see.** Contact poses, deep inversions, and artistry stay human-judged. We will not fabricate precision.
+- **We do not present estimated visuals as facts.** rPPG heart rate, breathing, muscle heatmaps are broadcast storytelling, permanently stamped "estimated."
+- **We do not use wearables in live competition.** Live is camera-only. Wearables live in training/calibration only.
+- **We are not replacing the federation's rulebook.** Exact criteria wording, weighting, and eligibility are the federation's call; we implement, we don't legislate.
+
+## What "good" looks like — measurable success criteria
+
+Voice stays warm, but the targets are concrete. These are the things we'll actually instrument.
+
+**For officials (judges, head judge, organisers):**
+- **Confirm rate without override** on measurable holds (Solo upright) is high *and* stable — the AI's suggestions are trusted enough to one-tap-confirm. Target a clear majority; track the trend, not a vanity number.
+- **Override-with-reason completeness: 100%.** No override should ever land without a logged reason. This is non-negotiable, not a goal to "improve toward."
+- **Time-to-resolve a protest** drops from "a tense conversation" to "pull the frame, decide" — measured in single-digit minutes, on evidence.
+- **Zero unsigned published results.** Every published round carries a verifiable signature and a replayable record.
+- **Calibration gate held: no round starts on a red rig.** Measured as count of rounds started on uncalibrated rigs = 0.
+
+**For fans (TV + second-screen):**
+- **"Now I get it" comprehension:** after a graphic plays, a viewer can correctly say which athlete scored higher and roughly why. Validate with audience testing, not assumption.
+- **Second-screen judge-along engagement:** fans submit their own score before the reveal on a healthy share of holds; retention across rounds.
+- **Estimated-vs-measured clarity:** in testing, viewers can correctly identify which on-screen numbers are "estimated." If they can't, the labelling has failed.
+- **No misleading-graphic incidents on air:** an estimated visual presented as fact is a P0 integrity bug, not a polish item.
+
+A note on honesty in metrics: we measure **confirm rate** and **trust**, but we do *not* chase "AI accuracy vs. the judge" as if the judge were ground truth on poses the camera can't see. On human-judged poses there is no machine "correct," so we don't score the machine against one.
+
 ## The honest line: real measurement vs. convincing visualisation
 
 This is the most important thing for designers to internalise, so we never overpromise or mislabel.
@@ -114,3 +151,18 @@ We already own a consumer yoga app called **AsanaAI.** Millions of everyday peop
 That loop — **practise → discover talent → compete → broadcast → fans → data → better practice** — is the flywheel. AsanaAI is the funnel that feeds athletes in and the magnet that pulls fans in. It's why ~70% of the athlete, coach, fan, and training surfaces can *reuse* AsanaAI's existing screens and warm "sun" visual design, while only the high-stakes **officiating and broadcast-control** tools need to be built fresh and dense.
 
 That's the project. A sport made fair for its judges and legible for its fans, with an app we already own as the engine underneath.
+
+---
+
+## Where the spec is still uncertain — open questions
+
+Honesty again: these are unresolved, and pretending otherwise would mislead the build team. Treat each as a decision we owe ourselves before the relevant surface ships.
+
+1. **Exact criteria & weighting.** We assume ~4 criteria ×10 = 40/round, but the precise wording, whether all four weigh equally, and whether weights differ by category (Musical vs Non-Musical) are the **federation's** call. Build the scoring UI to take weights as configuration, not as hard-coded constants.
+2. **Confidence thresholds.** Where exactly does "high/medium/low confidence" fall, and at what point does the system stop suggesting a number and say "human judgement required"? These thresholds need real calibration data; ship them as tunable, not magic.
+3. **Multi-camera reality at venues.** How many cameras, what rig, what minimum calibration quality counts as "green"? This depends on venue and broadcast-truck constraints we don't fully control. The calibration gate is firm; the hardware spec behind it is open.
+4. **Latency budget.** Broadcast overlays and second-screen sync have a real time budget. We have not yet committed to a number. Until we do, treat "low latency" as a requirement to be measured, not a feeling.
+5. **Estimated-visual accuracy bounds.** rPPG heart rate and breathing from camera vary with skin tone, lighting, and motion. We must document the conditions under which we'll even *show* them, and never imply a precision we don't have.
+6. **Consent & data governance specifics.** What exactly do athletes consent to (estimated biometric visuals on air, data flowing into AsanaAI), how is it revoked, and what jurisdictions apply? Owned by the federation's legal/governance role — flagged, not yet answered (see Persona file).
+7. **Dispute escalation authority.** The boundary between a judge's call, the head judge's override, and a formal federation appeal needs a documented chain. We sketch it in the journeys; the federation must ratify it.
+8. **Accessibility & language scope.** Which languages at launch, and what accessibility conformance target (captions, screen-reader support, colour-blind-safe overlays)? Defaulting to "later" is how accessibility gets skipped — name a target.

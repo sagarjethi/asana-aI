@@ -87,7 +87,73 @@ REVIEW    ── demo increment to client/3rd-party reviewer
 
 A change is never built before it is analyzed, estimated, and approved. Anything touching scoring rules additionally requires a new `rule_version` and a shadow-mode run before becoming authoritative — protecting reproducibility and protest integrity.
 
-## 6. RACI (key activities)
+### 5a. Change-control under a live-event freeze
+
+The analyst⇄builder⇄client loop is overlaid by a **freeze calendar** keyed to the federation's event schedule. A change request does not flow freely; it flows against the calendar:
+
+```
+                 ┌──────────────────── FREEZE CALENDAR (event-keyed) ────────────────────┐
+   T-14d  ──────▶│ FEATURE FREEZE  : no new scope into the venue build; bugfix-only       │
+   T-7d   ──────▶│ RULE FREEZE     : rule_version locked; no new authoritative rule/model │
+   T-72h  ──────▶│ CONFIG FREEZE   : calibration plan, env config, secrets rotated+pinned │
+   T-0    ──────▶│ HARD FREEZE     : event live — change board only; on-site rollback only │
+   T+24h  ──────▶│ THAW            : post-event retro → change requests resume normal flow │
+                 └────────────────────────────────────────────────────────────────────────┘
+```
+
+- A client change request received inside a freeze window is **captured and scoped by the analyst as normal**, but its APPROVAL gate is annotated with the freeze tier it lands in. The tech lead does not queue it for the imminent event; it targets the next thaw or a named future event.
+- **Emergency exception:** a P1/safety/integrity defect inside Rule or Config freeze requires sign-off from tech lead + analyst + Data-Governance Lead (the **change board**, §7.3), a regression + shadow run, and an explicit ledger entry recording who authorized the in-freeze change.
+- The freeze calendar is a shared artifact owned by the analyst (calendar) and tech lead (technical gates); the client sees freeze status on every change-request estimate.
+
+## 6. Operational readiness
+
+A v1 SDLC ends at "merged + released". This product is **deployed at the edge, at a live broadcast event, where you cannot hotfix mid-final**. Operational readiness is therefore a first-class part of the process, not an afterthought.
+
+### 6.1 Environments
+
+| Environment | Purpose | Topology | Data | Promotion in |
+|---|---|---|---|---|
+| **dev** | Local + CI; engineers and ML iterate | Cloud / laptop GPUs; synthetic + recorded clips | Synthetic, anonymized | PR + CI green |
+| **staging** | Production-faithful rehearsal; full pipeline replay; acceptance gates | Mirrors edge flight-case spec (same GPU class, same TensorRT, same Postgres/Drizzle) | De-identified golden replay sets | Tagged release + gates pass |
+| **venue-edge** | The on-prem officiating loop deployed in the flight case at the venue | 6–8 cams, dual GPU, edge Postgres, NVMe replay store | Live event data (special-category) | **Pinned** release promoted from staging only, before Config freeze |
+| **prod-cloud** | Post-live analytics, second-screen fan-out, OLAP, data flywheel | Cloud (AsanaAI stack: Next.js/Express/Drizzle/Postgres/JWT) | One-way batch sync after final closes | Independent cadence — never on officiating critical path |
+
+Key rule: **venue-edge and prod-cloud release on different clocks.** Edge is frozen and pinned for the event; cloud (second-screen, analytics) can ship continuously because it is off the officiating critical path. The two never share a deploy pipeline.
+
+### 6.2 Release management for an edge-at-a-live-event system
+
+- **Immutable pinned build.** The venue-edge release is a pinned bundle: app images, model weights, TensorRT engines, kernel/driver versions, rule_version set, and config — all content-addressed and signed. The exact bundle that passed staging acceptance is the bundle that ships; nothing is built on-site.
+- **Pre-event freeze.** Governed by §5a. By Config freeze (T-72h) the bundle is sealed and identical on primary and standby hardware.
+- **On-site rollback, not roll-forward.** During the event the only intervention is **rollback to the last-known-good pinned bundle** (kept warm on the standby) and **failover**. No new code is compiled, patched, or pulled at the venue. Roll-forward fixes are forbidden until thaw.
+- **Dual-system redundancy.** Primary and warm-standby edge stacks run the identical pinned bundle (hot/warm per 08). Failover is a runbook step, sub-event-window, and produces a ledger entry. See `08-nfr-reliability-slo.md` for the redundancy/SLO detail.
+- **Promotion record.** Every promotion to venue-edge is logged with the bundle hash, the staging acceptance run it passed, and the authorizing tech lead + governance sign-off.
+
+### 6.3 Incident management & on-call during live events
+
+- **Two on-call planes.** (1) **Live-event on-call** — physically/remotely staffed for the critical window only: broadcast engineer (cameras/transport), an edge/back-end on-call (scoring loop, ledger), and an ML on-call (calibration drift, confidence). (2) **Standing on-call** — for prod-cloud (second-screen, analytics) on the normal rotation.
+- **Severity ladder (event-time):** SEV-1 = officiating loop or ledger integrity at risk → immediate failover + head-judge informed, fall back to human-only judging if needed; SEV-2 = AR overlay / second-screen degraded (broadcast cosmetic) → degrade gracefully, no officiating impact; SEV-3 = post-event/analytics. Live officiating SEV-1 always outranks any broadcast-cosmetic issue.
+- **Decision authority during the event sits with the head judge for officiating outcomes** — engineering proposes (failover / degrade to human-only), the head judge owns the call of record. This mirrors the machine-assisted-human-judging ground truth.
+- **Comms.** A single event incident channel + a known bridge; the analyst owns client/federation comms during an incident so engineers stay heads-down.
+- **Blameless post-event review** at thaw (T+24h) feeds the change calendar and runbooks.
+
+### 6.4 Runbook culture
+
+Every operational procedure is a **versioned, rehearsed runbook**, tested in staging dress-rehearsal before each event — not written during an incident:
+
+- Venue setup & teardown (the ~2 hr broadcast setup), calibration capture & validation (reprojection-error gate).
+- Primary→standby failover; camera-drop degradation to reduced-confidence / human-only.
+- On-site rollback to last-known-good bundle.
+- Ledger integrity check & protest-replay procedure.
+- Secrets rotation and key-ceremony steps.
+- Each runbook names an owner, prerequisites, exact steps, the expected ledger/observable signal, and an abort/rollback path. Runbooks are dry-run at the staging dress rehearsal that gates every event.
+
+### 6.5 Configuration & secrets management
+
+- **Config as code, environment-scoped.** dev/staging/venue-edge/prod-cloud configs are versioned and content-addressed; the venue-edge config is pinned at Config freeze and part of the signed bundle. No console/manual config drift at the venue.
+- **Secrets** (ledger signing keys, JWT secrets, camera/transport creds, cloud sync creds) live in a managed secrets store, never in the repo or images; injected at deploy. Rotated and re-pinned before each event. The **ledger signing key is handled by the key-management process in `09-security-privacy.md`** (HSM/managed KMS, key ceremony, rotation with key-id in the chain).
+- **Separation of duties:** the person who can deploy the edge bundle is not the sole holder of the ledger signing key. Full RBAC/secrets handling is specified in 09.
+
+## 7. RACI (key activities)
 
 | Activity | Analyst | Tech Lead | FE | BE | ML | Broadcast | QA | Gov |
 |---|---|---|---|---|---|---|---|---|
@@ -102,5 +168,11 @@ A change is never built before it is analyzed, estimated, and approved. Anything
 | Latency/accuracy acceptance gates | I | A | C | C | C | C | **R** | I |
 | Consent / governance / retention | C | C | I | C | C | I | I | **A/R** |
 | Client demo / acceptance sign-off | **A/R** | C | I | I | I | I | C | C |
+| Freeze calendar & change board | **A** | **R** | I | I | I | C | I | C |
+| Venue-edge release pinning / promotion | I | **A/R** | C | C | C | C | C | C |
+| On-site failover / rollback (event) | I | A | I | **R** | C | **R** | I | I |
+| Live-event incident command | C | **A** | I | R | R | R | I | I |
+| Runbooks (author + dry-run) | I | A | C | C | C | **R** | **R** | C |
+| Config & secrets management | I | **A** | I | **R** | I | C | I | C |
 
-R = Responsible, A = Accountable, C = Consulted, I = Informed.
+R = Responsible, A = Accountable, C = Consulted, I = Informed. Officiating-outcome authority *during* a live event rests with the head judge (machine-assisted human judging); the table above covers engineering/process accountability.
