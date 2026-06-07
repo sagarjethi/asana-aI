@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drishti — Competitive Yoga Technology · Pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1c1410; --paper:#fffaf3; --sun:#ea580c; --sun2:#f59e0b;
+    --peach:#fff1e2; --line:#f0e3d3; --muted:#7c6f64;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:#120b07;overflow:hidden}
+  .deck{height:100vh;width:100vw;position:relative}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:6vh 8vw;background:var(--paper)}
+  .slide.active{opacity:1;visibility:visible}
+  h1{font-family:Fraunces,serif;font-weight:900;line-height:1.02;letter-spacing:-.02em}
+  h2{font-family:Fraunces,serif;font-weight:600;font-size:clamp(28px,3.4vw,52px);line-height:1.05;margin-bottom:.5em}
+  .kicker{text-transform:uppercase;letter-spacing:.18em;font-size:13px;font-weight:700;color:var(--sun)}
+  p,li{font-size:clamp(15px,1.5vw,21px);line-height:1.5;color:#3a2e26}
+  .muted{color:var(--muted)}
+  .full-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,6,3,.82) 0%,rgba(10,6,3,.55) 45%,rgba(10,6,3,.15) 100%)}
+  .over{position:relative;z-index:2;color:#fff;max-width:60%}
+  .over h1,.over h2,.over p,.over li{color:#fff}
+  .over .muted{color:#f2d9c2}
+  .grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:5vw;align-items:center}
+  .grid2 img{width:100%;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);border:1px solid #00000010}
+  .imgphone{max-height:74vh;width:auto;margin:0 auto;display:block;border-radius:28px;
+    box-shadow:0 24px 70px rgba(0,0,0,.32)}
+  ul{list-style:none;display:flex;flex-direction:column;gap:.55em;margin-top:.4em}
+  ul li{padding-left:1.4em;position:relative}
+  ul li::before{content:"";position:absolute;left:0;top:.62em;width:.5em;height:.5em;border-radius:2px;
+    background:var(--sun);transform:rotate(45deg)}
+  .big{font-size:clamp(40px,7vw,104px);font-family:Fraunces,serif;font-weight:900;letter-spacing:-.03em}
+  .stat-row{display:flex;gap:4vw;flex-wrap:wrap;margin-top:1em}
+  .stat b{display:block;font-family:Fraunces,serif;font-weight:900;font-size:clamp(30px,4.5vw,64px);color:var(--sun);line-height:1}
+  .stat span{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:1.2em}
+  .card{background:var(--peach);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .card h3{font-family:Fraunces,serif;font-size:21px;margin-bottom:.3em}
+  .card p{font-size:15px;color:#5b4a3d}
+  .tag{display:inline-block;background:var(--sun);color:#fff;font-size:12px;font-weight:700;
+    padding:4px 11px;border-radius:99px;text-transform:uppercase;letter-spacing:.06em}
+  table{width:100%;border-collapse:collapse;margin-top:.6em;font-size:clamp(13px,1.4vw,18px)}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line)}
+  th{color:var(--sun);text-transform:uppercase;letter-spacing:.06em;font-size:12px}
+  .fly{font-family:ui-monospace,monospace;font-size:clamp(12px,1.25vw,16px);line-height:1.9;
+    background:var(--ink);color:#ffd9b0;border-radius:14px;padding:22px 26px;white-space:pre-wrap}
+  .nav{position:fixed;bottom:18px;right:24px;z-index:50;display:flex;gap:8px;align-items:center}
+  .nav button{background:#ffffff14;color:#fff;border:1px solid #ffffff30;border-radius:8px;
+    width:38px;height:34px;font-size:16px;cursor:pointer;backdrop-filter:blur(6px)}
+  .nav button:hover{background:#ffffff28}
+  .count{position:fixed;bottom:22px;left:24px;z-index:50;color:#ffffffb0;font-size:13px;
+    font-variant-numeric:tabular-nums;mix-blend-mode:difference}
+  .progress{position:fixed;top:0;left:0;height:3px;background:var(--sun);z-index:60;transition:width .3s}
+  .brandmark{position:fixed;top:18px;left:24px;z-index:50;font-family:Fraunces,serif;font-weight:900;
+    font-size:18px;letter-spacing:-.01em;color:#fff;mix-blend-mode:difference}
+  .on-light .brandmark{color:var(--ink)}
+  .lead{font-size:clamp(18px,1.9vw,26px);color:#5b4a3d;max-width:44ch}
+  .ask{background:var(--ink);color:#fff}
+  .ask h2,.ask p,.ask li{color:#fff}
+  .pill-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:1em}
+  .pill{border:1px solid #ffffff2e;border-radius:99px;padding:7px 15px;font-size:14px;color:#ffd9b0}
+  .hint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:50;color:#ffffff80;
+    font-size:12px;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<div class="brandmark">◐ Drishti</div>
+<div class="deck" id="deck">
+
+<!-- 1 TITLE -->
+<section class="slide active" data-dark>
+  <img class="full-img" src="images/01-hero.jpg" alt="Competitive yoga athlete with AR scoring overlay">
+  <div class="scrim"></div>
+  <div class="over">
+    <div class="kicker" style="color:#ffd9b0">Competitive Yoga · Officiating & Broadcast Technology</div>
+    <h1 style="font-size:clamp(44px,7vw,104px);margin:.15em 0">Drishti</h1>
+    <p class="lead muted" style="max-width:32ch">Hawk-Eye for the world's oldest discipline. We make the invisible <em>scorable</em> — and make competitive yoga finally watchable.</p>
+    <div class="pill-row">
+      <span class="pill">by the AsanaAI team</span>
+      <span class="pill">Pilot-ready</span>
+      <span class="pill">forza.ventures</span>
+    </div>
+  </div>
+</section>
+
+<!-- 2 PROBLEM -->
+<section class="slide" data-dark>
+  <img class="full-img" src="images/02-problem.jpg" alt="Judges scoring a performance">
+  <div class="scrim"></div>
+  <div class="over">
+    <div class="kicker" style="color:#ffd9b0">The problem</div>
+    <h2>Beautiful to do. Impossible to judge. Hard to watch.</h2>
+    <ul>
+      <li>The discipline that makes yoga stunning — millimetric alignment, held stillness, control — is <b>invisible</b> to a camera audience.</li>
+      <li>Human judges disagree on subtle deviations. Contested deductions can't be <b>defended on air</b>.</li>
+      <li>A viewer can't see <b>why</b> one athlete beats another. No "why" = no fans = no sport.</li>
+    </ul>
+    <p class="muted" style="margin-top:1em">Credibility problem and watchability problem — they're the same problem.</p>
+  </div>
+</section>
+
+<!-- 3 WHY NOW -->
+<section class="slide on-light">
+  <div class="kicker">Why now</div>
+  <h2>The category is ready — the technology just arrived.</h2>
+  <div class="grid2">
+    <div>
+      <ul>
+        <li><b>Yoga is global and mainstream</b> — hundreds of millions practise; a built-in audience and talent pool.</li>
+        <li><b>Sport-tech precedent is proven</b> — Hawk-Eye, DRS, Simulcam taught fans to trust machine-assisted officiating.</li>
+        <li><b>Markerless 3D pose is finally good enough</b> — multi-camera capture now resolves real joint angles, camera-only.</li>
+        <li><b>We already shipped the hard part</b> — AsanaAI runs real-time pose tech in production today.</li>
+      </ul>
+    </div>
+    <div class="stat-row" style="flex-direction:column;gap:1.4em">
+      <div class="stat"><b>3–8°</b><span>markerless 3D joint-angle accuracy</span></div>
+      <div class="stat"><b>2-layer</b><span>scoring support + broadcast</span></div>
+      <div class="stat"><b>~70%</b><span>of fan/data tiers reuse AsanaAI</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 SOLUTION -->
+<section class="slide on-light">
+  <div class="kicker">The solution</div>
+  <h2>One platform. Two layers. Total transparency.</h2>
+  <div class="cards">
+    <div class="card"><span class="tag">Layer A</span><h3>Scoring Support</h3><p>Objective, camera-only measurement that <b>assists referees</b>: joint-angle deviation, stability, hold time, candidate deductions — every one explainable and replayable.</p></div>
+    <div class="card"><span class="tag">Layer B</span><h3>Broadcast & Fans</h3><p>Real-time <b>AR graphics</b>, live scores, leaderboards, Simulcam ghost comparisons, and a second-screen app that makes the sport legible and gripping.</p></div>
+    <div class="card" style="background:var(--ink)"><span class="tag">The principle</span><h3 style="color:#fff">Augment, never replace</h3><p style="color:#ffd9b0">The machine <b>suggests</b>; the human judge <b>confirms</b>. Every score is signed, auditable, and survives a televised protest.</p></div>
+  </div>
+</section>
+
+<!-- 5 HOW IT WORKS -->
+<section class="slide" data-dark>
+  <img class="full-img" src="images/03-capture-3d.jpg" alt="Multi-camera 3D capture rig">
+  <div class="scrim"></div>
+  <div class="over">
+    <div class="kicker" style="color:#ffd9b0">How it works</div>
+    <h2>Multi-camera 3D — and two tiers, like DRS.</h2>
+    <ul>
+      <li><b>6–8 synced cameras</b> triangulate a true 3D skeleton in millimetre space — no wearables, no depth a single camera could fake.</li>
+      <li><b>Live tier</b> (~60–90 ms) drives on-air graphics and the "feel".</li>
+      <li><b>Adjudicated tier</b> computes the official, replayable, <b>signed</b> deduction in a short review window.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 6 TRUST / REFEREE CONSOLE -->
+<section class="slide on-light">
+  <div class="kicker">The trust backbone</div>
+  <h2>AI suggests. The judge confirms.</h2>
+  <div class="grid2">
+    <img src="images/04-referee-console.jpg" alt="Referee scoring dashboard">
+    <div>
+      <p class="lead">The referee console shows measured joint angles, candidate deductions, and a <b>confidence</b> for each — with Approve / Override one tap away.</p>
+      <ul style="margin-top:1em">
+        <li>Low confidence → the system <b>abstains</b> and defers to the human.</li>
+        <li>Every override is logged. Every score is reproducible.</li>
+        <li>This is the single feature that earns a federation's trust.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 7 BROADCAST -->
+<section class="slide" data-dark>
+  <img class="full-img" src="images/05-broadcast-ar.jpg" alt="Broadcast AR overlay">
+  <div class="scrim"></div>
+  <div class="over">
+    <div class="kicker" style="color:#ffd9b0">Broadcast experience</div>
+    <h2>A sport that explains itself on screen.</h2>
+    <ul>
+      <li>Alignment & angle indicators, centre-of-gravity markers, live score breakdowns.</li>
+      <li>Leaderboards and round summaries that keep viewers oriented.</li>
+      <li>Graphics keyed straight into the live feed — broadcast-grade.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 8 SHOW ME WHY -->
+<section class="slide" data-dark>
+  <img class="full-img" src="images/06-show-me-why.jpg" alt="Explainable deduction graphic">
+  <div class="scrim"></div>
+  <div class="over">
+    <div class="kicker" style="color:#ffd9b0">The wow moment</div>
+    <h2>"Show me why."</h2>
+    <p class="lead muted" style="max-width:40ch">Tap any score and the replay shows the exact joint, the exact angle, and the exact reason: <b style="color:#fff">"standing knee flexed 8° — alignment −0.3."</b></p>
+    <p style="margin-top:1em">Black-box scoring is rejectable. Evidence is undeniable. This turns disputes into highlights.</p>
+  </div>
+</section>
+
+<!-- 9 FAN / SECOND SCREEN -->
+<section class="slide on-light">
+  <div class="kicker">Fan engagement</div>
+  <h2>From passive viewer to active judge.</h2>
+  <div class="grid2">
+    <div>
+      <p class="lead">A second-screen app turns watching into playing — and teaches scoring literacy that grows the sport.</p>
+      <ul style="margin-top:1em">
+        <li><b>Judge-along</b> — score the athlete, compare to the AI and the real judges.</li>
+        <li><b>Live win-probability</b> and prediction games.</li>
+        <li>Highlights and shareable clips, auto-generated from the score stream.</li>
+      </ul>
+    </div>
+    <img class="imgphone" src="images/07-second-screen.jpg" alt="Second-screen fan app">
+  </div>
+</section>
+
+<!-- 10 MOAT -->
+<section class="slide on-light">
+  <div class="kicker">The moat</div>
+  <h2>Why us — and why it compounds.</h2>
+  <div class="grid2">
+    <div>
+      <div class="fly">AsanaAI consumer app
+   → pose-labelled session DATA
+   → better scoring models  [MOAT]
+   → surfaces competition-ready amateurs  [TALENT FUNNEL]
+   → competitive platform → broadcast → fans
+   → fans download the practice app  ↻</div>
+      <p class="muted" style="margin-top:1em">A pure broadcast-tech vendor arrives with cameras and an empty model. We arrive with a pre-trained model <b>and</b> an audience funnel.</p>
+    </div>
+    <img class="imgphone" src="images/08-ecosystem.jpg" alt="Consumer practice app" style="max-height:64vh">
+  </div>
+</section>
+
+<!-- 11 BUSINESS MODEL -->
+<section class="slide on-light">
+  <div class="kicker">Business model</div>
+  <h2>Six ways the platform earns.</h2>
+  <table>
+    <tr><th>Stream</th><th>Who pays</th><th>Shape</th></tr>
+    <tr><td>Officiating + broadcast platform</td><td>Federation / organiser</td><td>Per-event &amp; annual licence</td></tr>
+    <tr><td>Data &amp; analytics SaaS</td><td>Teams, coaches, athletes</td><td>Subscription</td></tr>
+    <tr><td>Second-screen / fan</td><td>Fans &amp; sponsors</td><td>Freemium + sponsorship</td></tr>
+    <tr><td>AsanaAI consumer app</td><td>Practitioners</td><td>Subscription (the funnel)</td></tr>
+    <tr><td>Anonymised benchmarks</td><td>Partners</td><td>Data licensing</td></tr>
+    <tr><td>Integration / pro-services</td><td>Organisers</td><td>Project fees</td></tr>
+  </table>
+  <p class="muted" style="margin-top:.8em">Indicative program: <b>$2.0M–$3.5M</b> across pilot → full deployment. Buy graphics, build the IP — margin protected.</p>
+</section>
+
+<!-- 12 TRACTION -->
+<section class="slide on-light">
+  <div class="kicker">What we already have</div>
+  <h2>This isn't a slideware idea.</h2>
+  <div class="stat-row">
+    <div class="stat"><b>Live</b><span>AsanaAI real-time pose app, in production</span></div>
+    <div class="stat"><b>39k</b><span>words of senior-reviewed build spec</span></div>
+    <div class="stat"><b>14</b><span>production docs: SLOs, security, validation, contracts</span></div>
+    <div class="stat"><b>P1</b><span>Solo pilot fully scoped &amp; costed</span></div>
+  </div>
+  <p class="lead" style="margin-top:1.4em">A shipped product, a hardened plan, and a pilot we can stand up in weeks.</p>
+</section>
+
+<!-- 13 ROADMAP -->
+<section class="slide on-light">
+  <div class="kicker">Roadmap</div>
+  <h2>Earn trust before we scale.</h2>
+  <table>
+    <tr><th>Phase</th><th>Scope</th><th>Proves</th></tr>
+    <tr><td><b>0 · Training mode</b></td><td>Calibration + dataset building (reuse-heavy)</td><td>Diverse, fair, labelled data</td></tr>
+    <tr><td><b>1 · Solo pilot</b></td><td>4 cameras, 1–2 objective criteria, 1 overlay, 1 Simulcam, "show me why"</td><td>Latency + auditability on a real feed</td></tr>
+    <tr><td><b>2 · Multi-format</b></td><td>6–8 cameras, Pair, Musical, full dashboard</td><td>Production officiating</td></tr>
+    <tr><td><b>3 · Group</b></td><td>Group-of-5, multi-person (contact stays human-judged)</td><td>Full-format coverage</td></tr>
+  </table>
+</section>
+
+<!-- 14 ASK -->
+<section class="slide ask">
+  <div class="kicker">The ask</div>
+  <h2 style="max-width:18ch">Fund a Solo pilot. Let's prove it on a real feed.</h2>
+  <ul>
+    <li>A fixed-scope pilot proving glass-to-glass AR latency, officiating latency, and end-to-end auditability.</li>
+    <li>The three things a federation must verify before committing to a televised season.</li>
+  </ul>
+  <div class="pill-row" style="margin-top:1.4em">
+    <span class="pill">◐ Drishti — by the AsanaAI team</span>
+    <span class="pill">forza@forza.ventures</span>
+  </div>
+  <p class="muted" style="margin-top:1.6em">We give judges a defensible instrument, broadcasters a sport that explains itself, and the federation a flywheel only we own.</p>
+</section>
+
+</div>
+
+<div class="count"><span id="cur">1</span> / <span id="total">14</span></div>
+<div class="nav"><button onclick="go(-1)">‹</button><button onclick="go(1)">›</button></div>
+<div class="hint">← → or space to navigate · F for fullscreen</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const body=document.body, prog=document.getElementById('prog');
+  let i=0; document.getElementById('total').textContent=slides.length;
+  function render(){
+    slides.forEach((s,n)=>s.classList.toggle('active',n===i));
+    document.getElementById('cur').textContent=i+1;
+    prog.style.width=((i+1)/slides.length*100)+'%';
+    body.classList.toggle('on-light', !slides[i].hasAttribute('data-dark'));
+  }
+  function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); render(); }
+  addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){go(1);e.preventDefault();}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){go(-1);e.preventDefault();}
+    if(e.key==='Home'){i=0;render();}
+    if(e.key==='End'){i=slides.length-1;render();}
+    if(e.key.toLowerCase()==='f'){ if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen(); }
+  });
+  addEventListener('click',e=>{ if(e.target.closest('.nav'))return; /* click advances on image slides */ });
+  render();
+</script>
+</body>
+</html>

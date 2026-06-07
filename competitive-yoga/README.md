@@ -3,9 +3,11 @@
 > Our end-to-end response to the **forza.ventures "Competitive Yoga Technology"** brief —
 > built by extending our existing real-time pose product, **AsanaAI**.
 >
-> Two deliverables in one folder:
-> **`proposal/`** = the client-facing pitch (why partner with us, what we'll build, what it costs).
+> Deliverables in one folder:
+> **`proposal/`** = the client-facing written proposal (why partner with us, what we'll build, cost).
 > **`spec/`** = the internal, buildable analysis & roadmap for the front-end / back-end / AI team.
+> **`pitch/`** = the investor / client **pitch deck** (`pitch/index.html`) + spoken script + product images.
+> **`PROJECT-STATUS.md`** = the project-manager's live tracker of what's done vs not (read this to orient).
 
 ---
 
