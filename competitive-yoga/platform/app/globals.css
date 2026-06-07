@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Georgia", "Times New Roman", serif;
+}
+
+html, body {
+  background: #fffaf3;
+  color: #1c1410;
+}
+
+/* warm gradient used across marketing/athlete surfaces */
+.bg-sunrise {
+  background: linear-gradient(140deg, #fffaf3 0%, #fff1e2 60%, #ffe6cf 100%);
+}
+
+/* officiating console is intentionally dark + dense */
+.bg-console {
+  background: #12100e;
+  color: #f5efe9;
+}
+
+* { -webkit-tap-highlight-color: transparent; }

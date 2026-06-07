@@ -14,7 +14,7 @@
 | W1 | **Analysis & Client Proposal** (A) | analyst + architect team | ✅ **Done** | 6 proposal docs, committed `32db9f3` |
 | W2 | **Build Spec & Roadmap** (D) | architect + senior-review team | ✅ **Done** | 14 spec docs, hardened to v2, committed `b33de2e` |
 | W3 | **Investor / Client Pitch** | 🎤 **pitch agent (this one)** | 🟡 **In progress** | This workstream: deck + speech + 8 product images |
-| W4 | **Product Build** | 🏗️ **product-build agent (SEPARATE — not started)** | ⬜ **Not started** | A *different* agent + full SDLC team. Begins only after pitch + go-ahead. See §5. |
+| W4 | **Product Build** (pilot) | 🏗️ SDST team (architect · scoring · pose · backend · frontend · QA) | 🟢 **Built — green** | Pilot software at `platform/`: tsc ✓ · 25 tests ✓ · `next build` ✓ (13 routes) · runtime ✓. Hardware layers (multi-cam 3D, broadcast) simulated. |
 
 > **Important separation (per stakeholder):** the **pitch agent** (W3) and the **product-build
 > agent** (W4) are deliberately different jobs. This document and the pitch are W3. W4 is a clean,
@@ -99,4 +99,5 @@ Until those are met, W4 stays **Not started**. The pitch agent does not build th
 |------|--------|--------|
 | 2026-06-07 | W1 proposal pack created | `32db9f3` |
 | 2026-06-07 | W2 spec hardened to v2 (+6 docs) | `b33de2e` |
-| 2026-06-07 | W3 pitch: 8 images + deck + speech + HTML | _this commit_ |
+| 2026-06-07 | W3 pitch: deck + speech + images (later: market slides, stream before/after, email) | `7f9a32c`+ |
+| 2026-06-07 | W4 product build (pilot): SDST team built `platform/` — Next.js app, scoring engine, API, console/leaderboard/athlete/coach, monocular pose; tsc/tests/build/runtime all green | _this commit_ |
