@@ -1,105 +1,50 @@
-# Drishti — Pitch Deck (content)
+# Yoga Drishti — Pitch Deck (content & story)
 
-> Slide-by-slide content for the investor / client pitch. The live version is `index.html`
-> (open it in a browser, arrow keys to navigate, **F** for fullscreen). This markdown is the
-> source of truth if you want to rebuild it in PowerPoint / Keynote / Google Slides.
->
-> **Product name:** *Drishti* (Sanskrit: focused gaze / vision) — the officiating & broadcast
-> vision system. **Consumer app:** AsanaAI. **Audience:** investors, federations/organisers, clients.
-> **Visual language:** warm "sunrise" palette, Fraunces display + Inter body. Image per slide noted.
+> The live deck is **`index.html`** (open in a browser; arrow keys / swipe / tap; **F** = fullscreen).
+> This is the narrative source of truth — rebuild in PowerPoint / Keynote / Slides from here.
+
+## How this deck is built (the storytelling principles)
+Investors decide in the first few minutes, and a story persuades far better than a feature list.
+So every slide follows three rules:
+1. **One headline = one idea.** Each slide's title is a single sentence you'd understand in a
+   3-second glance. Read only the headlines and you still get the whole pitch.
+2. **A narrative arc, not a feature dump** — *World → Problem → Why now → Solution (hero) → How →
+   Trust → Wow → Experience → Moat → Market → Proof → Plan → Ask.* (Hero's-Journey / Problem-
+   Opportunity-Plan-Proof / Hearts-Minds-Wallets.)
+3. **One visual theme** — a warm "sunrise" palette, cinematic full-bleed imagery, one emphasized
+   image per slide. (See research sources at the bottom.)
 
 ---
 
-### Slide 1 — Title  · `images/01-hero.jpg`
-**Drishti** — Hawk-Eye for the world's oldest discipline.
-We make the invisible *scorable* — and make competitive yoga finally watchable.
-*by the AsanaAI team · pilot-ready · for forza.ventures*
+| # | Section | **Headline (the one-liner)** | Support | Image |
+|---|---------|------------------------------|---------|-------|
+| 1 | Title | **Yoga Drishti** — *Making the world's oldest discipline the world's next spectator sport.* | by the AsanaAI team · pilot-ready | `01-hero` |
+| 2 | The world | **Half a billion people practise yoga. None of them can watch it as a sport.** | The audience exists; the sport doesn't — yet. | `09-world-scale` |
+| 3 | The problem | **What makes yoga breathtaking is exactly what makes it impossible to judge.** | Alignment & stillness are invisible to a camera → judges disagree, no "why" for fans. | `02-problem` |
+| 4 | Why now | **Every sport became watchable through one breakthrough. Yoga's just arrived.** | Hawk-Eye/DRS precedent + markerless 3D + we shipped AsanaAI. | `10-why-now` |
+| 5 | The solution | **Yoga Drishti turns every pose into a number everyone can see — and trust.** | Two layers (scoring support + broadcast); machine suggests, judge confirms. | `11-solution` |
+| 6 | How it works | **Six cameras. One 3D skeleton. The truth, in milliseconds.** | Multi-cam triangulation; live + adjudicated tiers, like DRS. | `03-capture-3d` |
+| 7 | Trust | **The AI never overrules a judge. It hands them the evidence.** | Confidence per call, abstains when unsure, signed & replayable. | `04-referee-console` |
+| 8 | The wow | **For the first time, the screen tells you exactly why.** | Tap a score → joint, angle, reason. Disputes become highlights. | `06-show-me-why` |
+| 9 | Broadcast | **A sport that finally explains itself — live on air.** | AR alignment, balance, scores, leaderboards keyed into the feed. | `05-broadcast-ar` |
+| 10 | The fans | **Turn 500 million practitioners into 500 million judges.** | Judge-along, win-probability, predictions, auto-highlights. | `07-second-screen` |
+| 11 | The moat | **We have the data and the audience no one else can get.** | AsanaAI flywheel: data → models → talent → fans ↻. | `08-ecosystem` |
+| 12 | The market | **A category we define — with six ways to win it.** | 6 revenue streams; indicative program $2.0M–$3.5M. | `12-market` |
+| 13 | Traction | **The hard part already works — and it's live today.** | AsanaAI in production · 39k-word spec · pilot scoped. | `14-traction-app` |
+| 14 | Roadmap | **Earn trust on one mat. Then take it to the world stage.** | P0 dataset → P1 Solo pilot → P2 multi-format → P3 Group. | `13-vision-arena` |
+| 15 | The ask | **Fund the pilot. Let's make yoga the next sport the world watches.** | Prove latency + auditability; forza@forza.ventures. | `13-vision-arena` |
 
-### Slide 2 — The Problem  · `images/02-problem.jpg`
-**Beautiful to do. Impossible to judge. Hard to watch.**
-- The discipline that makes yoga stunning — millimetric alignment, held stillness, control — is invisible to a camera audience.
-- Human judges disagree on subtle deviations; contested deductions can't be defended on air.
-- A viewer can't see *why* one athlete beats another. No "why" = no fans = no sport.
-> Credibility problem and watchability problem — they're the same problem.
+---
 
-### Slide 3 — Why Now
-**The category is ready — the technology just arrived.**
-- Yoga is global and mainstream — a built-in audience and talent pool.
-- Sport-tech precedent is proven — Hawk-Eye, DRS, Simulcam taught fans to trust machine-assisted officiating.
-- Markerless 3D pose is finally good enough — real joint angles, camera-only.
-- We already shipped the hard part — AsanaAI runs real-time pose tech in production today.
-- Stats: **3–8°** markerless accuracy · **2-layer** platform · **~70%** of fan/data tiers reuse AsanaAI.
+## The three "wow" beats (don't bury them)
+1. **Slide 7** — *"AI hands the judge the evidence"* (the referee console).
+2. **Slide 8** — *"Show me why"* (tap a score, see the reason).
+3. **Slide 11** — *the moat* (the AsanaAI flywheel only we own).
 
-### Slide 4 — The Solution
-**One platform. Two layers. Total transparency.**
-- **Layer A — Scoring Support:** objective camera-only measurement that *assists referees* — joint-angle deviation, stability, hold time, candidate deductions; every one explainable and replayable.
-- **Layer B — Broadcast & Fans:** real-time AR graphics, live scores, leaderboards, Simulcam, second-screen.
-- **The principle — augment, never replace:** the machine *suggests*; the human judge *confirms*. Every score signed, auditable, protest-proof.
+## Spoken delivery
+Full ~6-minute narration with delivery cues and a Q&A bank is in **`PITCH-SCRIPT.md`**.
 
-### Slide 5 — How It Works  · `images/03-capture-3d.jpg`
-**Multi-camera 3D — and two tiers, like DRS.**
-- 6–8 synced cameras triangulate a true 3D skeleton in millimetre space — no wearables.
-- Live tier (~60–90 ms) drives on-air graphics and feel.
-- Adjudicated tier computes the official, replayable, signed deduction in a short review.
-
-### Slide 6 — The Trust Backbone  · `images/04-referee-console.jpg`
-**AI suggests. The judge confirms.**
-- Measured joint angles + candidate deductions, each with a confidence value; Approve / Override one tap away.
-- Low confidence → the system abstains and defers to the human.
-- Every override logged; every score reproducible. *The single feature that earns a federation's trust.*
-
-### Slide 7 — Broadcast Experience  · `images/05-broadcast-ar.jpg`
-**A sport that explains itself on screen.**
-- Alignment & angle indicators, centre-of-gravity markers, live score breakdowns.
-- Leaderboards and round summaries keep viewers oriented.
-- Graphics keyed straight into the live feed — broadcast-grade.
-
-### Slide 8 — The Wow Moment  · `images/06-show-me-why.jpg`
-**"Show me why."**
-Tap any score → the replay shows the exact joint, angle, and reason: *"standing knee flexed 8° — alignment −0.3."*
-Black-box scoring is rejectable. Evidence is undeniable. This turns disputes into highlights.
-
-### Slide 9 — Fan Engagement  · `images/07-second-screen.jpg`
-**From passive viewer to active judge.**
-- Judge-along — score the athlete, compare to the AI and the real judges.
-- Live win-probability and prediction games.
-- Auto-generated highlights and shareable clips from the score stream.
-
-### Slide 10 — The Moat  · `images/08-ecosystem.jpg`
-**Why us — and why it compounds.**
-AsanaAI app → pose-labelled data → better models → competition-ready amateurs (talent funnel) → competitive platform → broadcast → fans download the app ↻
-> A pure broadcast-tech vendor arrives with cameras and an empty model. We arrive with a pre-trained model *and* an audience funnel.
-
-### Slide 11 — Business Model
-**Six ways the platform earns.**
-| Stream | Who pays | Shape |
-|---|---|---|
-| Officiating + broadcast platform | Federation / organiser | Per-event & annual licence |
-| Data & analytics SaaS | Teams, coaches, athletes | Subscription |
-| Second-screen / fan | Fans & sponsors | Freemium + sponsorship |
-| AsanaAI consumer app | Practitioners | Subscription (the funnel) |
-| Anonymised benchmarks | Partners | Data licensing |
-| Integration / pro-services | Organisers | Project fees |
-Indicative program **$2.0M–$3.5M** pilot → full. Buy graphics, build the IP — margin protected.
-
-### Slide 12 — Traction
-**This isn't slideware.**
-- **Live:** AsanaAI real-time pose app, in production.
-- **39k** words of senior-reviewed build spec · **14** production docs (SLOs, security, validation, contracts).
-- **P1** Solo pilot fully scoped & costed.
-
-### Slide 13 — Roadmap
-**Earn trust before we scale.**
-| Phase | Scope | Proves |
-|---|---|---|
-| 0 · Training mode | Calibration + dataset (reuse-heavy) | Diverse, fair, labelled data |
-| 1 · Solo pilot | 4 cams, 1–2 criteria, 1 overlay, 1 Simulcam, "show me why" | Latency + auditability |
-| 2 · Multi-format | 6–8 cams, Pair, Musical, full dashboard | Production officiating |
-| 3 · Group | Group-of-5 (contact stays human-judged) | Full coverage |
-
-### Slide 14 — The Ask
-**Fund a Solo pilot. Let's prove it on a real feed.**
-- A fixed-scope pilot proving glass-to-glass AR latency, officiating latency, end-to-end auditability.
-- The three things a federation must verify before committing to a televised season.
-> We give judges a defensible instrument, broadcasters a sport that explains itself, and the federation a flywheel only we own.
-*◐ Drishti — by the AsanaAI team · forza@forza.ventures*
+## Research the storytelling is based on
+- Qubit Capital — [Narrative Arc: How to Structure Your Pitch Deck](https://qubit.capital/blog/create-storytelling-deck-with-narrative-arc), [Storytelling techniques](https://qubit.capital/blog/storytelling-techniques-for-pitch-decks)
+- Storydoc — [How to Apply Storytelling in a Startup Pitch](https://www.storydoc.com/blog/startup-pitch-storytelling)
+- M Accelerator — [Ultimate Guide to Storytelling in Pitch Decks](https://maccelerator.la/en/blog/entrepreneurship/ultimate-guide-to-storytelling-in-pitch-decks/)

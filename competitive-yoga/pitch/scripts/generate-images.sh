@@ -57,5 +57,23 @@ gen "07-second-screen.jpg" "9:16" "Fan engagement - second screen" \
 gen "08-ecosystem.jpg" "9:16" "The moat - consumer flywheel" \
 "Warm aspirational lifestyle photograph of a person practising yoga at home in a sunlit room in the morning, a smartphone on a small stand in front of them displaying a real-time pose-tracking app with a circular alignment-score ring overlaid on their live camera image; cosy golden morning light through a window, healthy modern wellness mood, photorealistic, 9:16"
 
+gen "09-world-scale.jpg" "16:9" "The world - scale" \
+"A vast breathtaking elevated photograph of hundreds of people practising yoga together in unison on a huge outdoor plaza at sunrise, neat rows stretching toward the horizon, warm golden morning light and long soft shadows, a sense of a massive global movement, photorealistic, aspirational, 16:9"
+
+gen "10-why-now.jpg" "16:9" "Why now - the moment" \
+"A dramatic sports-technology moment: a giant modern stadium screen displaying glowing augmented-reality performance graphics over a yoga athlete, a packed silhouetted crowd below with phone lights raised, the feeling of a niche activity becoming a major televised sport, warm cinematic amber and orange lighting, photorealistic, 16:9"
+
+gen "11-solution.jpg" "16:9" "The solution - pose to score" \
+"An elegant minimal product-hero concept: on the left a yoga athlete in a clean studio holding a pose, transitioning on the right into a glowing translucent 3D wireframe skeleton with a single clear circular alignment-score badge, smooth warm sunrise gradient background, premium tech-product aesthetic conveying turning a pose into a trustworthy number, high-end render, 16:9"
+
+gen "12-market.jpg" "16:9" "The market - opportunity" \
+"A sophisticated optimistic investor-deck illustration: a stylised glowing globe with bright arcs connecting cities and a subtle upward-rising line-graph motif, faint elegant yoga-pose silhouettes integrated, warm amber and orange accents on a clean deep-charcoal background, premium, uncluttered, 16:9"
+
+gen "13-vision-arena.jpg" "16:9" "The vision - arena" \
+"An epic wide cinematic shot of a packed futuristic arena hosting a competitive yoga world championship, athletes on a central illuminated circular stage, giant screens showing live augmented-reality scores and leaderboards, a roaring diverse crowd, the grandeur of a major global sporting event, warm dramatic stage lighting, photorealistic, 16:9"
+
+gen "14-traction-app.jpg" "9:16" "Traction - the app" \
+"A photorealistic close-up of a smartphone held in two hands showing a consumer yoga app: a live camera view of the user in a pose with a circular alignment-score ring and the pose name, clean warm sunrise interface, a polished shipped consumer product, bright modern mobile UI, softly blurred sunlit home background, 9:16"
+
 echo "]" >> "$MANIFEST"
 echo "Done. Images in $IMG"; ls -1 "$IMG"
