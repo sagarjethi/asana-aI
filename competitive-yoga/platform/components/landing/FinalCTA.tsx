@@ -1,44 +1,60 @@
 "use client";
 
-/** Closing call-to-action band, reiterating the principle. */
+/** Final CTA band — bold, amber, magnetic primary button. */
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Reveal } from "./Reveal";
-import { GradientSheen } from "./primitives";
 import { useSession } from "@/lib/client/auth";
+import { Reveal, MonoLabel, MagneticButton } from "./ui";
+
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080B]";
 
 export function FinalCTA() {
   const { user, loading } = useSession();
   const authed = !loading && !!user;
 
   return (
-    <section className="bg-paper px-5 pb-20 pt-4 sm:px-8 sm:pb-28">
-      <Reveal className="relative isolate mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-sun-300/60 bg-sunrise px-6 py-16 text-center shadow-xl shadow-sun-900/10 sm:px-12 sm:py-24">
-        <GradientSheen />
-        <p className="relative inline-flex items-center gap-2 rounded-full border border-sun-300/70 bg-white/70 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-sun-700 backdrop-blur">
-          <span aria-hidden className="text-sun-600">◐</span>
+    <section className="relative z-10 bg-[#08080B] px-5 pb-28 pt-4 sm:px-8 sm:pb-36">
+      <Reveal className="relative isolate mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border border-amber-500/30 bg-gradient-to-br from-amber-500 to-orange-600 px-6 py-20 text-center sm:px-12 sm:py-28">
+        {/* subtle inner texture */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-20"
+          style={{
+            background:
+              "radial-gradient(60% 50% at 50% 0%, rgba(0,0,0,0.45), transparent 70%)",
+          }}
+        />
+        <MonoLabel className="relative !text-black/70">
+          <span aria-hidden>◐</span>
           AI suggests · the judge confirms
-        </p>
-        <h2 className="relative mx-auto mt-6 max-w-3xl font-display text-4xl font-black leading-[1.05] tracking-tight text-ink sm:text-6xl">
-          Make every pose scorable. Make yoga watchable.
+        </MonoLabel>
+        <h2 className="relative mx-auto mt-6 max-w-3xl font-display text-[clamp(2.2rem,5.5vw,4.5rem)] font-bold leading-[0.98] tracking-[-0.02em] text-black">
+          Competitive yoga, finally scored.
         </h2>
-        <p className="relative mx-auto mt-5 max-w-xl text-lg text-ink/65">
+        <p className="relative mx-auto mt-6 max-w-xl text-lg leading-relaxed text-black/75">
           Start scoring from a single camera today, or talk to us about bringing
           explainable officiating to your federation or broadcast.
         </p>
-        <div className="relative mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link
+        <div className="relative mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <MagneticButton
             href={authed ? "/dashboard" : "/signup"}
-            className="group inline-flex items-center justify-center gap-2 rounded-xl bg-sun-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-sun-900/20 transition hover:bg-sun-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sun-500 focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+            className={
+              "group inline-flex items-center justify-center gap-2 rounded-xl bg-black px-8 py-4 text-base font-semibold text-[#F4F4F5] transition-colors hover:bg-zinc-900 " +
+              focusRing
+            }
           >
-            {authed ? "Go to dashboard" : "Get started"}
+            {authed ? "Dashboard" : "Get started"}
             <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />
-          </Link>
+          </MagneticButton>
           <Link
-            href="/login"
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-sun-300 bg-white/70 px-8 py-3.5 text-base font-semibold text-sun-800 backdrop-blur transition hover:border-sun-400 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sun-500 focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+            href="/athlete/practice"
+            className={
+              "inline-flex items-center justify-center gap-2 rounded-xl border border-black/25 bg-black/5 px-8 py-4 text-base font-semibold text-black transition hover:bg-black/10 " +
+              focusRing
+            }
           >
-            Log in
+            See live scoring
           </Link>
         </div>
       </Reveal>
