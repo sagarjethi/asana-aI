@@ -7,13 +7,16 @@
  * deductions). No camera needed. Re-run to take again.
  */
 import * as React from "react";
-import type { AsanaTemplate, PerformanceScore } from "@/lib/contracts";
+import type { AsanaTemplate, PerformanceScore, PoseFrame } from "@/lib/contracts";
 import { authFetch } from "@/lib/client/auth";
 import { Shell } from "@/components/app/Shell";
 import { Button, Card } from "@/components/ui";
 import { ScoreDetail } from "@/components/athlete/ScoreDetail";
+import { CameraPose } from "@/components/athlete/CameraPose";
 import { useGate } from "@/components/athlete/useGate";
 import { sampleFrames } from "@/lib/sample/keypoints";
+
+type Mode = "demo" | "live";
 
 export default function PracticePage() {
   const { ready } = useGate();
@@ -22,6 +25,7 @@ export default function PracticePage() {
   const [score, setScore] = React.useState<PerformanceScore | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [mode, setMode] = React.useState<Mode>("demo");
 
   React.useEffect(() => {
     if (!ready) return;
@@ -38,14 +42,14 @@ export default function PracticePage() {
       });
   }, [ready]);
 
-  const runScore = React.useCallback(async (id: string) => {
+  const scoreFrames = React.useCallback(async (id: string, frames: PoseFrame[]) => {
     if (!id) return;
     setLoading(true);
     setError(null);
     try {
       const res = await authFetch("/api/score", {
         method: "POST",
-        body: JSON.stringify({ asanaTemplateId: id, frames: sampleFrames(id) }),
+        body: JSON.stringify({ asanaTemplateId: id, frames }),
       });
       if (!res.ok) throw new Error(`score failed (${res.status})`);
       setScore(await res.json());
@@ -55,6 +59,11 @@ export default function PracticePage() {
       setLoading(false);
     }
   }, []);
+
+  const runDemo = React.useCallback(
+    (id: string) => scoreFrames(id, sampleFrames(id)),
+    [scoreFrames],
+  );
 
   if (!ready) {
     return (
@@ -99,16 +108,51 @@ export default function PracticePage() {
               )}
             </select>
           </label>
-          <Button size="lg" disabled={loading || !templateId} onClick={() => runScore(templateId)}>
-            {loading ? "Scoring…" : score ? "Practice again" : "Start practice"}
-          </Button>
+          {mode === "demo" ? (
+            <Button size="lg" disabled={loading || !templateId} onClick={() => runDemo(templateId)}>
+              {loading ? "Scoring…" : score ? "Practice again" : "Start practice"}
+            </Button>
+          ) : null}
         </div>
       </header>
+
+      <div className="mt-5 inline-flex rounded-lg border border-sun-200 bg-white/70 p-1">
+        {(["demo", "live"] as Mode[]).map((m) => (
+          <button
+            key={m}
+            type="button"
+            onClick={() => {
+              setMode(m);
+              setScore(null);
+              setError(null);
+            }}
+            className={
+              "rounded-md px-4 py-1.5 text-sm font-medium transition-colors " +
+              (mode === m
+                ? "bg-sun-600 text-white shadow-sm"
+                : "text-sun-800 hover:bg-sun-100")
+            }
+          >
+            {m === "demo" ? "Demo (sample)" : "Live camera"}
+          </button>
+        ))}
+      </div>
 
       {error ? (
         <Card className="mt-6 rounded-2xl border-red-200 bg-red-50">
           <p className="text-sm text-red-700">{error}</p>
         </Card>
+      ) : null}
+
+      {mode === "live" ? (
+        <div className="mt-6">
+          <CameraPose
+            key={templateId}
+            templateId={templateId}
+            busy={loading}
+            onScore={(frames) => scoreFrames(templateId, frames)}
+          />
+        </div>
       ) : null}
 
       <div className="mt-6">
@@ -117,7 +161,11 @@ export default function PracticePage() {
         ) : (
           <Card className="rounded-2xl">
             <p className="text-sm text-stone-400">
-              {loading ? "Scoring your take…" : "Pick an asana and start a practice run."}
+              {loading
+                ? "Scoring your take…"
+                : mode === "live"
+                  ? "Start the camera, hold the pose, then capture & score."
+                  : "Pick an asana and start a practice run."}
             </p>
           </Card>
         )}

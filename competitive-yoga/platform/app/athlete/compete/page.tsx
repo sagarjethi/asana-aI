@@ -10,11 +10,12 @@ import * as React from "react";
 import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import type { Performance, PerformanceScore } from "@/lib/contracts";
+import type { Performance, PerformanceScore, PoseFrame } from "@/lib/contracts";
 import { authFetch } from "@/lib/client/auth";
 import { Shell } from "@/components/app/Shell";
 import { Button, Card, Badge } from "@/components/ui";
 import { ScoreDetail } from "@/components/athlete/ScoreDetail";
+import { CameraPose } from "@/components/athlete/CameraPose";
 import { useGate } from "@/components/athlete/useGate";
 import { sampleFrames } from "@/lib/sample/keypoints";
 
@@ -34,7 +35,7 @@ function CompeteInner() {
   const [error, setError] = React.useState<string | null>(null);
   const [notLive, setNotLive] = React.useState(false);
 
-  const perform = async () => {
+  const perform = async (frames: PoseFrame[]) => {
     if (!roundId) {
       setError("Missing round. Open this from a live event.");
       return;
@@ -45,7 +46,7 @@ function CompeteInner() {
     try {
       const res = await authFetch("/api/perform", {
         method: "POST",
-        body: JSON.stringify({ roundId, frames: sampleFrames(templateId) }),
+        body: JSON.stringify({ roundId, frames }),
       });
       if (res.status === 409) {
         setNotLive(true);
@@ -59,6 +60,8 @@ function CompeteInner() {
       setLoading(false);
     }
   };
+
+  const performDemo = () => perform(sampleFrames(templateId));
 
   if (!ready) return <p className="text-sm text-stone-400">Loading…</p>;
 
@@ -74,9 +77,6 @@ function CompeteInner() {
             One take is recorded and scored for the official standings.
           </p>
         </div>
-        <Button size="lg" disabled={loading || !!result} onClick={perform}>
-          {loading ? "Recording…" : result ? "Recorded" : "Perform now"}
-        </Button>
       </header>
 
       {notLive ? (
@@ -119,11 +119,36 @@ function CompeteInner() {
           <ScoreDetail score={result.score} />
         </div>
       ) : !notLive ? (
-        <Card className="mt-6 rounded-2xl">
-          <p className="text-sm text-stone-400">
-            When you’re ready, tap “Perform now” to record your take.
-          </p>
-        </Card>
+        <div className="mt-6 space-y-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-sun-600">
+              Perform with camera
+            </p>
+            <p className="mt-1 text-sm text-sun-900/70">
+              Use your webcam for a real take. Hold the pose, then capture to record it.
+            </p>
+            <div className="mt-3">
+              <CameraPose
+                templateId={templateId}
+                busy={loading}
+                ctaLabel="Capture & record"
+                onScore={(frames) => perform(frames)}
+              />
+            </div>
+          </div>
+
+          <Card className="flex flex-wrap items-center justify-between gap-3 rounded-2xl">
+            <div>
+              <p className="text-sm font-medium text-ink">No camera handy?</p>
+              <p className="text-xs text-stone-500">
+                Record a take using built-in demo motion data instead.
+              </p>
+            </div>
+            <Button variant="secondary" disabled={loading} onClick={performDemo}>
+              {loading ? "Recording…" : "Perform with demo data"}
+            </Button>
+          </Card>
+        </div>
       ) : null}
     </>
   );

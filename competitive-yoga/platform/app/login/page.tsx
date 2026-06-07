@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { setSession } from "@/lib/client/auth";
 import { Button, Card } from "@/components/ui";
+import { Shell } from "@/components/app/Shell";
 import type { Session } from "@/lib/contracts";
 
 const DEMO_ACCOUNTS = [
@@ -48,12 +49,9 @@ export default function LoginPage() {
   );
 
   return (
-    <main className="bg-sunrise flex min-h-screen items-center justify-center px-5 py-12">
-      <div className="w-full max-w-md">
-        <Link href="/" className="font-display text-xl font-black tracking-tight text-ink">
-          ◐ Yoga&nbsp;Drishti
-        </Link>
-        <Card className="mt-4 rounded-2xl">
+    <Shell tone="warm">
+      <div className="mx-auto w-full max-w-md py-6">
+        <Card className="rounded-2xl">
           <h1 className="font-display text-2xl font-black text-ink">Welcome back</h1>
           <p className="mt-1 text-sm text-sun-900/60">Log in to your account.</p>
 
@@ -127,6 +125,6 @@ export default function LoginPage() {
           </div>
         </Card>
       </div>
-    </main>
+    </Shell>
   );
 }

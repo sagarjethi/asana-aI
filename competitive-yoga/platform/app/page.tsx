@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSession } from "@/lib/client/auth";
+import { Shell } from "@/components/app/Shell";
 
 const surfaces = [
   { title: "Referee Console", desc: "AI suggests, the judge confirms — live deductions, confidence, replay." },
@@ -21,8 +22,8 @@ export default function Home() {
   const { user, loading } = useSession();
 
   return (
-    <main className="bg-sunrise min-h-screen">
-      <div className="mx-auto max-w-5xl px-6 py-16">
+    <Shell tone="warm">
+      <div className="mx-auto max-w-5xl">
         <p className="text-sm font-bold uppercase tracking-[0.18em] text-sun-600">
           Competitive Yoga · Officiating &amp; Broadcast
         </p>
@@ -97,6 +98,6 @@ export default function Home() {
           &amp; broadcast hardware layers are simulated. See <code>README.md</code>.
         </p>
       </div>
-    </main>
+    </Shell>
   );
 }

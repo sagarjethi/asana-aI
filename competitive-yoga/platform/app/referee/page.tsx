@@ -179,8 +179,8 @@ function RefereeConsole() {
   const pendingCount = deductions.filter((d) => (statuses[d.id] ?? "pending") === "pending").length;
 
   return (
-    <Shell tone="console">
-      <div>
+    <Shell tone="warm">
+      <div className="rounded-2xl bg-console p-5 text-paper sm:p-6">
         {/* Header */}
         <header className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -387,7 +387,7 @@ export default function RefereePage() {
   return (
     <React.Suspense
       fallback={
-        <Shell tone="console">
+        <Shell tone="warm">
           <p className="text-sm text-stone-400">Loading console…</p>
         </Shell>
       }

@@ -10,6 +10,7 @@ import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import type { ResultRow } from "@/lib/contracts";
 import { Card, Badge } from "@/components/ui";
+import { Shell } from "@/components/app/Shell";
 import { cn } from "@/lib/utils";
 
 const REFRESH_MS = 4000;
@@ -133,10 +134,10 @@ function LeaderboardInner() {
 
 export default function LeaderboardPage() {
   return (
-    <main className="bg-sunrise min-h-screen">
+    <Shell tone="warm">
       <Suspense fallback={<div className="px-5 py-10 text-sm text-stone-400">Loading…</div>}>
         <LeaderboardInner />
       </Suspense>
-    </main>
+    </Shell>
   );
 }
