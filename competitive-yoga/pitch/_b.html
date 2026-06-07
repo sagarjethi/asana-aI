@@ -300,7 +300,7 @@
   const slides=[...document.querySelectorAll('.slide')];
   const prog=document.getElementById('prog');
   const prevB=document.getElementById('prevBtn'), nextB=document.getElementById('nextBtn');
-  let i=0; document.getElementById('total').textContent=slides.length;
+  let i=11; document.getElementById('total').textContent=slides.length;
   function render(){
     slides.forEach((s,n)=>{ s.classList.toggle('active',n===i); if(n===i)s.scrollTop=0; });
     document.getElementById('cur').textContent=i+1;
