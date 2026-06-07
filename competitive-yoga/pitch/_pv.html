@@ -52,6 +52,14 @@
   .feat{background:#fff;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:clamp(12px,1.4vw,15px);
     color:#5b3d28;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,.05)}
   .feat b{color:var(--sun)}
+  .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:1.2em;width:100%}
+  .role{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+  .role .ic{font-size:26px;line-height:1}
+  .role h3{font-family:Fraunces,serif;font-size:clamp(18px,2vw,24px);margin:.25em 0 .05em;color:var(--ink)}
+  .role .tl{color:var(--sun);font-weight:700;font-size:clamp(12px,1.3vw,14px);margin-bottom:.55em}
+  .role ul{list-style:none;display:flex;flex-direction:column;gap:.38em;margin:0}
+  .role li{font-size:clamp(12.5px,1.35vw,15px);color:#5b4a3d;line-height:1.4;padding-left:1em;position:relative}
+  .role li::before{content:"·";position:absolute;left:0;color:var(--sun);font-weight:800}
 
   .streams{list-style:none;display:flex;flex-direction:column;gap:.5em;margin-top:1em}
   .streams li{display:flex;gap:.6em;font-size:clamp(14px,1.5vw,18px);color:#fbe7d4}
@@ -85,6 +93,7 @@
     .showcase{justify-content:flex-start} .shot{max-height:42vh}
     .headline{font-size:clamp(30px,8.5vw,46px)} .headline-dark{font-size:clamp(27px,7.5vw,40px)}
     .showcase .headline-dark{font-size:clamp(21px,5.6vw,30px)}
+    .roles{grid-template-columns:1fr;gap:12px}
     .stat-row{gap:16px 26px} .hint{display:none} .nav button{width:56px;height:56px;font-size:26px}
   }
   @media (max-width:820px) and (orientation:landscape){ .slide{justify-content:center;padding-top:9vh;padding-bottom:11vh} .imgphone{max-height:58vh} }
@@ -214,7 +223,43 @@
   <div class="featrow"><span class="feat"><b>·</b> Judge-along</span><span class="feat"><b>·</b> Live win-probability</span><span class="feat"><b>·</b> Predictions</span><span class="feat"><b>·</b> Social leaderboards</span><span class="feat"><b>·</b> Shareable clips</span></div>
 </section>
 
-<!-- 15 MOAT -->
+<!-- 15 WHO IT HELPS · end-to-end value -->
+<section class="slide warm">
+  <div class="kicker">End-to-end value · who it helps</div>
+  <h2 class="headline-dark" style="max-width:26ch">Built for every role — it grows careers, not just scores.</h2>
+  <div class="roles">
+    <div class="role">
+      <div class="ic">🧘</div><h3>Athletes</h3><div class="tl">From living-room to the podium</div>
+      <ul>
+        <li>A free practice app with real-time alignment feedback</li>
+        <li>AI training plans &amp; targeted weakness drills</li>
+        <li>Track progress, get ranked &amp; scouted</li>
+        <li>A clear path: amateur → competitor → pro</li>
+      </ul>
+    </div>
+    <div class="role">
+      <div class="ic">🎯</div><h3>Coaches</h3><div class="tl">Develop talent with data</div>
+      <ul>
+        <li>Weakness heatmaps &amp; score trends over time</li>
+        <li>Head-to-head &amp; field benchmarking</li>
+        <li>Pre-match prep, post-match review, drill plans</li>
+        <li>Grow more athletes — and win more</li>
+      </ul>
+    </div>
+    <div class="role">
+      <div class="ic">⚖️</div><h3>Judges</h3><div class="tl">Officiate with confidence</div>
+      <ul>
+        <li>Evidence-backed, explainable calls</li>
+        <li>Faster, more consistent scoring</li>
+        <li>Defensible under protest (signed replay)</li>
+        <li>Train &amp; certify the next generation of judges</li>
+      </ul>
+    </div>
+  </div>
+  <p class="sub" style="margin-top:1em;color:#5b4a3d">One account, one journey — the same platform that scores a world final helps a beginner improve at home.</p>
+</section>
+
+<!-- 16 MOAT -->
 <section class="slide warm">
   <div class="grid2">
     <div><div class="kicker">Why us</div>
@@ -281,7 +326,7 @@
 
 </div>
 
-<div class="count"><span id="cur">1</span> / <span id="total">19</span></div>
+<div class="count"><span id="cur">1</span> / <span id="total">20</span></div>
 <div class="nav"><button id="prevBtn" aria-label="Previous slide">‹</button><button id="nextBtn" aria-label="Next slide">›</button></div>
 <div class="hint">← → / swipe / tap · F for fullscreen</div>
 
@@ -289,7 +334,7 @@
   const slides=[...document.querySelectorAll('.slide')];
   const prog=document.getElementById('prog');
   const prevB=document.getElementById('prevBtn'), nextB=document.getElementById('nextBtn');
-  let i=9; document.getElementById('total').textContent=slides.length;
+  let i=14; document.getElementById('total').textContent=slides.length;
   function render(){
     slides.forEach((s,n)=>{ s.classList.toggle('active',n===i); if(n===i)s.scrollTop=0; });
     document.getElementById('cur').textContent=i+1;
