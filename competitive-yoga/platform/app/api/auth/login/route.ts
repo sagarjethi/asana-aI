@@ -1,10 +1,16 @@
 /**
- * POST /api/auth/login — demo credential login.
- * Body: { email, password } (zLogin). Matches DEMO_USERS; returns a JWT + role.
+ * POST /api/auth/login — log in against the store, falling back to demo users.
+ * Body: { email, password } (zLogin).
+ *
+ * First tries store.verifyCredentials. If that fails, tries findDemoUser and
+ * PROVISIONS the demo account into the store (so a real store id is issued and
+ * the token's sub points at a persisted user). Otherwise 401.
+ * Returns { token, user }.
  */
 import { NextResponse } from "next/server";
 import { zLogin } from "@/lib/contracts";
 import { findDemoUser, signToken } from "@/lib/auth";
+import { store } from "@/lib/store";
 
 export async function POST(req: Request) {
   let body: unknown;
@@ -23,11 +29,25 @@ export async function POST(req: Request) {
   }
 
   const { email, password } = parsed.data;
-  const user = findDemoUser(email, password);
+
+  let user = store.verifyCredentials(email, password);
+
   if (!user) {
-    return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    const demo = findDemoUser(email, password);
+    if (!demo) {
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    }
+    // Provision the demo account into the store so it has a real store id.
+    user =
+      store.getUserByEmail(demo.email) ??
+      store.createUser({
+        email: demo.email,
+        password,
+        role: demo.role,
+        name: demo.email.split("@")[0],
+      });
   }
 
-  const token = signToken({ sub: user.email, role: user.role });
-  return NextResponse.json({ token, role: user.role });
+  const token = signToken({ sub: user.id, role: user.role });
+  return NextResponse.json({ token, user: store.publicUser(user) });
 }

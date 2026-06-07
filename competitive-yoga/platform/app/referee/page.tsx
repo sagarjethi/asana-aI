@@ -7,14 +7,18 @@
  * override), a per-criterion score panel, and the confidence-state chip.
  */
 import * as React from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import type {
   AsanaTemplate,
   CriterionScore,
   Deduction,
   JointAngle,
-  LeaderboardRow,
   LiveEvent,
+  ResultRow,
 } from "@/lib/contracts";
+import { authFetch } from "@/lib/client/auth";
+import { Shell } from "@/components/app/Shell";
 import { Button, Card, Badge, Stat } from "@/components/ui";
 import { DeductionCard } from "@/components/DeductionCard";
 import { cn } from "@/lib/utils";
@@ -28,8 +32,12 @@ const CONFIDENCE_META: Record<ConfidenceState, { tone: "success" | "warning" | "
   human_only: { tone: "danger", label: "Human only" },
 };
 
-export default function RefereePage() {
-  const [templateId, setTemplateId] = React.useState<string | null>(null);
+function RefereeConsole() {
+  const searchParams = useSearchParams();
+  const roundId = searchParams.get("roundId");
+  const templateIdParam = searchParams.get("templateId");
+
+  const [templateId, setTemplateId] = React.useState<string | null>(templateIdParam);
   const [asana, setAsana] = React.useState<string>("");
   const [roundStatus, setRoundStatus] = React.useState<string>("scheduled");
   const [angles, setAngles] = React.useState<JointAngle[]>([]);
@@ -42,8 +50,12 @@ export default function RefereePage() {
   const [connected, setConnected] = React.useState(false);
   const performanceIdRef = React.useRef<string>("live");
 
-  // Resolve a templateId to subscribe to.
+  // Resolve a templateId to subscribe to (fall back to /api/templates[0] if no param).
   React.useEffect(() => {
+    if (templateIdParam) {
+      setTemplateId(templateIdParam);
+      return;
+    }
     let cancelled = false;
     fetch("/api/templates")
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
@@ -61,7 +73,7 @@ export default function RefereePage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [templateIdParam]);
 
   // Open the SSE stream once we have a templateId.
   React.useEffect(() => {
@@ -141,14 +153,34 @@ export default function RefereePage() {
     [postOverride],
   );
 
+  const [publishing, setPublishing] = React.useState(false);
+  const [published, setPublished] = React.useState<ResultRow[] | null>(null);
+  const [publishError, setPublishError] = React.useState<string | null>(null);
+
+  const handlePublish = React.useCallback(async () => {
+    if (!roundId) return;
+    setPublishing(true);
+    setPublishError(null);
+    try {
+      const res = await authFetch(`/api/rounds/${roundId}/publish`, { method: "POST" });
+      if (!res.ok) throw new Error("Could not publish results.");
+      const rows = (await res.json()) as ResultRow[];
+      setPublished(rows);
+    } catch (e) {
+      setPublishError(e instanceof Error ? e.message : "Publish failed.");
+    } finally {
+      setPublishing(false);
+    }
+  }, [roundId]);
+
   const cm = CONFIDENCE_META[confidenceState];
   const criterionList = Object.values(criteria);
   const runningTotal = criterionList.reduce((s, c) => s + c.value, 0);
   const pendingCount = deductions.filter((d) => (statuses[d.id] ?? "pending") === "pending").length;
 
   return (
-    <main className="bg-console min-h-screen">
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+    <Shell tone="console">
+      <div>
         {/* Header */}
         <header className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -162,7 +194,24 @@ export default function RefereePage() {
               {asana || "—"} · round {roundStatus}
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {roundId ? (
+              <>
+                <Button
+                  size="sm"
+                  onClick={handlePublish}
+                  disabled={publishing}
+                >
+                  {publishing ? "Publishing…" : "Publish results"}
+                </Button>
+                <Link
+                  href={`/judge`}
+                  className="rounded-lg px-3 py-1.5 text-sm font-medium text-stone-300 hover:text-white"
+                >
+                  ← My rounds
+                </Link>
+              </>
+            ) : null}
             <span
               className={cn(
                 "inline-flex items-center gap-1.5 text-xs",
@@ -298,7 +347,52 @@ export default function RefereePage() {
             </div>
           </Card>
         </div>
+
+        {/* Published results */}
+        {publishError ? (
+          <p className="mt-4 rounded-lg bg-red-900/40 px-3 py-2 text-sm text-red-300">
+            {publishError}
+          </p>
+        ) : null}
+        {published ? (
+          <Card tone="console" className="mt-4 rounded-2xl">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-stone-300">
+              Published results
+            </h2>
+            {published.length === 0 ? (
+              <p className="mt-2 text-sm text-stone-500">No results to publish yet.</p>
+            ) : (
+              <table className="mt-3 w-full text-sm">
+                <tbody>
+                  {published.map((row) => (
+                    <tr key={row.athleteId} className="border-t border-console-line">
+                      <td className="py-1.5 pr-2 tabular-nums text-stone-500">#{row.rank}</td>
+                      <td className="py-1.5 text-paper">{row.athleteName}</td>
+                      <td className="py-1.5 text-right font-semibold tabular-nums text-sun-400">
+                        {row.total.toFixed(1)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </Card>
+        ) : null}
       </div>
-    </main>
+    </Shell>
+  );
+}
+
+export default function RefereePage() {
+  return (
+    <React.Suspense
+      fallback={
+        <Shell tone="console">
+          <p className="text-sm text-stone-400">Loading console…</p>
+        </Shell>
+      }
+    >
+      <RefereeConsole />
+    </React.Suspense>
   );
 }

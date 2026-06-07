@@ -11,6 +11,7 @@ import type { LeaderboardRow, PoseFrame, JointName } from "@/lib/contracts";
 import { TEMPLATES } from "@/lib/sample/templates";
 import { scorePerformance } from "@/lib/scoring";
 import { sampleFrames } from "@/lib/sample/keypoints";
+import { store } from "@/lib/store";
 
 interface DemoAthlete {
   id: string;
@@ -51,7 +52,14 @@ function nudgeFrames(frames: PoseFrame[], athleteIndex: number): PoseFrame[] {
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const roundId = searchParams.get("roundId") ?? undefined;
-  void roundId; // accepted but unused in demo mode
+
+  // Real results take precedence: if a round has scored performances, return them.
+  if (roundId) {
+    const results = store.roundResults(roundId);
+    if (results.length > 0) {
+      return NextResponse.json(results);
+    }
+  }
 
   const template = TEMPLATES[0];
   const base = sampleFrames(template.id);

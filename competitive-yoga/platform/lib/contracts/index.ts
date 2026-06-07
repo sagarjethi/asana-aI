@@ -165,22 +165,34 @@ export interface CompetitionEvent {
   id: string;
   name: string;
   venue?: string;
+  description?: string;
+  organizerId?: string;
+  status?: "draft" | "open" | "live" | "complete";
   createdAt: string;
 }
 
 export interface Round {
   id: string;
   eventId: string;
+  name?: string;
   format: Format;
   category: Category;
   asanaTemplateId: string;
   status: "scheduled" | "live" | "complete";
+  judgeIds?: string[];
+  startedAt?: string;
+  completedAt?: string;
 }
 
 export interface Performance {
   id: string;
   roundId: string;
   athleteId: string;
+  athleteName?: string;
+  status?: "pending" | "scored" | "published";
+  score?: PerformanceScore;
+  performedAt?: string;
+  scoredBy?: string;
 }
 
 export interface LeaderboardRow {
@@ -247,3 +259,73 @@ export const ENGINE_VERSION = "0.1.0";
 export const NOISE_FLOOR_DEGREES = 5;
 /** Below this calibrated confidence, the engine abstains and defers to the human. */
 export const CONFIDENCE_ABSTAIN_THRESHOLD = 0.6;
+
+/* ----------------------------------------------------------------------------
+ * Product layer — accounts, enrollment, results (the end-to-end journeys)
+ * ------------------------------------------------------------------------- */
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: Role;
+  country?: string;
+  createdAt: string;
+}
+
+export interface Session {
+  token: string;
+  user: User;
+}
+
+export interface Enrollment {
+  id: string;
+  eventId: string;
+  athleteId: string;
+  athleteName: string;
+  seed?: number;
+  status: "enrolled" | "withdrawn";
+  createdAt: string;
+}
+
+/** A ranked result row for a round or event (extends the live leaderboard row). */
+export interface ResultRow extends LeaderboardRow {
+  performanceId?: string;
+  published?: boolean;
+}
+
+/* zod request schemas for the product APIs */
+export const zSignup = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+  name: z.string().min(1),
+  role: z.enum(ROLES),
+  country: z.string().optional(),
+});
+
+export const zCreateEvent = z.object({
+  name: z.string().min(1),
+  venue: z.string().optional(),
+  description: z.string().optional(),
+});
+
+export const zCreateRound = z.object({
+  eventId: z.string(),
+  name: z.string().optional(),
+  format: z.enum(FORMATS),
+  category: z.enum(CATEGORIES),
+  asanaTemplateId: z.string(),
+});
+
+export const zEnroll = z.object({
+  eventId: z.string(),
+});
+
+/** Submit a performance for scoring inside a live round. */
+export const zPerform = z.object({
+  roundId: z.string(),
+  frames: z.array(zPoseFrame).min(1),
+});
+
+export type SignupRequest = z.infer<typeof zSignup>;
+export type CreateEventRequest = z.infer<typeof zCreateEvent>;
+export type CreateRoundRequest = z.infer<typeof zCreateRound>;
