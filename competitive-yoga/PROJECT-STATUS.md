@@ -4,6 +4,9 @@
 > not started. Update this file whenever a doc or workstream changes state.
 >
 > **Last updated:** 2026-06-07 · **Branch:** `docs/competitive-yoga-program` · **PM:** Claude (pitch agent)
+>
+> **Live:** Product app → https://yoga-drishti-app.vercel.app · Pitch deck → https://yoga-drishti.vercel.app
+> Landing redesigned to premium dark/cinematic via the `ui-ux-pro-max` skill (scroll-storytelling, restrained motion, a11y).
 
 ---
 
