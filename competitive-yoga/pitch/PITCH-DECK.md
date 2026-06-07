@@ -1,7 +1,7 @@
 # Yoga Drishti — Pitch Deck (content & story)
 
 > Live deck: **`index.html`** (browser; arrow keys / swipe / tap; **F** = fullscreen).
-> **15 slides** — tightened from 20. Storytelling rules: one headline = one idea; a narrative arc;
+> **16 slides.** Storytelling rules: one headline = one idea; a narrative arc;
 > one warm visual theme; an emphasized image or **data graphic** on every slide.
 
 | # | Section | **Headline** | Visual |
@@ -13,14 +13,17 @@
 | 5 | How it works | **Six cameras. One 3D skeleton. The truth, in milliseconds.** | `03-capture-3d` |
 | 6 | Trust | **The AI never overrules a judge. It hands them the evidence.** | `04-referee-console` |
 | 7 | The wow | **For the first time, the screen tells you exactly why.** | `06-show-me-why` |
-| 8 | Product — athletes & coaches | **Athletes train with feedback. Coaches develop with data.** | `15-athlete-app` + `16-coach-dashboard` |
-| 9 | Product — compete/broadcast/fan | **One platform for judges, broadcasters and fans.** | `19-simulcam-compare` |
-| 10 | Who it helps | **Built for every role — it grows careers, not just scores.** | athlete / coach / judge cards |
-| 11 | **Market — size** | **A $127B market that has never had a sport.** | **TAM/SAM/SOM funnel + stat cards (charts)** |
-| 12 | **Market — why now** | **Officiating is being automated. Competition is going digital. We sit at the intersection.** | **precedent cards + growth chips (charts)** |
-| 13 | Moat + traction | **The data and audience no one else can get — and it's live today.** | `08-ecosystem` |
-| 14 | Roadmap | **Earn trust on one mat. Then take it to the world stage.** | `13-vision-arena` |
-| 15 | Ask | **Fund the pilot. Let's make yoga the next sport the world watches.** | `13-vision-arena` |
+| 8 | **The stream, transformed** | **The same YouTube live-stream — transformed.** *(before 1.8K → after 187K watching)* | **`20-stream-before` + `21-stream-after`** |
+| 9 | Product — athletes & coaches | **Athletes train with feedback. Coaches develop with data.** | `15-athlete-app` + `16-coach-dashboard` |
+| 10 | Product — compete/broadcast/fan | **One platform for judges, broadcasters and fans.** | `19-simulcam-compare` |
+| 11 | Who it helps | **Built for every role — it grows careers, not just scores.** | athlete / coach / judge cards |
+| 12 | **Market — size** | **A $127B market that has never had a sport.** | **TAM/SAM/SOM funnel + stat cards (charts)** |
+| 13 | **Market — why now** | **Officiating is being automated. Competition is going digital. We sit at the intersection.** | **precedent cards + growth chips (charts)** |
+| 14 | Moat + traction | **The data and audience no one else can get — and it's live today.** | `08-ecosystem` |
+| 15 | Roadmap | **Earn trust on one mat. Then take it to the world stage.** | `13-vision-arena` |
+| 16 | Ask | **Fund the pilot. Let's make yoga the next sport the world watches.** | `13-vision-arena` |
+
+*Outreach email to send with the deck: **`OUTREACH-EMAIL.md`**.*
 
 ## Market data on slides 11–12 (verified by research QA)
 - **TAM $127B** — global yoga market (Grand View Research), ~10% CAGR → **$269B by 2033**.
